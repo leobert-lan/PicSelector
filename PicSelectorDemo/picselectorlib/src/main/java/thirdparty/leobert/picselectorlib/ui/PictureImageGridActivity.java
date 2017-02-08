@@ -14,6 +14,7 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -23,6 +24,7 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import thirdparty.leobert.picselectorlib.Logger;
 import thirdparty.leobert.picselectorlib.R;
 import thirdparty.leobert.picselectorlib.adapter.PictureImageGridAdapter;
 import thirdparty.leobert.picselectorlib.compress.CompressConfig;
@@ -34,6 +36,7 @@ import thirdparty.leobert.picselectorlib.model.FunctionConfig;
 import thirdparty.leobert.picselectorlib.model.LocalMediaLoader;
 import thirdparty.leobert.picselectorlib.model.PictureConfig;
 import thirdparty.leobert.picselectorlib.observable.ImagesObservable;
+
 import com.yalantis.ucrop.MultiUCrop;
 import com.yalantis.ucrop.UCrop;
 import com.yalantis.ucrop.dialog.SweetAlertDialog;
@@ -43,6 +46,9 @@ import com.yalantis.ucrop.util.FileUtils;
 import com.yalantis.ucrop.util.ScreenUtils;
 import com.yalantis.ucrop.util.ToolbarUtil;
 import com.yalantis.ucrop.util.Utils;
+
+import org.json.JSONArray;
+import org.json.JSONStringer;
 
 import java.io.File;
 import java.io.Serializable;
@@ -722,6 +728,7 @@ public class PictureImageGridActivity extends PictureBaseActivity implements Vie
             @Override
             public void onCompressSuccess(List<LocalMedia> images) {
                 // 压缩成功回调
+                Logger.d(TAG, "compressSuccess:" + Logger.stringnify(images));
                 onResult(images);
                 dismiss();
             }
@@ -729,6 +736,7 @@ public class PictureImageGridActivity extends PictureBaseActivity implements Vie
             @Override
             public void onCompressError(List<LocalMedia> images, String msg) {
                 // 压缩失败回调 返回原图
+                Logger.i(TAG, "compressFailure" + Logger.stringnify(images) + "\n" + msg);
                 List<LocalMedia> selectedImages = adapter.getSelectedImages();
                 onResult(selectedImages);
                 dismiss();

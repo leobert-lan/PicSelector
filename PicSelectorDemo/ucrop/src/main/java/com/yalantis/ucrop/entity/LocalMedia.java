@@ -140,4 +140,9 @@ public class LocalMedia implements Serializable {
     public void setPosition(int position) {
         this.position = position;
     }
+
+    @Override
+    public String toString() {
+        return "original path:" + this.path;
+    }
 }

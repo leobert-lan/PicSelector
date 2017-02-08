@@ -12,11 +12,11 @@ import android.content.Context;
 
 public class PVSelector {
     public static IPhotoSelector getPhotoSelector(Context context) {
-
+        return new PhotoSelector(context);
     }
 
     public static IVideoSelector getVideoSelector(Context context) {
-
+        return new VideoSelector(context);
     }
 
 }
