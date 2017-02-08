@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import thirdparty.leobert.picselectordemo.R;
-import thirdparty.leobert.picselectorlib.Logger;
+import thirdparty.leobert.pvselectorlib.Logger;
 
 public class GridImageAdapter extends
         RecyclerView.Adapter<GridImageAdapter.ViewHolder> {
