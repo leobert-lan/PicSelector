@@ -32,11 +32,11 @@ dependencies {
     })
     compile 'com.android.support:appcompat-v7:25.1.0'
     testCompile 'junit:junit:4.12'
-    //    compile project(':pvselectorlib')
+    compile project(':pvselectorlib')
     //    compile(name: 'pvselectorlib-release', ext: 'aar')
     //
 //    compile(name: 'ucrop-release', ext: 'aar')
-    compile 'individual.leobert.libs:pvselectorlib:1.0.1'
+//    compile 'individual.leobert.libs:pvselectorlib:1.0.1'
     compile 'com.github.bumptech.glide:glide:3.7.0'
     //    compile 'com.commit451:PhotoView:1.2.4'
     //    compile 'io.reactivex:rxjava:1.1.6'
