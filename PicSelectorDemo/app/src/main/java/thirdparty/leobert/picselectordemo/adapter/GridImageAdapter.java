@@ -2,7 +2,6 @@ package thirdparty.leobert.picselectordemo.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import thirdparty.leobert.picselectordemo.R;
+import thirdparty.leobert.pvselectorlib.Logger;
 
 public class GridImageAdapter extends
         RecyclerView.Adapter<GridImageAdapter.ViewHolder> {
@@ -135,7 +135,7 @@ public class GridImageAdapter extends
                 case 1:
                     // 图片
                     if (media.isCompressed()) {
-                        Log.i("compress image result", new File(media.getCompressPath()).length() / 1024 + "k");
+                        Logger.i("compress image result", new File(media.getCompressPath()).length() / 1024 + "k");
                     }
 
                     Glide.with(mContext)

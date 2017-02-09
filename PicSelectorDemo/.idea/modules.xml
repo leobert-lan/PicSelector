@@ -4,7 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/PicSelectorDemo.iml" filepath="$PROJECT_DIR$/PicSelectorDemo.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/picselectorlib/picselectorlib.iml" filepath="$PROJECT_DIR$/picselectorlib/picselectorlib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pvselectorlib/pvselectorlib.iml" filepath="$PROJECT_DIR$/pvselectorlib/pvselectorlib.iml" />
       <module fileurl="file://$PROJECT_DIR$/ucrop/ucrop.iml" filepath="$PROJECT_DIR$/ucrop/ucrop.iml" />
     </modules>
   </component>

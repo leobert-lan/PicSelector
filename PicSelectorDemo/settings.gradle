@@ -1,1 +1,1 @@
-include ':app', ':picselectorlib', 'ucrop'
+include ':app', ':pvselectorlib', 'ucrop'

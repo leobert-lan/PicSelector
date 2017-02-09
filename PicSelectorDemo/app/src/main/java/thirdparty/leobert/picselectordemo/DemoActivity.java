@@ -20,11 +20,11 @@ import java.util.List;
 
 import thirdparty.leobert.picselectordemo.adapter.GridImageAdapter;
 import thirdparty.leobert.picselectordemo.util.FullyGridLayoutManager;
-import thirdparty.leobert.picselectorlib.model.FunctionConfig;
-import thirdparty.leobert.picselectorlib.model.LocalMediaLoader;
-import thirdparty.leobert.picselectorlib.model.PictureConfig;
+import thirdparty.leobert.pvselectorlib.model.FunctionConfig;
+import thirdparty.leobert.pvselectorlib.model.LocalMediaLoader;
+import thirdparty.leobert.pvselectorlib.model.PictureConfig;
 
-public class DemoActivity  extends Activity implements RadioGroup.OnCheckedChangeListener {
+public class DemoActivity extends Activity implements RadioGroup.OnCheckedChangeListener {
 
     private RecyclerView recyclerView;
     private GridImageAdapter adapter;
@@ -124,6 +124,8 @@ public class DemoActivity  extends Activity implements RadioGroup.OnCheckedChang
             }
         });
 
+//        PVSelector.getVideoSelector(this).multiSelect(4).enableCamera().enablePreview()
+//                .setCompleteColor(ContextCompat.getColor(this, R.color.colorPrimary)).launch(resultCallback);
 
     }
 
