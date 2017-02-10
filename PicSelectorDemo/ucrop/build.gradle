@@ -11,7 +11,7 @@ apply plugin: 'com.jfrog.bintray'
 group = "individual.leobert.libs"
 
 // 根节点添加
-version = "2.2.0"
+version = "2.3.0"
 
 // 根节点添加
 def siteUrl = 'https://github.com/leobert-lan/PicSelector'    // project homepage
@@ -23,8 +23,8 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 23
-        versionCode 22
-        versionName "2.2.0-native"
+        versionCode 23
+        versionName "2.3.0-native"
         vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
@@ -67,9 +67,10 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.android.support:recyclerview-v7:23.4.0'
     compile 'com.github.bumptech.glide:glide:3.7.0'
-    compile 'com.commit451:PhotoView:1.2.4'
+//    compile 'com.commit451:PhotoView:1.2.4'
     compile 'io.reactivex:rxjava:1.1.6'
     compile 'io.reactivex:rxandroid:1.1.0'
+    compile files('libs/photoview.jar')
 }
 
 task sourcesJar(type: Jar) {

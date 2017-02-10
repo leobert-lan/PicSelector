@@ -22,7 +22,7 @@ android {
     buildToolsVersion "25.0.2"
 
     defaultConfig {
-        minSdkVersion 21
+        minSdkVersion 14
         targetSdkVersion 25
         versionCode 102
         versionName "1.0.2"
@@ -64,98 +64,98 @@ dependencies {
     })
     //    compile 'com.android.support:appcompat-v7:25.1.0'
     testCompile 'junit:junit:4.12'
-    compile 'individual.leobert.libs:ucrop:2.2.0'
-//    compile project(':ucrop')
+//    compile 'individual.leobert.libs:ucrop:2.2.0'
+    compile project(':ucrop')
 }
 
-task sourcesJar(type: Jar) {
-    from android.sourceSets.main.java.srcDirs
-    classifier = 'sources'
-}
-
-task javadoc(type: Javadoc) {
-    source = android.sourceSets.main.java.srcDirs
-    exclude "com/yalantis/ucrop"//,"com/google/zxing"//如果你要排除一些目录下的，要这样写,不能是com.zbar.lib
-    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-}
-
-javadoc {
-    options{
-        encoding "UTF-8"
-        charSet 'UTF-8'
-        author true
-        version true
-        links "http://docs.oracle.com/javase/7/docs/api"
-    }
-}
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
-}
-
-artifacts {
-    archives javadocJar
-    archives sourcesJar
-}
-
-
-// 根节点添加
-install {
-    repositories.mavenInstaller {
-        // This generates POM.xml with proper parameters
-        pom {
-            project {
-                packaging 'aar'
-                name 'pvselectorlib'
-//                groupId 'individual.leobert.libs'
-//                artifactId 'pvselectorlib'
-                url siteUrl
-                licenses {
-                    license {
-                        name 'The Apache Software License, Version 2.0'
-                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                    }
-                }
-                developers {
-                    developer {
-                        id 'leobert-lan'
-                        name 'lan.leobert'
-                        email 'leobert.l@hotmail.com'
-                    }
-                }
-                scm {
-                    connection gitUrl
-                    developerConnection gitUrl
-                    url siteUrl
-                }
-            }
-        }
-    }
-}
-
-Properties properties = new Properties()
-properties.load(project.rootProject.file('local.properties').newDataInputStream())
-//boolean isHasFile = false
-//if (project.rootProject.findProject('local.properties') != null){
-//    isHasFile = true
-//    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+//task sourcesJar(type: Jar) {
+//    from android.sourceSets.main.java.srcDirs
+//    classifier = 'sources'
 //}
-bintray {
-//    user = isHasFile ? properties.getProperty("bintray_user") : System.getenv("bintray.user")
-//    key = isHasFile ? properties.getProperty("bintray_apikey") : System.getenv("bintray.apikey")
-
-    user =  properties.getProperty("bintray_user")
-    key = properties.getProperty("bintray_apikey")
-
-
-    configurations = ['archives']
-    pkg {
-        repo = "maven"
-        name = "pvselectorlib"     // #CONFIG# project name in jcenter
-        websiteUrl = siteUrl
-        vcsUrl = gitUrl
-        licenses = ["Apache-2.0"]
-        publish = true
-    }
-}
+//
+//task javadoc(type: Javadoc) {
+//    source = android.sourceSets.main.java.srcDirs
+//    exclude "com/yalantis/ucrop"//,"com/google/zxing"//如果你要排除一些目录下的，要这样写,不能是com.zbar.lib
+//    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+//}
+//
+//javadoc {
+//    options{
+//        encoding "UTF-8"
+//        charSet 'UTF-8'
+//        author true
+//        version true
+//        links "http://docs.oracle.com/javase/7/docs/api"
+//    }
+//}
+//
+//task javadocJar(type: Jar, dependsOn: javadoc) {
+//    classifier = 'javadoc'
+//    from javadoc.destinationDir
+//}
+//
+//artifacts {
+//    archives javadocJar
+//    archives sourcesJar
+//}
+//
+//
+//// 根节点添加
+//install {
+//    repositories.mavenInstaller {
+//        // This generates POM.xml with proper parameters
+//        pom {
+//            project {
+//                packaging 'aar'
+//                name 'pvselectorlib'
+////                groupId 'individual.leobert.libs'
+////                artifactId 'pvselectorlib'
+//                url siteUrl
+//                licenses {
+//                    license {
+//                        name 'The Apache Software License, Version 2.0'
+//                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+//                    }
+//                }
+//                developers {
+//                    developer {
+//                        id 'leobert-lan'
+//                        name 'lan.leobert'
+//                        email 'leobert.l@hotmail.com'
+//                    }
+//                }
+//                scm {
+//                    connection gitUrl
+//                    developerConnection gitUrl
+//                    url siteUrl
+//                }
+//            }
+//        }
+//    }
+//}
+//
+//Properties properties = new Properties()
+//properties.load(project.rootProject.file('local.properties').newDataInputStream())
+////boolean isHasFile = false
+////if (project.rootProject.findProject('local.properties') != null){
+////    isHasFile = true
+////    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+////}
+//bintray {
+////    user = isHasFile ? properties.getProperty("bintray_user") : System.getenv("bintray.user")
+////    key = isHasFile ? properties.getProperty("bintray_apikey") : System.getenv("bintray.apikey")
+//
+//    user =  properties.getProperty("bintray_user")
+//    key = properties.getProperty("bintray_apikey")
+//
+//
+//    configurations = ['archives']
+//    pkg {
+//        repo = "maven"
+//        name = "pvselectorlib"     // #CONFIG# project name in jcenter
+//        websiteUrl = siteUrl
+//        vcsUrl = gitUrl
+//        licenses = ["Apache-2.0"]
+//        publish = true
+//    }
+//}
