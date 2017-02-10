@@ -11,7 +11,7 @@ apply plugin: 'com.jfrog.bintray'
 group = "individual.leobert.libs"
 
 // 根节点添加
-version = "1.0.1"
+version = "1.0.2"
 
 // 根节点添加
 def siteUrl = 'https://github.com/leobert-lan/PicSelector'    // project homepage
@@ -24,8 +24,8 @@ android {
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 25
-        versionCode 101
-        versionName "1.0.1"
+        versionCode 102
+        versionName "1.0.2"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -57,12 +57,6 @@ buildscript {
     }
 }
 
-//repositories {
-//    flatDir {
-//        dirs 'libs'
-//    }
-//}
-
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
@@ -70,8 +64,8 @@ dependencies {
     })
     //    compile 'com.android.support:appcompat-v7:25.1.0'
     testCompile 'junit:junit:4.12'
-    compile project(':ucrop')
-//        compile(name: 'ucrop-release', ext: 'aar')
+    compile 'individual.leobert.libs:ucrop:2.2.0'
+//    compile project(':ucrop')
 }
 
 task sourcesJar(type: Jar) {
@@ -81,7 +75,7 @@ task sourcesJar(type: Jar) {
 
 task javadoc(type: Javadoc) {
     source = android.sourceSets.main.java.srcDirs
-    //exclude "com/zbar/lib","com/google/zxing"//如果你要排除一些目录下的，要这样写,不能是com.zbar.lib
+    exclude "com/yalantis/ucrop"//,"com/google/zxing"//如果你要排除一些目录下的，要这样写,不能是com.zbar.lib
     classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
 }
 
