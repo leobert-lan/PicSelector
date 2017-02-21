@@ -67,6 +67,7 @@ public class FunctionConfig implements Serializable {
     public final static String EXTRA_IS_CHECKED_NUM = "checkedNum";
     public final static String EXTRA_PREVIEW_COLOR = "previewColor";
     public final static String EXTRA_COMPLETE_COLOR = "completeColor";
+    public final static String EXTRA_COMPLETE_TEXT = "completeText";
     public final static String EXTRA_BOTTOM_BG_COLOR = "bottomBgColor";
     public final static String EXTRA_PREVIEW_BOTTOM_BG_COLOR = "previewBottomBgColor";
     public final static String EXTRA_COMPRESS_QUALITY = "compressQuality";
@@ -98,6 +99,16 @@ public class FunctionConfig implements Serializable {
     protected int compressFlag = 1; // 1 系统自带压缩 2 luban压缩
     protected int compressW;
     protected int compressH;
+
+    protected  CharSequence completeText;
+
+    public CharSequence getCompleteText() {
+        return completeText;
+    }
+
+    public void setCompleteText(CharSequence completeText) {
+        this.completeText = completeText;
+    }
 
     public int getCompressW() {
         return compressW;

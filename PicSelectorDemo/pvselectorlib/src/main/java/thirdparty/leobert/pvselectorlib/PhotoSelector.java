@@ -123,4 +123,10 @@ import thirdparty.leobert.pvselectorlib.model.PictureConfig;
     protected IPhotoSelector self() {
         return this;
     }
+
+    @Override
+    public IPhotoSelector setCompleteText(CharSequence completeText) {
+        config.setCompleteText(completeText);
+        return this;
+    }
 }

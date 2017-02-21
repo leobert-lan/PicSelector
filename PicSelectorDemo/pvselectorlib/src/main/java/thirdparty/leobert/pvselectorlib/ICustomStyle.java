@@ -20,28 +20,36 @@ public interface ICustomStyle<T> {
     /**
      * 设置选择图片页面底部背景色
      *
-     * @param bottomBgColor 
+     * @param bottomBgColor
      */
     T setBottomBgColor(int bottomBgColor);
 
 
     /**
      * "预览"文字颜色
+     *
      * @param previewColor
      */
     T setPreviewColor(int previewColor);
 
     /**
      * “已完成”文字颜色
+     *
      * @param completeColor
      */
     T setCompleteColor(int completeColor);
 
     /**
+     * 设置完成选取的文字
+     * @param completeText
+     */
+    T setCompleteText(CharSequence completeText);
+
+    /**
      * 启用计数checkbox
      */
     T enableCheckNumMode();
-    
+
     T setCheckedBoxDrawable(int drawableResId);
 
 }
