@@ -298,7 +298,7 @@ public class PictureImageGridActivity extends PictureBaseActivity implements Vie
             tv_img_num.startAnimation(animation);
             tv_img_num.setVisibility(View.VISIBLE);
             tv_img_num.setText(selectImages.size() + "");
-            tv_ok.setText("已完成");
+            tv_ok.setText(completeText);
         } else {
             tv_ok.setEnabled(false);
             id_preview.setAlpha(0.5f);

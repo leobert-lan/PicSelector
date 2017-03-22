@@ -101,4 +101,10 @@ class VideoSelector extends AbsSelector<IVideoSelector> implements IVideoSelecto
         PictureConfig.init(config);
         PictureConfig.getPictureConfig().openPhoto(context, resultCallback);
     }
+
+    @Override
+    public IVideoSelector setCompleteText(CharSequence completeText) {
+        config.setCompleteText(completeText);
+        return this;
+    }
 }

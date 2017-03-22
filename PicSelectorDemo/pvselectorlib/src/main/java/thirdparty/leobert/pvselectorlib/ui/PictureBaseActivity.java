@@ -42,6 +42,7 @@ public class PictureBaseActivity extends FragmentActivity {
     protected boolean is_checked_num;
     protected int previewColor; // 底部预览字体颜色
     protected int completeColor; // 底部完成字体颜色
+    protected CharSequence completeText; // 底部完成文字
     protected int bottomBgColor; // 底部背景色
     protected int previewBottomBgColor; // 预览底部背景色
     protected int compressQuality = 0;// 压缩图片质量
@@ -79,6 +80,10 @@ public class PictureBaseActivity extends FragmentActivity {
         previewColor = config.getPreviewColor();
         completeColor = config.getCompleteColor();
         bottomBgColor = config.getBottomBgColor();
+        completeText = config.getCompleteText();
+        if (completeText == null||completeText.equals("")) {
+            completeText = "完成";
+        }
         previewBottomBgColor = config.getPreviewBottomBgColor();
         compressQuality = config.getCompressQuality();
         selectMedias = config.getSelectMedia();
