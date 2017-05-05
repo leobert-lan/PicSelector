@@ -8,34 +8,40 @@
 
         <activity
             android:name=".ui.PictureAlbumDirectoryActivity"
-            android:configChanges="orientation|keyboardHidden"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Slider" />
         <activity
             android:name=".ui.PictureImageGridActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Slider" />
         <activity
             android:name=".ui.PicturePreviewActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Slider" />
         <activity
             android:name=".ui.PictureVideoPlayActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Slider" />
 
         <activity
             android:name=".ui.PictureExternalPreviewActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Slider" />
 
         <activity
             android:name="com.yalantis.ucrop.ui.PictureMultiCuttingActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Slider" />
 
         <activity
             android:name="com.yalantis.ucrop.ui.PictureSingeUCropActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Slider" />
 

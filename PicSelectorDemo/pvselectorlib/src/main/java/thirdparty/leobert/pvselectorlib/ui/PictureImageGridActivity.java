@@ -14,6 +14,7 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -93,6 +94,7 @@ public class PictureImageGridActivity extends PictureBaseActivity implements Vie
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG,"onCreate");
         setContentView(R.layout.picture_activity_image_grid);
         registerReceiver(receiver, "app.activity.finish", "app.action.refresh.data", "app.action.crop_data");
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
@@ -512,6 +514,7 @@ public class PictureImageGridActivity extends PictureBaseActivity implements Vie
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d(TAG,"onActivityResult");
         if (resultCode == RESULT_OK) {
             // on take photo success
             if (requestCode == FunctionConfig.REQUEST_CAMERA) {
