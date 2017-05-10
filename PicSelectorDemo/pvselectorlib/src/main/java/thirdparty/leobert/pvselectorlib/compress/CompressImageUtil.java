@@ -13,6 +13,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
+import thirdparty.leobert.pvselectorlib.rotate.RotateUtil;
+
 public class CompressImageUtil {
     private CompressConfig config;
     private Context context;
@@ -32,7 +34,15 @@ public class CompressImageUtil {
                 e.printStackTrace();
             }
         } else {
-            compressImageByQuality(BitmapFactory.decodeFile(imagePath), imagePath, listener);
+            int rotation = RotateUtil.getBitmapDegree(imagePath);
+            Bitmap origin = BitmapFactory.decodeFile(imagePath);
+            Bitmap res;
+            if (rotation != 0) {
+                 res = RotateUtil.rotateBitmapByDegree(origin, rotation);
+            } else {
+                res = origin;
+            }
+            compressImageByQuality(res, imagePath, listener);
         }
     }
 
@@ -117,8 +127,15 @@ public class CompressImageUtil {
         if (config.isEnableQualityCompress()) {
             compressImageByQuality(bitmap, imgPath, listener);//压缩好比例大小后再进行质量压缩
         } else {
+            int rotation = RotateUtil.getBitmapDegree(imgPath);
+            Bitmap dest;
+            if (rotation != 0) {
+                dest = RotateUtil.rotateBitmapByDegree(bitmap, rotation);
+            } else {
+                dest = bitmap;
+            }
             File thumbnailFile = getThumbnailFile(new File(imgPath));
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(thumbnailFile));
+            dest.compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(thumbnailFile));
 
             listener.onCompressSuccess(thumbnailFile.getPath());
         }
