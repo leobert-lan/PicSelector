@@ -3,6 +3,7 @@ package thirdparty.leobert.pvselectorlib.model;
 import android.graphics.Color;
 
 import thirdparty.leobert.pvselectorlib.R;
+
 import com.yalantis.ucrop.entity.LocalMedia;
 
 import java.io.Serializable;
@@ -72,8 +73,9 @@ public class FunctionConfig implements Serializable {
     public final static String EXTRA_PREVIEW_BOTTOM_BG_COLOR = "previewBottomBgColor";
     public final static String EXTRA_COMPRESS_QUALITY = "compressQuality";
 
+    @LocalMedia.MediaType
+    private int type = LocalMedia.TYPE_PICTURE;
 
-    private int type = 1; // 获取相册类型; 1 图片 2 视频
     private int copyMode = COPY_MODEL_DEFAULT; // 裁剪模式; 默认、1:1、3:4、3:2、16:9
     private int maxSelectNum = SELECT_MAX_NUM; // 多选最大可选数量
     private int selectMode = MODE_MULTIPLE; // 单选 or 多选
@@ -100,7 +102,7 @@ public class FunctionConfig implements Serializable {
     protected int compressW;
     protected int compressH;
 
-    protected  CharSequence completeText;
+    protected CharSequence completeText;
 
     public CharSequence getCompleteText() {
         return completeText;
@@ -207,7 +209,7 @@ public class FunctionConfig implements Serializable {
         this.completeColor = completeColor;
     }
 
-    public boolean isCheckNumMode() {
+    public boolean isCheckNumMode() {  // TODO: 2017/8/17 change name
         return isCheckNumMode;
     }
 
@@ -279,11 +281,13 @@ public class FunctionConfig implements Serializable {
         this.themeStyle = themeStyle;
     }
 
-    public int getType() {
+    public
+    @LocalMedia.MediaType
+    int getType() {
         return type;
     }
 
-    public void setType(int type) {
+    public void setType(@LocalMedia.MediaType int type) {
         this.type = type;
     }
 

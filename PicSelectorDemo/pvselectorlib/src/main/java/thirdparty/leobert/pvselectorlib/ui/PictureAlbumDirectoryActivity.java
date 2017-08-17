@@ -65,7 +65,7 @@ public class PictureAlbumDirectoryActivity extends PictureBaseActivity implement
         tv_empty.setOnClickListener(this);
         ImagesObservable.getInstance().add(this);
         switch (type) {
-            case LocalMediaLoader.TYPE_IMAGE:
+            case LocalMediaLoader.TYPE_PICTURE:
                 picture_tv_title.setText(getString(R.string.select_photo));
                 break;
             case LocalMediaLoader.TYPE_VIDEO:
@@ -99,7 +99,7 @@ public class PictureAlbumDirectoryActivity extends PictureBaseActivity implement
         } else {
             tv_empty.setVisibility(View.VISIBLE);
             switch (type) {
-                case LocalMediaLoader.TYPE_IMAGE:
+                case LocalMediaLoader.TYPE_PICTURE:
                     tv_empty.setText(getString(R.string.no_photo));
                     break;
                 case LocalMediaLoader.TYPE_VIDEO:
@@ -170,7 +170,7 @@ public class PictureAlbumDirectoryActivity extends PictureBaseActivity implement
         List<LocalMedia> images = new ArrayList<>();
         String title = "";
         switch (type) {
-            case LocalMediaLoader.TYPE_IMAGE:
+            case LocalMediaLoader.TYPE_PICTURE:
                 title = getString(R.string.lately_image);
                 break;
             case LocalMediaLoader.TYPE_VIDEO:

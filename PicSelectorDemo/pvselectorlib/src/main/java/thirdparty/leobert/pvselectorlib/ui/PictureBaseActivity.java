@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import thirdparty.leobert.pvselectorlib.R;
 import thirdparty.leobert.pvselectorlib.model.FunctionConfig;
+
 import com.yalantis.ucrop.entity.LocalMedia;
 
 import java.util.ArrayList;
@@ -23,7 +24,10 @@ import java.util.List;
 
 public class PictureBaseActivity extends FragmentActivity {
     protected Context mContext;
-    protected int type = 0;
+
+    @LocalMedia.MediaType
+    protected int type = LocalMedia.TYPE_PICTURE;//default picture
+
     protected int maxSelectNum = 0;
     protected int spanCount = 4;
     protected int copyMode = 0;
@@ -39,7 +43,7 @@ public class PictureBaseActivity extends FragmentActivity {
     protected int recordVideoSecond = 0;
     protected int definition = 3;
     protected boolean isCompress;
-    protected boolean is_checked_num;
+    protected boolean displayCandidateNo;
     protected int previewColor; // 底部预览字体颜色
     protected int completeColor; // 底部完成字体颜色
     protected CharSequence completeText; // 底部完成文字
@@ -76,12 +80,12 @@ public class PictureBaseActivity extends FragmentActivity {
         cropH = config.getCropH();
         recordVideoSecond = config.getRecordVideoSecond();
         definition = config.getRecordVideoDefinition();
-        is_checked_num = config.isCheckNumMode();
+        displayCandidateNo = config.isCheckNumMode();
         previewColor = config.getPreviewColor();
         completeColor = config.getCompleteColor();
         bottomBgColor = config.getBottomBgColor();
         completeText = config.getCompleteText();
-        if (completeText == null||completeText.equals("")) {
+        if (completeText == null || completeText.equals("")) {
             completeText = "完成";
         }
         previewBottomBgColor = config.getPreviewBottomBgColor();
@@ -91,7 +95,7 @@ public class PictureBaseActivity extends FragmentActivity {
         compressW = config.getCompressW();
         compressH = config.getCompressH();
         // 如果是显示数据风格，则默认为qq选择风格
-        if (is_checked_num) {
+        if (displayCandidateNo) {
             cb_drawable = R.drawable.checkbox_num_selector;
         }
     }
@@ -220,8 +224,7 @@ public class PictureBaseActivity extends FragmentActivity {
      * 初始化屏幕宽高
      */
     protected void initScreenWidth() {
-        DisplayMetrics dm = new DisplayMetrics();
-        dm = getResources().getDisplayMetrics();
+        DisplayMetrics dm = getResources().getDisplayMetrics();
         mScreenHeight = dm.heightPixels;
         mScreenWidth = dm.widthPixels;
     }

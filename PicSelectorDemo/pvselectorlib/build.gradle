@@ -64,8 +64,11 @@ dependencies {
     })
     //    compile 'com.android.support:appcompat-v7:25.1.0'
     testCompile 'junit:junit:4.12'
-    compile 'individual.leobert.libs:ucrop:2.3.0'
-//    compile project(':ucrop')
+//    compile 'individual.leobert.libs:ucrop:2.3.0'
+    compile project(':ucrop')
+
+        compile 'io.reactivex:rxjava:1.1.6'
+    compile 'io.reactivex:rxandroid:1.1.0'
 }
 
 task sourcesJar(type: Jar) {

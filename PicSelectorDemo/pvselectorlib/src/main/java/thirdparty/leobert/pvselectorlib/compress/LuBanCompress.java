@@ -34,8 +34,8 @@ public class LuBanCompress implements CompressInterface {
                 listener.onCompressError(images, " There are pictures of compress  is null.");
                 return;
             }
-            if (image.isCut()) {
-                files.add(new File(image.getCutPath()));
+            if (image.isCropped()) {
+                files.add(new File(image.getCroppedPath()));
             } else {
                 files.add(new File(image.getPath()));
             }

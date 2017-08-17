@@ -42,8 +42,8 @@ public class CompressImageOptions implements CompressInterface {
 
     private void compress(final LocalMedia image) {
         String path;
-        if (image.isCut()) {
-            path = image.getCutPath();
+        if (image.isCropped()) {
+            path = image.getCroppedPath();
         } else {
             path = image.getPath();
         }

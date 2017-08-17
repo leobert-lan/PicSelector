@@ -1,3 +1,27 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2017 leobert-lan
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 package com.yalantis.ucrop.ui;
 
 import android.content.Context;
@@ -90,9 +114,9 @@ public class PictureMultiCuttingActivity extends FragmentActivity {
         copyMode = intent.getIntExtra("copyMode", 0);
         isCompress = intent.getBooleanExtra("isCompress", false);
         for (LocalMedia media : images) {
-            media.setCut(false);
+            media.setCropped(false);
         }
-        images.get(cutIndex).setCut(true);// 默认装载第一张图片
+        images.get(cutIndex).setCropped(true);// 默认装载第一张图片
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
         mLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         recyclerView.setLayoutManager(mLayoutManager);
@@ -305,15 +329,15 @@ public class PictureMultiCuttingActivity extends FragmentActivity {
 
     protected void setResultUri(Uri uri, float resultAspectRatio, int imageWidth, int imageHeight) {
         try {
-            images.get(cutIndex).setCutPath(uri.getPath());
-            images.get(cutIndex).setCut(true);
+            images.get(cutIndex).setCroppedPath(uri.getPath());
+            images.get(cutIndex).setCropped(true);
             cutIndex++;
             if (cutIndex >= images.size()) {
                 sendBroadcast(new Intent().setAction("app.action.finish.preview"));
                 sendBroadcast(new Intent().setAction("app.action.crop_data").putExtra(UCrop.EXTRA_RESULT, (Serializable) images));
                 // 裁剪完成，看是否压缩
                 for (LocalMedia media : images) {
-                    media.setCut(true);
+                    media.setCropped(true);
                 }
                 finish();
                 overridePendingTransition(0, R.anim.hold);

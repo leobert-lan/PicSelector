@@ -22,25 +22,45 @@
  * SOFTWARE.
  */
 
-package com.yalantis.ucrop.callback;
+package com.yalantis.ucrop.entity;
 
-import android.graphics.Bitmap;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-
-import com.yalantis.ucrop.model.ExifInfo;
+import java.io.Serializable;
 
 /**
- * callbacks to listen the result of bitmap load
+ * <p><b>Package:</b> com.yalantis.ucrop.entity </p>
+ * <p><b>Project:</b> PicSelectorDemo </p>
+ * <p><b>Classname:</b> GridItemInfoHolder </p>
+ * <p><b>Description:</b> TODO </p>
+ * Created by leobert on 2017/8/17.
  */
-public interface BitmapLoadCallback {
 
+public class GridItemInfoHolder implements Serializable{
+    /**
+     * position in the adapter
+     */
+    private int adapterPosition;
 
-    void onBitmapLoaded(@NonNull Bitmap bitmap,
-                        @NonNull ExifInfo exifInfo,
-                        @NonNull String imageInputPath,
-                        @Nullable String imageOutputPath);
+    /**
+     * the number of this candidate,ordered by selected time
+     *
+     * start from 1
+     */
+    private int candidateNo;
 
-    void onFailure(@NonNull Exception bitmapWorkerException);
+    public int getAdapterPosition() {
+        return adapterPosition;
+    }
+
+    public void setAdapterPosition(int adapterPosition) {
+        this.adapterPosition = adapterPosition;
+    }
+
+    public int getCandidateNo() {
+        return candidateNo;
+    }
+
+    public void setCandidateNo(int candidateNo) {
+        this.candidateNo = candidateNo;
+    }
 
 }

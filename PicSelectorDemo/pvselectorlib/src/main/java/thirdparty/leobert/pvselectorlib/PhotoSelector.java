@@ -23,7 +23,7 @@ import thirdparty.leobert.pvselectorlib.model.PictureConfig;
     public PhotoSelector(Context context) {
         super();
         contextRef = new WeakReference<>(context);
-        config.setType(LocalMediaLoader.TYPE_IMAGE);
+        config.setType(LocalMediaLoader.TYPE_PICTURE);
         config.setEnablePreview(false);
         config.setShowCamera(false);
         config.setCompress(false);

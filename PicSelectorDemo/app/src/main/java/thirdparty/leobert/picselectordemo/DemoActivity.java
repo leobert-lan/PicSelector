@@ -36,7 +36,7 @@ public class DemoActivity extends Activity implements RadioGroup.OnCheckedChange
     private EditText et_w, et_h, et_compress_width, et_compress_height;
     private LinearLayout ll_luban_wh;
     private boolean isShow = true;
-    private int selectType = LocalMediaLoader.TYPE_IMAGE;
+    private int selectType = LocalMediaLoader.TYPE_PICTURE;
     private int copyMode = FunctionConfig.COPY_MODEL_DEFAULT;
     private boolean enablePreview = true;
     private boolean isPreviewVideo = true;
@@ -266,7 +266,7 @@ public class DemoActivity extends Activity implements RadioGroup.OnCheckedChange
                 selectMode = FunctionConfig.MODE_MULTIPLE;
                 break;
             case R.id.rb_image:
-                selectType = LocalMediaLoader.TYPE_IMAGE;
+                selectType = LocalMediaLoader.TYPE_PICTURE;
                 break;
             case R.id.rb_video:
                 selectType = LocalMediaLoader.TYPE_VIDEO;

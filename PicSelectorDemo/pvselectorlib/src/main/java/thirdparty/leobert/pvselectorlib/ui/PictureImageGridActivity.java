@@ -52,7 +52,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PictureImageGridActivity extends PictureBaseActivity implements View.OnClickListener, PictureImageGridAdapter.OnPhotoSelectChangedListener {
+public class PictureImageGridActivity extends PictureBaseActivity
+        implements View.OnClickListener,
+        PictureImageGridAdapter.OnPhotoSelectChangedListener {
     public final String TAG = PictureImageGridActivity.class.getSimpleName();
     private List<LocalMedia> images = new ArrayList<>();
     private RecyclerView recyclerView;
@@ -79,7 +81,7 @@ public class PictureImageGridActivity extends PictureBaseActivity implements Vie
             } else if (action.equals("app.action.refresh.data")) {
                 List<LocalMedia> selectImages = (List<LocalMedia>) intent.getSerializableExtra(FunctionConfig.EXTRA_PREVIEW_SELECT_LIST);
                 if (selectImages != null)
-                    adapter.bindSelectImages(selectImages);
+                    adapter.bindSelectedMedias(selectImages);
             } else if (action.equals("app.action.crop_data")) {
                 // 裁剪返回的数据
                 List<LocalMedia> result = (List<LocalMedia>) intent.getSerializableExtra(FunctionConfig.EXTRA_RESULT);
@@ -94,7 +96,7 @@ public class PictureImageGridActivity extends PictureBaseActivity implements Vie
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG,"onCreate");
+        Log.d(TAG, "onCreate");
         setContentView(R.layout.picture_activity_image_grid);
         registerReceiver(receiver, "app.activity.finish", "app.action.refresh.data", "app.action.crop_data");
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
@@ -158,7 +160,7 @@ public class PictureImageGridActivity extends PictureBaseActivity implements Vie
             picture_tv_title.setText(folderName);
         } else {
             switch (type) {
-                case LocalMediaLoader.TYPE_IMAGE:
+                case LocalMediaLoader.TYPE_PICTURE:
                     picture_tv_title.setText(getString(R.string.lately_image));
                     break;
                 case LocalMediaLoader.TYPE_VIDEO:
@@ -176,7 +178,7 @@ public class PictureImageGridActivity extends PictureBaseActivity implements Vie
         // 解决调用 notifyItemChanged 闪烁问题,取消默认动画
         ((SimpleItemAnimator) recyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
         // 如果是显示数据风格，则默认为qq选择风格
-        if (is_checked_num) {
+        if (displayCandidateNo) {
             tv_img_num.setBackgroundResource(R.drawable.message_oval_blue);
         }
         String titleText = picture_tv_title.getText().toString().trim();
@@ -188,13 +190,13 @@ public class PictureImageGridActivity extends PictureBaseActivity implements Vie
                 showCamera = false;
             }
         }
-        adapter = new PictureImageGridAdapter(this, showCamera, maxSelectNum, selectMode, enablePreview, enablePreviewVideo, cb_drawable, is_checked_num);
+        adapter = new PictureImageGridAdapter(this, showCamera, maxSelectNum, selectMode, enablePreview, enablePreviewVideo, cb_drawable, displayCandidateNo);
         recyclerView.setAdapter(adapter);
         if (selectMedias.size() > 0) {
             ChangeImageNumber(selectMedias);
-            adapter.bindSelectImages(selectMedias);
+            adapter.bindSelectedMedias(selectMedias);
         }
-        adapter.bindImagesData(images);
+        adapter.bindMediaData(images);
         adapter.setOnPhotoSelectChangedListener(PictureImageGridActivity.this);
     }
 
@@ -204,16 +206,16 @@ public class PictureImageGridActivity extends PictureBaseActivity implements Vie
          * 根据type决定，查询本地图片或视频。
          */
         showDialog("请稍候...");
-        new LocalMediaLoader(this, type).loadAllImage(new LocalMediaLoader.LocalMediaLoadListener() {
+        new LocalMediaLoader(this, type).loadAllImage(new LocalMediaLoader.OnLocalMediaLoadedListener() {
 
             @Override
-            public void loadComplete(List<LocalMediaFolder> folders) {
+            public void onLocalMediaLoadComplete(List<LocalMediaFolder> folders) {
                 dismiss();
                 if (folders.size() > 0) {
                     // 取最近相册或视频数据
                     LocalMediaFolder folder = folders.get(0);
                     images = folder.getImages();
-                    adapter.bindImagesData(images);
+                    adapter.bindMediaData(images);
                     PictureImageGridActivity.this.folders = folders;
                     ImagesObservable.getInstance().saveLocalFolders(folders);
                     ImagesObservable.getInstance().notifyFolderObserver(folders);
@@ -250,12 +252,12 @@ public class PictureImageGridActivity extends PictureBaseActivity implements Vie
             startActivityForResult(intent, FunctionConfig.REQUEST_PREVIEW);
         } else if (id == R.id.tv_ok) {
             List<LocalMedia> images = adapter.getSelectedImages();
-            if (enableCrop && type == LocalMediaLoader.TYPE_IMAGE && selectMode == FunctionConfig.MODE_MULTIPLE) {
+            if (enableCrop && type == LocalMediaLoader.TYPE_PICTURE && selectMode == FunctionConfig.MODE_MULTIPLE) {
                 // 是图片和选择压缩并且是多张，调用批量压缩
                 startMultiCopy(images);
             } else {
                 // 图片才压缩，视频不管
-                if (isCompress && type == LocalMediaLoader.TYPE_IMAGE) {
+                if (isCompress && type == LocalMediaLoader.TYPE_PICTURE) {
                     compressImage(images);
                 } else {
                     resultBack(images);
@@ -318,7 +320,7 @@ public class PictureImageGridActivity extends PictureBaseActivity implements Vie
     @Override
     public void startCamera() {
         switch (type) {
-            case LocalMediaLoader.TYPE_IMAGE:
+            case LocalMediaLoader.TYPE_PICTURE:
                 // 拍照
                 startOpenCamera();
                 break;
@@ -331,17 +333,18 @@ public class PictureImageGridActivity extends PictureBaseActivity implements Vie
     }
 
     @Override
-    public void onPictureClick(LocalMedia media, int position) {
-        startPreview(adapter.getImages(), position);
+    public void onMediaClick(LocalMedia media, int position) {
+        startPreview(adapter.getDatas(), position);
     }
 
     public void startPreview(List<LocalMedia> previewImages, int position) {
         LocalMedia media = previewImages.get(position);
-        int type = media.getType();
+        @LocalMedia.MediaType int type = media.getType();
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
         switch (type) {
-            case LocalMediaLoader.TYPE_IMAGE:
+            // TODO: 2017/8/17 修改常量
+            case LocalMediaLoader.TYPE_PICTURE:
                 if (enableCrop && selectMode == FunctionConfig.MODE_SINGLE) {
                     startCopy(media.getPath());
                 } else if (!enableCrop && selectMode == FunctionConfig.MODE_SINGLE) {
@@ -514,7 +517,7 @@ public class PictureImageGridActivity extends PictureBaseActivity implements Vie
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d(TAG,"onActivityResult");
+        Log.d(TAG, "onActivityResult");
         if (resultCode == RESULT_OK) {
             // on take photo success
             if (requestCode == FunctionConfig.REQUEST_CAMERA) {
@@ -523,11 +526,11 @@ public class PictureImageGridActivity extends PictureBaseActivity implements Vie
                 sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)));
                 if (selectMode == FunctionConfig.MODE_SINGLE) {
                     // 如果是单选 拍照后直接返回
-                    if (enableCrop && type == LocalMediaLoader.TYPE_IMAGE) {
+                    if (enableCrop && type == LocalMediaLoader.TYPE_PICTURE) {
                         // 如果允许裁剪，并且是图片
                         startCopy(cameraPath);
                     } else {
-                        if (isCompress && type == LocalMediaLoader.TYPE_IMAGE) {
+                        if (isCompress && type == LocalMediaLoader.TYPE_PICTURE) {
                             // 压缩图片
                             ArrayList<LocalMedia> compresses = new ArrayList<>();
                             LocalMedia compress = new LocalMedia();
@@ -573,7 +576,7 @@ public class PictureImageGridActivity extends PictureBaseActivity implements Vie
                     if (localMedias.size() >= 100) {
                         localMedias.remove(localMedias.size() - 1);
                     }
-                    List<LocalMedia> images = adapter.getImages();
+                    List<LocalMedia> images = adapter.getDatas();
                     images.add(0, media);
                     mediaFolder.setImages(images);
                     mediaFolder.setImageNum(mediaFolder.getImages().size());
@@ -581,10 +584,10 @@ public class PictureImageGridActivity extends PictureBaseActivity implements Vie
                     if (adapter.getSelectedImages().size() < maxSelectNum) {
                         List<LocalMedia> selectedImages = adapter.getSelectedImages();
                         selectedImages.add(media);
-                        adapter.bindSelectImages(selectedImages);
+                        adapter.bindSelectedMedias(selectedImages);
                         ChangeImageNumber(adapter.getSelectedImages());
                     }
-                    adapter.bindImagesData(images);
+                    adapter.bindMediaData(images);
                 }
 
             }
@@ -600,13 +603,14 @@ public class PictureImageGridActivity extends PictureBaseActivity implements Vie
         if (folders.size() == 0) {
             // 没有相册 先创建一个最近相册出来
             LocalMediaFolder newFolder = new LocalMediaFolder();
-            String folderName = "";
+            String folderName;
             switch (type) {
-                case LocalMediaLoader.TYPE_IMAGE:
-                    folderName = getString(R.string.lately_image);
-                    break;
                 case LocalMediaLoader.TYPE_VIDEO:
                     folderName = getString(R.string.lately_video);
+                    break;
+                case LocalMediaLoader.TYPE_PICTURE:
+                default:
+                    folderName = getString(R.string.lately_image);
                     break;
             }
             newFolder.setName(folderName);
@@ -619,7 +623,7 @@ public class PictureImageGridActivity extends PictureBaseActivity implements Vie
 
     private void handleCropResult(List<LocalMedia> result) {
         if (result != null) {
-            if (isCompress && type == LocalMediaLoader.TYPE_IMAGE) {
+            if (isCompress && type == LocalMediaLoader.TYPE_PICTURE) {
                 // 压缩图片
                 compressImage(result);
             } else {

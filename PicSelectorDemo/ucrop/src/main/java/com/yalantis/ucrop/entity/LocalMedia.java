@@ -1,29 +1,74 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2017 leobert-lan
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 package com.yalantis.ucrop.entity;
 
 
+import android.support.annotation.IntDef;
+
 import java.io.Serializable;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
 
 /**
- * author：luck
- * project：PictureSelector
- * package：com.luck.picture.entity
- * email：893855882@qq.com
- * data：16/12/31
+ * local "Media" file，picture or video
  */
 public class LocalMedia implements Serializable {
+
+    public static final int TYPE_PICTURE = 0;
+    public static final int TYPE_VIDEO = 1;
+
+
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef({TYPE_PICTURE, TYPE_VIDEO})
+    public @interface MediaType {
+    }
+
     private String path;
     private String compressPath;
-    private String cutPath;
+    private String croppedPath;
     private long duration;
     private long lastUpdateAt;
-    private boolean isChecked;
-    private boolean isCut;
-    public int position;
-    private int num;
-    private int type;
+    private boolean isCropped;
+//    /**
+//    private boolean isChecked;
+//     *
+//     */
+//    private int position;
+//    private int num;
+
+    private
+    @MediaType
+    int type;
+
     private boolean compressed;
 
-    public LocalMedia(String path, long lastUpdateAt, long duration, int type) {
+    private final GridItemInfoHolder gridItemInfoHolder
+            = new GridItemInfoHolder();
+
+    public LocalMedia(String path, long lastUpdateAt, long duration, @MediaType int type) {
         this.path = path;
         this.duration = duration;
         this.lastUpdateAt = lastUpdateAt;
@@ -31,33 +76,33 @@ public class LocalMedia implements Serializable {
     }
 
     public LocalMedia(String path, long duration, long lastUpdateAt,
-                      boolean isChecked, int position, int num, int type) {
+                      boolean isChecked, int position, int num, @MediaType int type) {
         this.path = path;
         this.duration = duration;
         this.lastUpdateAt = lastUpdateAt;
-        this.isChecked = isChecked;
-        this.position = position;
-        this.num = num;
+//        this.isChecked = isChecked;
+//        this.position = position;
+//        this.num = num;
         this.type = type;
     }
 
     public LocalMedia() {
     }
 
-    public String getCutPath() {
-        return cutPath;
+    public String getCroppedPath() {
+        return croppedPath;
     }
 
-    public void setCutPath(String cutPath) {
-        this.cutPath = cutPath;
+    public void setCroppedPath(String croppedPath) {
+        this.croppedPath = croppedPath;
     }
 
-    public boolean isCut() {
-        return isCut;
+    public boolean isCropped() {
+        return isCropped;
     }
 
-    public void setCut(boolean cut) {
-        isCut = cut;
+    public void setCropped(boolean cropped) {
+        isCropped = cropped;
     }
 
     public boolean isCompressed() {
@@ -76,29 +121,35 @@ public class LocalMedia implements Serializable {
         this.compressPath = compressPath;
     }
 
-    public int getNum() {
-        return num;
-    }
+//    public int getNum() {
+//        return num;
+//    }
+//
+//    public void setNum(int num) {
+//        this.num = num;
+//    }
 
-    public void setNum(int num) {
-        this.num = num;
-    }
-
+    @MediaType
     public int getType() {
         return type;
     }
 
-    public void setType(int type) {
+    public void setType(@MediaType int type) {
         this.type = type;
     }
 
 
-    public boolean isChecked() {
-        return isChecked;
-    }
+//    public boolean isChecked() {
+//        return isChecked;
+//    }
+//
+//    public void setChecked(boolean checked) {
+//        isChecked = checked;
+//    }
 
-    public void setChecked(boolean checked) {
-        isChecked = checked;
+
+    public GridItemInfoHolder getGridItemInfoHolder() {
+        return gridItemInfoHolder;
     }
 
     public String getPath() {
@@ -125,21 +176,21 @@ public class LocalMedia implements Serializable {
         this.lastUpdateAt = lastUpdateAt;
     }
 
-    public boolean getIsChecked() {
-        return this.isChecked;
-    }
+//    public boolean getIsChecked() {
+//        return this.isChecked;
+//    }
+//
+//    public void setIsChecked(boolean isChecked) {
+//        this.isChecked = isChecked;
+//    }
 
-    public void setIsChecked(boolean isChecked) {
-        this.isChecked = isChecked;
-    }
-
-    public int getPosition() {
-        return this.position;
-    }
-
-    public void setPosition(int position) {
-        this.position = position;
-    }
+//    public int getPosition() {
+//        return this.position;
+//    }
+//
+//    public void setPosition(int position) {
+//        this.position = position;
+//    }
 
     @Override
     public String toString() {

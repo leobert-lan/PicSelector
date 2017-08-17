@@ -20,11 +20,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import thirdparty.leobert.pvselectorlib.R;
-import thirdparty.leobert.pvselectorlib.model.FunctionConfig;
-import thirdparty.leobert.pvselectorlib.model.LocalMediaLoader;
-import thirdparty.leobert.pvselectorlib.observable.ImagesObservable;
-import thirdparty.leobert.pvselectorlib.widget.PreviewViewPager;
 import com.yalantis.ucrop.MultiUCrop;
 import com.yalantis.ucrop.UCrop;
 import com.yalantis.ucrop.dialog.OptAnimationLoader;
@@ -36,7 +31,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PicturePreviewActivity extends PictureBaseActivity implements View.OnClickListener {
+import thirdparty.leobert.pvselectorlib.R;
+import thirdparty.leobert.pvselectorlib.model.FunctionConfig;
+import thirdparty.leobert.pvselectorlib.model.LocalMediaLoader;
+import thirdparty.leobert.pvselectorlib.observable.ImagesObservable;
+import thirdparty.leobert.pvselectorlib.widget.PreviewViewPager;
+
+public class PicturePreviewActivity extends PictureBaseActivity
+        implements View.OnClickListener {
     private ImageButton left_back;
     private TextView tv_img_num, tv_title, tv_ok;
     private RelativeLayout select_bar_layout;
@@ -44,7 +46,7 @@ public class PicturePreviewActivity extends PictureBaseActivity implements View.
     private int position;
     private RelativeLayout rl_title;
     private LinearLayout ll_check;
-    private List<LocalMedia> images = new ArrayList<>();
+    private List<LocalMedia> datas = new ArrayList<>();
     private List<LocalMedia> selectImages = new ArrayList<>();
     private TextView check;
     private SimpleFragmentAdapter adapter;
@@ -88,12 +90,12 @@ public class PicturePreviewActivity extends PictureBaseActivity implements View.
         boolean is_bottom_preview = getIntent().getBooleanExtra(FunctionConfig.EXTRA_BOTTOM_PREVIEW, false);
         if (is_bottom_preview) {
             // 底部预览按钮过来
-            images = (List<LocalMedia>) getIntent().getSerializableExtra(FunctionConfig.EXTRA_PREVIEW_LIST);
+            datas = (List<LocalMedia>) getIntent().getSerializableExtra(FunctionConfig.EXTRA_PREVIEW_LIST);
         } else {
-            images = ImagesObservable.getInstance().readLocalMedias();
+            datas = ImagesObservable.getInstance().readLocalMedias();
         }
 
-        if (is_checked_num) {
+        if (displayCandidateNo) {
             tv_img_num.setBackgroundResource(R.drawable.message_oval_blue);
         }
 
@@ -104,39 +106,49 @@ public class PicturePreviewActivity extends PictureBaseActivity implements View.
             @Override
             public void onClick(View view) {
                 // 刷新图片列表中图片状态
-                boolean isChecked;
-                if (!check.isSelected()) {
-                    isChecked = true;
-                    check.setSelected(true);
-                    Animation animation = OptAnimationLoader.loadAnimation(mContext, R.anim.modal_in);
-                    check.startAnimation(animation);
-                } else {
-                    isChecked = false;
-                    check.setSelected(false);
-                }
-                if (selectImages.size() >= maxSelectNum && isChecked) {
-                    Toast.makeText(PicturePreviewActivity.this, getString(R.string.message_max_num, maxSelectNum), Toast.LENGTH_LONG).show();
+                boolean hasBeenSelected = check.isSelected();
+
+                if (selectImages.size() >= maxSelectNum && !hasBeenSelected) { /*try to add selected but onLimit*/
+                    Toast.makeText(PicturePreviewActivity.this,
+                            getString(R.string.message_max_num, maxSelectNum),
+                            Toast.LENGTH_LONG).show();
                     check.setSelected(false);
                     return;
                 }
-                LocalMedia image = images.get(viewPager.getCurrentItem());
-                if (isChecked) {
-                    selectImages.add(image);
-                    image.setNum(selectImages.size());
-                    if (is_checked_num) {
-                        check.setText(image.getNum() + "");
-                    }
-                } else {
+
+                LocalMedia localMedia = datas.get(viewPager.getCurrentItem());
+
+                if (hasBeenSelected) { /*update to unSelected*/
+                    check.setSelected(false);
+
                     for (LocalMedia media : selectImages) {
-                        if (media.getPath().equals(image.getPath())) {
+                        if (media.getPath().equals(localMedia.getPath())) {
                             selectImages.remove(media);
-                            subSelectPosition();
-                            notifyCheckChanged(media);
+                            rebuildCandidateNo();
+                            rebuildSelectPosition(media);
                             break;
                         }
                     }
+
+                } else { /*update to selected*/
+//                    hasBeenSelected = true;
+                    check.setSelected(true);
+
+                    //handle UI animation
+                    Animation animation = OptAnimationLoader.loadAnimation(mContext, R.anim.modal_in);
+                    check.startAnimation(animation);
+
+                    selectImages.add(localMedia);
+
+                    final int candidateNo = selectImages.size();
+
+                    localMedia.getGridItemInfoHolder().setCandidateNo(candidateNo);
+                    if (displayCandidateNo) {
+                        check.setText(String.valueOf(candidateNo));
+                    }
                 }
-                onSelectNumChange(true);
+
+                onSelectNumChanged(true);
             }
         });
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -147,11 +159,11 @@ public class PicturePreviewActivity extends PictureBaseActivity implements View.
 
             @Override
             public void onPageSelected(int position) {
-                tv_title.setText(position + 1 + "/" + images.size());
-                if (is_checked_num) {
-                    LocalMedia media = images.get(position);
-                    check.setText(media.getNum() + "");
-                    notifyCheckChanged(media);
+                tv_title.setText(position + 1 + "/" + datas.size());
+                if (displayCandidateNo) {
+                    LocalMedia media = datas.get(position);
+                    check.setText(String.valueOf(media.getGridItemInfoHolder().getCandidateNo()));
+                    rebuildSelectPosition(media);
                 }
                 onImageChecked(position);
             }
@@ -163,31 +175,32 @@ public class PicturePreviewActivity extends PictureBaseActivity implements View.
     }
 
     private void initViewPageAdapterData() {
-        tv_title.setText(position + 1 + "/" + images.size());
+        tv_title.setText(position + 1 + "/" + datas.size());
         adapter = new SimpleFragmentAdapter(getSupportFragmentManager());
         check.setBackgroundResource(cb_drawable);
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(position);
-        onSelectNumChange(false);
+        onSelectNumChanged(false);
         onImageChecked(position);
-        if (is_checked_num) {
+        if (displayCandidateNo) {
             tv_img_num.setBackgroundResource(R.drawable.message_oval_blue);
-            LocalMedia media = images.get(position);
-            check.setText(media.getNum() + "");
-            notifyCheckChanged(media);
+            LocalMedia media = datas.get(position);
+            check.setText(media.getGridItemInfoHolder().getCandidateNo());
+            rebuildSelectPosition(media);
         }
     }
 
     /**
      * 选择按钮更新
      */
-    private void notifyCheckChanged(LocalMedia imageBean) {
-        if (is_checked_num) {
+    private void rebuildSelectPosition(LocalMedia imageBean) {
+        if (displayCandidateNo) {
             check.setText("");
             for (LocalMedia media : selectImages) {
                 if (media.getPath().equals(imageBean.getPath())) {
-                    imageBean.setNum(media.getNum());
-                    check.setText(String.valueOf(imageBean.getNum()));
+                    final int candidateNo = media.getGridItemInfoHolder().getCandidateNo();
+                    imageBean.getGridItemInfoHolder().setCandidateNo(candidateNo);
+                    check.setText(String.valueOf(candidateNo));
                 }
             }
         }
@@ -196,10 +209,10 @@ public class PicturePreviewActivity extends PictureBaseActivity implements View.
     /**
      * 更新选择的顺序
      */
-    private void subSelectPosition() {
+    private void rebuildCandidateNo() {
         for (int index = 0, len = selectImages.size(); index < len; index++) {
             LocalMedia media = selectImages.get(index);
-            media.setNum(index + 1);
+            media.getGridItemInfoHolder().setCandidateNo(index + 1);
         }
     }
 
@@ -209,7 +222,7 @@ public class PicturePreviewActivity extends PictureBaseActivity implements View.
      * @param position
      */
     public void onImageChecked(int position) {
-        check.setSelected(isSelected(images.get(position)));
+        check.setSelected(isSelected(datas.get(position)));
     }
 
     /**
@@ -230,7 +243,7 @@ public class PicturePreviewActivity extends PictureBaseActivity implements View.
     /**
      * 更新图片选择数量
      */
-    public void onSelectNumChange(boolean isRefresh) {
+    public void onSelectNumChanged(boolean isRefresh) {
         Animation animation = null;
         boolean enable = selectImages.size() != 0;
         if (enable) {
@@ -267,13 +280,13 @@ public class PicturePreviewActivity extends PictureBaseActivity implements View.
 
         @Override
         public Fragment getItem(int position) {
-            PictureImagePreviewFragment fragment = PictureImagePreviewFragment.getInstance(images.get(position).getPath(), selectImages);
+            PictureImagePreviewFragment fragment = PictureImagePreviewFragment.getInstance(datas.get(position).getPath(), selectImages);
             return fragment;
         }
 
         @Override
         public int getCount() {
-            return images.size();
+            return datas.size();
         }
     }
 
@@ -284,7 +297,7 @@ public class PicturePreviewActivity extends PictureBaseActivity implements View.
         if (id == R.id.left_back) {
             finish();
         } else if (id == R.id.tv_ok) {
-            if (selectMode == FunctionConfig.MODE_MULTIPLE && enableCrop && type == LocalMediaLoader.TYPE_IMAGE) {
+            if (selectMode == FunctionConfig.MODE_MULTIPLE && enableCrop && type == LocalMediaLoader.TYPE_PICTURE) {
                 // 是图片和选择压缩并且是多张，调用批量压缩
                 startMultiCopy(selectImages);
             } else {

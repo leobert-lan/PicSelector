@@ -10,6 +10,7 @@ import android.support.v4.content.Loader;
 import android.text.TextUtils;
 
 import thirdparty.leobert.pvselectorlib.R;
+
 import com.yalantis.ucrop.entity.LocalMedia;
 import com.yalantis.ucrop.entity.LocalMediaFolder;
 
@@ -21,8 +22,12 @@ import java.util.List;
 
 public class LocalMediaLoader {
     // load type
-    public static final int TYPE_IMAGE = 1;
-    public static final int TYPE_VIDEO = 2;
+    @LocalMedia.MediaType
+    public static final int TYPE_PICTURE = LocalMedia.TYPE_PICTURE;
+
+    @LocalMedia.MediaType
+    public static final int TYPE_VIDEO = LocalMedia.TYPE_VIDEO;
+
     public int index = 0;
     private final static String[] IMAGE_PROJECTION = {
             MediaStore.Images.Media.DATA,
@@ -39,103 +44,108 @@ public class LocalMediaLoader {
             MediaStore.Video.Media.DURATION,
     };
 
-    private int type = TYPE_IMAGE;
+    @LocalMedia.MediaType
+    private int type = TYPE_PICTURE;
+
     private FragmentActivity activity;
 
 
-    public LocalMediaLoader(FragmentActivity activity, int type) {
+    public LocalMediaLoader(FragmentActivity activity,
+                            @LocalMedia.MediaType int type) {
         this.activity = activity;
         this.type = type;
     }
 
-    public void loadAllImage(final LocalMediaLoadListener imageLoadListener) {
-        activity.getSupportLoaderManager().initLoader(type, null, new LoaderManager.LoaderCallbacks<Cursor>() {
-            @Override
-            public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-                CursorLoader cursorLoader = null;
-                if (id == TYPE_IMAGE) {
-                    cursorLoader = new CursorLoader(
-                            activity, MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                            IMAGE_PROJECTION, MediaStore.Images.Media.MIME_TYPE + "=? or "
-                            + MediaStore.Images.Media.MIME_TYPE + "=?" + " or "
-                            + MediaStore.Images.Media.MIME_TYPE + "=?",
-                            new String[]{"image/jpeg", "image/png", "image/gif"}, IMAGE_PROJECTION[2] + " DESC");
-                } else if (id == TYPE_VIDEO) {
-                    cursorLoader = new CursorLoader(
-                            activity, MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
-                            VIDEO_PROJECTION, null, null, VIDEO_PROJECTION[2] + " DESC");
-                }
-                return cursorLoader;
-            }
+    public void loadAllImage(final OnLocalMediaLoadedListener imageLoadListener) {
+        activity.getSupportLoaderManager().initLoader(type, null,
+                new LoaderManager.LoaderCallbacks<Cursor>() {
+                    @Override
+                    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+                        CursorLoader cursorLoader = null;
+                        if (id == TYPE_PICTURE) {
+                            cursorLoader = new CursorLoader(
+                                    activity, MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                                    IMAGE_PROJECTION, MediaStore.Images.Media.MIME_TYPE + "=? or "
+                                    + MediaStore.Images.Media.MIME_TYPE + "=?" + " or "
+                                    + MediaStore.Images.Media.MIME_TYPE + "=?",
+                                    new String[]{"image/jpeg", "image/png", "image/gif"}, IMAGE_PROJECTION[2] + " DESC");
+                        } else if (id == TYPE_VIDEO) {
+                            cursorLoader = new CursorLoader(
+                                    activity, MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+                                    VIDEO_PROJECTION, null, null, VIDEO_PROJECTION[2] + " DESC");
+                        }
+                        return cursorLoader;
+                    }
 
-            @Override
-            public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-                try {
-                    ArrayList<LocalMediaFolder> imageFolders = new ArrayList<LocalMediaFolder>();
-                    LocalMediaFolder allImageFolder = new LocalMediaFolder();
-                    List<LocalMedia> allImages = new ArrayList<LocalMedia>();
-                    if (data != null) {
-                        int count = data.getCount();
-                        if (count > 0) {
-                            data.moveToFirst();
-                            do {
+                    @Override
+                    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+                        try {
+                            ArrayList<LocalMediaFolder> imageFolders = new ArrayList<LocalMediaFolder>();
+                            LocalMediaFolder allImageFolder = new LocalMediaFolder();
+                            List<LocalMedia> allImages = new ArrayList<LocalMedia>();
+                            if (data != null) {
+                                int count = data.getCount();
+                                if (count > 0) {
+                                    data.moveToFirst();
+                                    do {
 
-                                String path = data.getString(data.getColumnIndexOrThrow(IMAGE_PROJECTION[0]));
-                                String name = data.getString(data.getColumnIndexOrThrow(IMAGE_PROJECTION[1]));
-                                // 如原图路径不存在或者路径存在但文件不存在,就结束当前循环
-                                if (TextUtils.isEmpty(path) || !new File(path).exists()) {
-                                    continue;
+                                        String path = data.getString(data.getColumnIndexOrThrow(IMAGE_PROJECTION[0]));
+                                        String name = data.getString(data.getColumnIndexOrThrow(IMAGE_PROJECTION[1]));
+                                        // 如原图路径不存在或者路径存在但文件不存在,就结束当前循环
+                                        if (TextUtils.isEmpty(path) || !new File(path).exists()) {
+                                            continue;
+                                        }
+                                        long dateTime = data.getLong(data.getColumnIndexOrThrow(IMAGE_PROJECTION[2]));
+                                        int duration = (type == TYPE_VIDEO ? data.getInt(data.getColumnIndexOrThrow(VIDEO_PROJECTION[4])) : 0);
+                                        LocalMedia image = new LocalMedia(path, dateTime, duration, type);
+                                        LocalMediaFolder folder = getImageFolder(path, imageFolders);
+                                        folder.getImages().add(image);
+                                        folder.setType(type);
+                                        index++;
+                                        folder.setImageNum(folder.getImageNum() + 1);
+                                        // 最近相册中  只添加最新的100条
+                                        if (index <= 100) {
+                                            allImages.add(image);
+                                            allImageFolder.setType(type);
+                                            allImageFolder.setImageNum(allImageFolder.getImageNum() + 1);
+                                        }
+
+                                    } while (data.moveToNext());
+
+                                    if (allImages.size() > 0) {
+                                        sortFolder(imageFolders);
+                                        imageFolders.add(0, allImageFolder);
+                                        String title;
+                                        switch (type) {
+                                            case LocalMedia.TYPE_VIDEO:
+                                                title = activity.getString(R.string.lately_video);
+                                                break;
+                                            case LocalMedia.TYPE_PICTURE:
+                                            default:
+                                                title = activity.getString(R.string.lately_image);
+                                                break;
+                                        }
+                                        allImageFolder.setFirstImagePath(allImages.get(0).getPath());
+                                        allImageFolder.setName(title);
+                                        allImageFolder.setType(type);
+                                        allImageFolder.setImages(allImages);
+                                    }
+                                    imageLoadListener.onLocalMediaLoadComplete(imageFolders);
+                                    data.close();
+                                } else {
+                                    // 如果没有相册
+                                    imageLoadListener.onLocalMediaLoadComplete(imageFolders);
                                 }
-                                long dateTime = data.getLong(data.getColumnIndexOrThrow(IMAGE_PROJECTION[2]));
-                                int duration = (type == TYPE_VIDEO ? data.getInt(data.getColumnIndexOrThrow(VIDEO_PROJECTION[4])) : 0);
-                                LocalMedia image = new LocalMedia(path, dateTime, duration, type);
-                                LocalMediaFolder folder = getImageFolder(path, imageFolders);
-                                folder.getImages().add(image);
-                                folder.setType(type);
-                                index++;
-                                folder.setImageNum(folder.getImageNum() + 1);
-                                // 最近相册中  只添加最新的100条
-                                if (index <= 100) {
-                                    allImages.add(image);
-                                    allImageFolder.setType(type);
-                                    allImageFolder.setImageNum(allImageFolder.getImageNum() + 1);
-                                }
-
-                            } while (data.moveToNext());
-
-                            if (allImages.size() > 0) {
-                                sortFolder(imageFolders);
-                                imageFolders.add(0, allImageFolder);
-                                String title = "";
-                                switch (type) {
-                                    case TYPE_VIDEO:
-                                        title = activity.getString(R.string.lately_video);
-                                        break;
-                                    case TYPE_IMAGE:
-                                        title = activity.getString(R.string.lately_image);
-                                        break;
-                                }
-                                allImageFolder.setFirstImagePath(allImages.get(0).getPath());
-                                allImageFolder.setName(title);
-                                allImageFolder.setType(type);
-                                allImageFolder.setImages(allImages);
                             }
-                            imageLoadListener.loadComplete(imageFolders);
-                            data.close();
-                        } else {
-                            // 如果没有相册
-                            imageLoadListener.loadComplete(imageFolders);
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
 
-            @Override
-            public void onLoaderReset(Loader<Cursor> loader) {
-            }
-        });
+                    @Override
+                    public void onLoaderReset(Loader<Cursor> loader) {
+                    }
+                });
     }
 
     private void sortFolder(List<LocalMediaFolder> imageFolders) {
@@ -146,14 +156,15 @@ public class LocalMediaLoader {
                 if (lhs.getImages() == null || rhs.getImages() == null) {
                     return 0;
                 }
-                int lsize = lhs.getImageNum();
-                int rsize = rhs.getImageNum();
-                return lsize == rsize ? 0 : (lsize < rsize ? 1 : -1);
+                int lSize = lhs.getImageNum();
+                int rSize = rhs.getImageNum();
+                return lSize == rSize ? 0 : (lSize < rSize ? 1 : -1);
             }
         });
     }
 
-    private LocalMediaFolder getImageFolder(String path, List<LocalMediaFolder> imageFolders) {
+    private LocalMediaFolder getImageFolder(String path,
+                                            List<LocalMediaFolder> imageFolders) {
         File imageFile = new File(path);
         File folderFile = imageFile.getParentFile();
 
@@ -170,7 +181,7 @@ public class LocalMediaLoader {
         return newFolder;
     }
 
-    public interface LocalMediaLoadListener {
-        void loadComplete(List<LocalMediaFolder> folders);
+    public interface OnLocalMediaLoadedListener {
+        void onLocalMediaLoadComplete(List<LocalMediaFolder> folders);
     }
 }

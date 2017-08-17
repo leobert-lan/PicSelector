@@ -1,16 +1,34 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2017 leobert-lan
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 package com.yalantis.ucrop.entity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * author：luck
- * project：PictureSelector
- * package：com.luck.picture.entity
- * email：893855882@qq.com
- * data：16/12/31
- */
+
 public class LocalMediaFolder implements Serializable {
     private String name;
     private String path;
@@ -18,14 +36,17 @@ public class LocalMediaFolder implements Serializable {
     private int imageNum;
     private boolean isChecked;
     private int checkedNum;
+
+    @LocalMedia.MediaType
     private int type;
-    private List<LocalMedia> images = new ArrayList<LocalMedia>();
+
+    private List<LocalMedia> images = new ArrayList<>();
 
     public int getType() {
         return type;
     }
 
-    public void setType(int type) {
+    public void setType(@LocalMedia.MediaType int type) {
         this.type = type;
     }
 
