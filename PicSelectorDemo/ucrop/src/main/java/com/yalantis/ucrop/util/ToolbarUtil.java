@@ -32,11 +32,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 
-/**
- * Author: HF
- * Date:   2016-04-26
- * Description: Learn From https://github.com/laobie
- */
 
 public class ToolbarUtil {
 

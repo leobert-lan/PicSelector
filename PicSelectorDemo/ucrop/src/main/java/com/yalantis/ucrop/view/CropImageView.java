@@ -48,8 +48,6 @@ import java.lang.ref.WeakReference;
 import java.util.Arrays;
 
 /**
- * Created by Oleksii Shliama (https://github.com/shliama).
- * <p/>
  * This class adds crop feature, methods to draw crop guidelines, and keep image in correct state.
  * Also it extends parent class methods to add checks for scale; animating zoom in/out.
  */
@@ -521,12 +519,16 @@ public class CropImageView extends TransformImageView {
      * This method extracts all needed values from the styled attributes.
      * Those are used to configure the view.
      */
-    @SuppressWarnings("deprecation")
     protected void processStyledAttributes(@NonNull TypedArray a) {
-        float targetAspectRatioX = Math.abs(a.getFloat(R.styleable.ucrop_UCropView_ucrop_aspect_ratio_x, DEFAULT_ASPECT_RATIO));
-        float targetAspectRatioY = Math.abs(a.getFloat(R.styleable.ucrop_UCropView_ucrop_aspect_ratio_y, DEFAULT_ASPECT_RATIO));
+        float targetAspectRatioX =
+                Math.abs(a.getFloat(R.styleable.ucrop_UCropView_ucrop_aspect_ratio_x,
+                        DEFAULT_ASPECT_RATIO));
+        float targetAspectRatioY =
+                Math.abs(a.getFloat(R.styleable.ucrop_UCropView_ucrop_aspect_ratio_y,
+                        DEFAULT_ASPECT_RATIO));
 
-        if (targetAspectRatioX == SOURCE_IMAGE_ASPECT_RATIO || targetAspectRatioY == SOURCE_IMAGE_ASPECT_RATIO) {
+        if (targetAspectRatioX == SOURCE_IMAGE_ASPECT_RATIO
+                || targetAspectRatioY == SOURCE_IMAGE_ASPECT_RATIO) {
             mTargetAspectRatio = SOURCE_IMAGE_ASPECT_RATIO;
         } else {
             mTargetAspectRatio = targetAspectRatioX / targetAspectRatioY;

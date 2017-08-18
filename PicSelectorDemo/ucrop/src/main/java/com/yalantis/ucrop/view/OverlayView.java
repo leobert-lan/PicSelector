@@ -48,8 +48,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * Created by Oleksii Shliama (https://github.com/shliama).
- * <p/>
  * This view is used for drawing the overlay on top of the image. It may have frame, crop guidelines and dimmed area.
  * This must have LAYER_TYPE_SOFTWARE to draw itself properly.
  */

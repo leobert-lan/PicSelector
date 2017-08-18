@@ -46,9 +46,7 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 
-/**
- * Created by Oleksii Shliama (https://github.com/shliama).
- */
+
 public class BitmapLoadUtils {
 
     private static final String TAG = "BitmapLoadUtils";
@@ -147,28 +145,29 @@ public class BitmapLoadUtils {
      *
      * @return - max bitmap size in pixels.
      */
-    @SuppressWarnings({"SuspiciousNameCombination", "deprecation"})
+//    @SuppressWarnings({"SuspiciousNameCombination", "deprecation"})
     public static int calculateMaxBitmapSize(@NonNull Context context) {
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
 
         Point size = new Point();
         int width, height;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            display.getSize(size);
-            width = size.x;
-            height = size.y;
-        } else {
-            width = display.getWidth();
-            height = display.getHeight();
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+        display.getSize(size);
+        width = size.x;
+        height = size.y;
+//        } else {
+//            width = display.getWidth();
+//            height = display.getHeight();
+//        }
 
         // Twice the device screen diagonal as default
         int maxBitmapSize = (int) Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2));
 
         // Check for max texture size via Canvas
         Canvas canvas = new Canvas();
-        final int maxCanvasSize = Math.min(canvas.getMaximumBitmapWidth(), canvas.getMaximumBitmapHeight());
+        final int maxCanvasSize = Math.min(canvas.getMaximumBitmapWidth(),
+                canvas.getMaximumBitmapHeight());
         if (maxCanvasSize > 0) {
             maxBitmapSize = Math.min(maxBitmapSize, maxCanvasSize);
         }
@@ -183,9 +182,8 @@ public class BitmapLoadUtils {
         return maxBitmapSize;
     }
 
-    @SuppressWarnings("ConstantConditions")
     public static void close(@Nullable Closeable c) {
-        if (c != null && c instanceof Closeable) { // java.lang.IncompatibleClassChangeError: interface not implemented
+        if (c != null) {
             try {
                 c.close();
             } catch (IOException e) {

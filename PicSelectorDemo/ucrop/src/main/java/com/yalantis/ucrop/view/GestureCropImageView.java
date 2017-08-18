@@ -32,9 +32,6 @@ import android.view.ScaleGestureDetector;
 
 import com.yalantis.ucrop.util.RotationGestureDetector;
 
-/**
- * Created by Oleksii Shliama (https://github.com/shliama).
- */
 public class GestureCropImageView extends CropImageView {
 
     private static final int DOUBLE_TAP_ZOOM_DURATION = 200;

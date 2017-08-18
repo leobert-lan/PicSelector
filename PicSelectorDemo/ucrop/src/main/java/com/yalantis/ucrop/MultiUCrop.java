@@ -52,8 +52,6 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * Created by Oleksii Shliama (https://github.com/shliama).
- * <p>
  * Builder class to ease Intent setup.
  */
 public class MultiUCrop {

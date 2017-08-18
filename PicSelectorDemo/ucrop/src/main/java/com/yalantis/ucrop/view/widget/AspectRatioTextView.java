@@ -45,9 +45,6 @@ import com.yalantis.ucrop.view.CropImageView;
 
 import java.util.Locale;
 
-/**
- * Created by Oleksii Shliama (https://github.com/shliama).
- */
 public class AspectRatioTextView extends android.support.v7.widget.AppCompatTextView {
 
     private final Rect mCanvasClipBounds = new Rect();
@@ -121,7 +118,6 @@ public class AspectRatioTextView extends android.support.v7.widget.AppCompatText
         }
     }
 
-    @SuppressWarnings("deprecation")
     private void init(@NonNull TypedArray a) {
         setGravity(Gravity.CENTER_HORIZONTAL);
 
@@ -141,7 +137,8 @@ public class AspectRatioTextView extends android.support.v7.widget.AppCompatText
 
         setTitle();
 
-        int activeColor = getResources().getColor(R.color.ucrop_color_widget_active);
+        int activeColor = //getResources().getColor(R.color.ucrop_color_widget_active);
+                ContextCompat.getColor(getContext(), R.color.ucrop_color_widget_active);
         applyActiveColor(activeColor);
 
         a.recycle();

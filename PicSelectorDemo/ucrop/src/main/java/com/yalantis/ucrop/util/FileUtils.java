@@ -45,11 +45,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-/**
- * @author Peli
- * @author paulburke (ipaulpro)
- * @version 2013-12-11
- */
+
 public class FileUtils {
     private static String DEFAULT_CACHE_DIR = "picture_cache";
 
@@ -197,7 +193,6 @@ public class FileUtils {
      *
      * @param context The context.
      * @param uri     The Uri to query.
-     * @author paulburke
      */
     @SuppressLint("NewApi")
     public static String getPath(final Context context, final Uri uri) {

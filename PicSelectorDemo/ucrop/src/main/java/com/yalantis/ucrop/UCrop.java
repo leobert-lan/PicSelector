@@ -49,8 +49,6 @@ import java.util.Arrays;
 import java.util.Locale;
 
 /**
- * Created by Oleksii Shliama (https://github.com/shliama).
- * <p>
  * Builder class to ease Intent setup.
  */
 public class UCrop {

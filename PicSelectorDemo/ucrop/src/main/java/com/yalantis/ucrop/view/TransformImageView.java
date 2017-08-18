@@ -35,7 +35,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.widget.ImageView;
 
 import com.yalantis.ucrop.callback.BitmapLoadCallback;
 import com.yalantis.ucrop.model.ExifInfo;
@@ -44,12 +43,10 @@ import com.yalantis.ucrop.util.FastBitmapDrawable;
 import com.yalantis.ucrop.util.RectUtils;
 
 /**
- * Created by Oleksii Shliama (https://github.com/shliama).
- * <p/>
  * This class provides base logic to setup the image, transform it with matrix (move, scale, rotate),
  * and methods to get current matrix state.
  */
-public class TransformImageView extends ImageView {
+public class TransformImageView extends android.support.v7.widget.AppCompatImageView {
 
     private static final String TAG = "TransformImageView";
 
