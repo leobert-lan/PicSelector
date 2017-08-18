@@ -34,7 +34,7 @@
             android:theme="@style/Theme.Slider" />
 
         <activity
-            android:name="com.yalantis.ucrop.ui.PictureMultiCuttingActivity"
+            android:name="com.yalantis.ucrop.ui.PictureMultiUCropActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Slider" />

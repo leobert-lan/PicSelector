@@ -23,10 +23,10 @@ import java.util.List;
 public class LocalMediaLoader {
     // load type
     @LocalMedia.MediaType
-    public static final int TYPE_PICTURE = LocalMedia.TYPE_PICTURE;
+    private static final int TYPE_PICTURE = LocalMedia.TYPE_PICTURE;
 
     @LocalMedia.MediaType
-    public static final int TYPE_VIDEO = LocalMedia.TYPE_VIDEO;
+    private static final int TYPE_VIDEO = LocalMedia.TYPE_VIDEO;
 
     public int index = 0;
     private final static String[] IMAGE_PROJECTION = {

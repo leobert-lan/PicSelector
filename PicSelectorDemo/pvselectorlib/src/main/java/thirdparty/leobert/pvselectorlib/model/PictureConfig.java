@@ -77,7 +77,9 @@ public class PictureConfig {
      * @param position
      * @param medias
      */
-    public void externalPicturePreview(Context mContext, int position, List<LocalMedia> medias) {
+    public void externalPicturePreview(Context mContext,
+                                       int position,
+                                       List<LocalMedia> medias) {
         if (medias != null && medias.size() > 0) {
             Intent intent = new Intent();
             intent.putExtra(FunctionConfig.EXTRA_PREVIEW_SELECT_LIST, (Serializable) medias);

@@ -109,7 +109,8 @@ public class GridImageAdapter extends
      * 设置值
      */
     @Override
-    public void onBindViewHolder(final ViewHolder viewHolder, final int position) {
+    public void onBindViewHolder(final ViewHolder viewHolder,
+                                 final int position) {
         //少于8张，显示继续添加的图标
         if (getItemViewType(position) == TYPE_CAMERA) {
             viewHolder.mImg.setImageResource(R.mipmap.addimg_1x);
@@ -132,7 +133,7 @@ public class GridImageAdapter extends
             int type = media.getType();
             String path = media.getPath();
             switch (type) {
-                case 1:
+                case LocalMedia.TYPE_PICTURE:
                     // 图片
                     if (media.isCompressed()) {
                         Logger.i("compress image result", new File(media.getCompressPath()).length() / 1024 + "k");
@@ -145,7 +146,7 @@ public class GridImageAdapter extends
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .into(viewHolder.mImg);
                     break;
-                case 2:
+                case LocalMedia.TYPE_VIDEO:
                     // 视频
                     Glide.with(mContext).load(path).thumbnail(0.5f).into(viewHolder.mImg);
                     break;

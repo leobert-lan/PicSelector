@@ -34,7 +34,7 @@ public interface IVideoSelector extends ICustomStyle<IVideoSelector>{
     /**
      * 视频清晰度
      *
-     * @param videoDefinition FunctionConfig.HIGH 清晰  FunctionConfig.ORDINARY 低质量
+     * @param videoDefinition FunctionConfig.RECORD_QUALITY_HIGH 清晰  FunctionConfig.RECORD_QUALITY_ORDINARY 低质量
      * @return
      */
     IVideoSelector setRecordVideoDefinition(int videoDefinition);

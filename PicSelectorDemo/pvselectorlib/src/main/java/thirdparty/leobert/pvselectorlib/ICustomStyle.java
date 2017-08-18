@@ -6,6 +6,7 @@ package thirdparty.leobert.pvselectorlib;
  */
 
 public interface ICustomStyle<T> {
+    // TODO: 2017/8/18 sync the function with UIConfigDelegate
 
     /**
      * @param spanCount 单行数量上限

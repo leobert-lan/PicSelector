@@ -26,7 +26,6 @@ import java.util.List;
 
 import thirdparty.leobert.pvselectorlib.R;
 import thirdparty.leobert.pvselectorlib.model.FunctionConfig;
-import thirdparty.leobert.pvselectorlib.model.LocalMediaLoader;
 
 public class PictureImageGridAdapter
         extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -45,7 +44,7 @@ public class PictureImageGridAdapter
     private boolean enablePreviewPicture;
     private boolean enablePreviewVideo = false;
 
-    private int selectMode = FunctionConfig.MODE_MULTIPLE;
+    private int selectMode = FunctionConfig.SELECT_MODE_MULTIPLE;
 
     @DrawableRes
     private int cbDrawable;
@@ -224,8 +223,8 @@ public class PictureImageGridAdapter
                 @Override
                 public void onClick(View v) {
                     int type = localMedia.getType();
-                    if (type == LocalMediaLoader.TYPE_VIDEO
-                            && (selectMode == FunctionConfig.MODE_SINGLE || enablePreviewVideo)) {
+                    if (type == LocalMedia.TYPE_VIDEO
+                            && (selectMode == FunctionConfig.SELECT_MODE_SINGLE || enablePreviewVideo)) {
                         /* when single select mode or video preview enabled
                         * click item to preview
                         * */
@@ -239,8 +238,8 @@ public class PictureImageGridAdapter
                         return;
                     }
 
-                    if (type == LocalMediaLoader.TYPE_PICTURE
-                            && (selectMode == FunctionConfig.MODE_SINGLE || enablePreviewPicture)) {
+                    if (type == LocalMedia.TYPE_PICTURE
+                            && (selectMode == FunctionConfig.SELECT_MODE_SINGLE || enablePreviewPicture)) {
                         /* when single select mode or video preview enabled
                         * click item to preview
                         * */
@@ -262,7 +261,7 @@ public class PictureImageGridAdapter
 
         private void initSelectMode(int selectMode) {
             final int selectHintVisibility =
-                    selectMode == FunctionConfig.MODE_SINGLE ?
+                    selectMode == FunctionConfig.SELECT_MODE_SINGLE ?
                             View.GONE : View.VISIBLE;
             ll_check.setVisibility(selectHintVisibility);
         }

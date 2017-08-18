@@ -21,7 +21,6 @@ import java.util.List;
 import thirdparty.leobert.picselectordemo.adapter.GridImageAdapter;
 import thirdparty.leobert.picselectordemo.util.FullyGridLayoutManager;
 import thirdparty.leobert.pvselectorlib.model.FunctionConfig;
-import thirdparty.leobert.pvselectorlib.model.LocalMediaLoader;
 import thirdparty.leobert.pvselectorlib.model.PictureConfig;
 
 public class DemoActivity extends Activity implements RadioGroup.OnCheckedChangeListener {
@@ -29,15 +28,15 @@ public class DemoActivity extends Activity implements RadioGroup.OnCheckedChange
     private RecyclerView recyclerView;
     private GridImageAdapter adapter;
     private RadioGroup rgbs01, rgbs0, rgbs1, rgbs2, rgbs3, rgbs4, rgbs5, rgbs6, rgbs7, rgbs8, rgbs9, rgbs10;
-    private int selectMode = FunctionConfig.MODE_MULTIPLE;
+    private int selectMode = FunctionConfig.SELECT_MODE_MULTIPLE;
     private int maxSelectNum = 9;// 图片最大可选数量
     private ImageButton minus, plus;
     private EditText select_num;
     private EditText et_w, et_h, et_compress_width, et_compress_height;
     private LinearLayout ll_luban_wh;
     private boolean isShow = true;
-    private int selectType = LocalMediaLoader.TYPE_PICTURE;
-    private int copyMode = FunctionConfig.COPY_MODEL_DEFAULT;
+    private int selectType = LocalMedia.TYPE_PICTURE;
+    private int copyMode = FunctionConfig.CROP_MODE_DEFAULT;
     private boolean enablePreview = true;
     private boolean isPreviewVideo = true;
     private boolean enableCrop = true;
@@ -48,7 +47,7 @@ public class DemoActivity extends Activity implements RadioGroup.OnCheckedChange
     private int compressW = 0;
     private int compressH = 0;
     private boolean isCompress = false;
-    private boolean isCheckNumMode = false;
+    private boolean enableDisplayCandidateNo = false;
     private int compressFlag = 1;// 1 系统自带压缩 2 luban压缩
     private List<LocalMedia> selectMedia = new ArrayList<>();
     private Context mContext;
@@ -151,11 +150,11 @@ public class DemoActivity extends Activity implements RadioGroup.OnCheckedChange
                      * CheckedBoxDrawable -->图片勾选样式
                      * cropW-->裁剪宽度 值不能小于100  如果值大于图片原始宽高 将返回原图大小
                      * cropH-->裁剪高度 值不能小于100
-                     * isCompress -->是否压缩图片
+                     * getPictureCompressEnable -->是否压缩图片
                      * setEnablePixelCompress 是否启用像素压缩
                      * setEnableQualityCompress 是否启用质量压缩
                      * setRecordVideoSecond 录视频的秒数，默认不限制
-                     * setRecordVideoDefinition 视频清晰度  Constants.HIGH 清晰  Constants.ORDINARY 低质量
+                     * setRecordVideoDefinition 视频清晰度  Constants.RECORD_QUALITY_HIGH 清晰  Constants.RECORD_QUALITY_ORDINARY 低质量
                      * setImageSpanCount -->每行显示个数
                      * setCheckNumMode 是否显示QQ选择风格(带数字效果)
                      * setPreviewColor 预览文字颜色
@@ -184,8 +183,8 @@ public class DemoActivity extends Activity implements RadioGroup.OnCheckedChange
                     int selector = R.drawable.select_cb;
                     FunctionConfig config = new FunctionConfig();
                     config.setType(selectType);
-                    config.setCopyMode(copyMode);
-                    config.setCompress(isCompress);
+                    config.setCropMode(copyMode);
+                    config.setPictureCompressEnable(isCompress);
                     config.setEnablePixelCompress(true);
                     config.setEnableQualityCompress(true);
                     config.setMaxSelectNum(maxSelectNum);
@@ -194,11 +193,11 @@ public class DemoActivity extends Activity implements RadioGroup.OnCheckedChange
                     config.setEnablePreview(enablePreview);
                     config.setEnableCrop(enableCrop);
                     config.setPreviewVideo(isPreviewVideo);
-                    config.setRecordVideoDefinition(FunctionConfig.HIGH);// 视频清晰度
+                    config.setRecordVideoDefinition(FunctionConfig.RECORD_QUALITY_HIGH);// 视频清晰度
                     config.setRecordVideoSecond(60);// 视频秒数
                     config.setCropW(cropW);
                     config.setCropH(cropH);
-                    config.setCheckNumMode(isCheckNumMode);
+                    config.setDisplayCandidateNo(enableDisplayCandidateNo);
                     config.setCompressQuality(100);
                     config.setImageSpanCount(4);
                     config.setSelectMedia(selectMedia);
@@ -208,10 +207,10 @@ public class DemoActivity extends Activity implements RadioGroup.OnCheckedChange
                     if (theme) {
                         config.setThemeStyle(ContextCompat.getColor(DemoActivity.this, R.color.blue));
                         // 可以自定义底部 预览 完成 文字的颜色和背景色
-                        if (!isCheckNumMode) {
+                        if (!enableDisplayCandidateNo) {
                             // QQ 风格模式下 这里自己搭配颜色，使用蓝色可能会不好看
-                            config.setPreviewColor(ContextCompat.getColor(DemoActivity.this, R.color.white));
-                            config.setCompleteColor(ContextCompat.getColor(DemoActivity.this, R.color.white));
+                            config.setPreviewTxtColor(ContextCompat.getColor(DemoActivity.this, R.color.white));
+                            config.setCompleteTxtColor(ContextCompat.getColor(DemoActivity.this, R.color.white));
                             config.setPreviewBottomBgColor(ContextCompat.getColor(DemoActivity.this, R.color.blue));
                             config.setBottomBgColor(ContextCompat.getColor(DemoActivity.this, R.color.blue));
                         }
@@ -254,22 +253,22 @@ public class DemoActivity extends Activity implements RadioGroup.OnCheckedChange
     public void onCheckedChanged(RadioGroup radioGroup, int i) {
         switch (i) {
             case R.id.rb_ordinary:
-                isCheckNumMode = false;
+                enableDisplayCandidateNo = false;
                 break;
             case R.id.rb_qq:
-                isCheckNumMode = true;
+                enableDisplayCandidateNo = true;
                 break;
             case R.id.rb_single:
-                selectMode = FunctionConfig.MODE_SINGLE;
+                selectMode = FunctionConfig.SELECT_MODE_SINGLE;
                 break;
             case R.id.rb_multiple:
-                selectMode = FunctionConfig.MODE_MULTIPLE;
+                selectMode = FunctionConfig.SELECT_MODE_MULTIPLE;
                 break;
             case R.id.rb_image:
-                selectType = LocalMediaLoader.TYPE_PICTURE;
+                selectType = LocalMedia.TYPE_PICTURE;
                 break;
             case R.id.rb_video:
-                selectType = LocalMediaLoader.TYPE_VIDEO;
+                selectType = LocalMedia.TYPE_VIDEO;
                 break;
             case R.id.rb_photo_display:
                 isShow = true;
@@ -278,19 +277,19 @@ public class DemoActivity extends Activity implements RadioGroup.OnCheckedChange
                 isShow = false;
                 break;
             case R.id.rb_default:
-                copyMode = FunctionConfig.COPY_MODEL_DEFAULT;
+                copyMode = FunctionConfig.CROP_MODE_DEFAULT;
                 break;
             case R.id.rb_to1_1:
-                copyMode = FunctionConfig.COPY_MODEL_1_1;
+                copyMode = FunctionConfig.CROP_MODE_1_1;
                 break;
             case R.id.rb_to3_2:
-                copyMode = FunctionConfig.COPY_MODEL_3_2;
+                copyMode = FunctionConfig.CROP_MODE_3_2;
                 break;
             case R.id.rb_to3_4:
-                copyMode = FunctionConfig.COPY_MODEL_3_4;
+                copyMode = FunctionConfig.CROP_MODE_3_4;
                 break;
             case R.id.rb_to16_9:
-                copyMode = FunctionConfig.COPY_MODEL_16_9;
+                copyMode = FunctionConfig.CROP_MODE_16_9;
                 break;
             case R.id.rb_preview:
                 enablePreview = true;

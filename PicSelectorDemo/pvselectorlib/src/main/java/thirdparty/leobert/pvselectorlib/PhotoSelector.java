@@ -8,7 +8,6 @@ import java.lang.ref.WeakReference;
 import java.util.List;
 
 import thirdparty.leobert.pvselectorlib.model.FunctionConfig;
-import thirdparty.leobert.pvselectorlib.model.LocalMediaLoader;
 import thirdparty.leobert.pvselectorlib.model.PictureConfig;
 
 /**
@@ -23,10 +22,10 @@ import thirdparty.leobert.pvselectorlib.model.PictureConfig;
     public PhotoSelector(Context context) {
         super();
         contextRef = new WeakReference<>(context);
-        config.setType(LocalMediaLoader.TYPE_PICTURE);
+        config.setType(LocalMedia.TYPE_PICTURE);
         config.setEnablePreview(false);
         config.setShowCamera(false);
-        config.setCompress(false);
+        config.setPictureCompressEnable(false);
         config.setEnableCrop(false);
     }
 
@@ -44,27 +43,27 @@ import thirdparty.leobert.pvselectorlib.model.PictureConfig;
 
     @Override
     public IPhotoSelector singleSelect() {
-        config.setSelectMode(FunctionConfig.MODE_SINGLE);
+        config.setSelectMode(FunctionConfig.SELECT_MODE_SINGLE);
         return this;
     }
 
     @Override
     public IPhotoSelector multiSelect(int maxCount) {
-        config.setSelectMode(FunctionConfig.MODE_MULTIPLE);
+        config.setSelectMode(FunctionConfig.SELECT_MODE_MULTIPLE);
         config.setMaxSelectNum(maxCount);
         return this;
     }
 
     @Override
     public IPhotoSelector enableCrop() {
-        enableCrop(FunctionConfig.COPY_MODEL_DEFAULT);
+        enableCrop(FunctionConfig.CROP_MODE_DEFAULT);
         return this;
     }
 
     @Override
     public IPhotoSelector enableCrop(int mode) {
         config.setEnableCrop(true);
-        config.setCopyMode(mode);
+        config.setCropMode(mode);
         return this;
     }
 
@@ -78,7 +77,7 @@ import thirdparty.leobert.pvselectorlib.model.PictureConfig;
 
     @Override
     public IPhotoSelector useSystemCompressOnCrop(boolean enablePixelCompress, boolean enableQualityCompress) {
-        config.setCompress(true);
+        config.setPictureCompressEnable(true);
         config.setCompressFlag(1);
         config.setEnablePixelCompress(enablePixelCompress);
         config.setEnableQualityCompress(enableQualityCompress);
@@ -89,7 +88,7 @@ import thirdparty.leobert.pvselectorlib.model.PictureConfig;
 
     @Override
     public IPhotoSelector enableLubanCompressOnCrop(int maxWidth, int maxHeight) {
-        config.setCompress(true);
+        config.setPictureCompressEnable(true);
         config.setCompressFlag(2);
         config.setCompressH(maxHeight);
         config.setCompressW(maxWidth);

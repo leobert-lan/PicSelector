@@ -1,40 +1,83 @@
 package thirdparty.leobert.pvselectorlib.model;
 
-import android.graphics.Color;
-
-import thirdparty.leobert.pvselectorlib.R;
+import android.support.annotation.IntDef;
 
 import com.yalantis.ucrop.entity.LocalMedia;
 
 import java.io.Serializable;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FunctionConfig implements Serializable {
+public class FunctionConfig implements Serializable, UIConfig.UIConfigDelegate {
 
-    // 裁剪模式
-    public static final int COPY_MODEL_DEFAULT = 0;
-    public static final int COPY_MODEL_1_1 = 11;
-    public static final int COPY_MODEL_3_4 = 34;
-    public static final int COPY_MODEL_3_2 = 32;
-    public static final int COPY_MODEL_16_9 = 169;
 
-    public final static int MODE_MULTIPLE = 1;// 多选
-    public final static int MODE_SINGLE = 2;// 单选
+    ///////////////////////////////////////////////////////////////////////////
+    //  crop mode const&annotation define
+    ///////////////////////////////////////////////////////////////////////////
 
-    public static final int ORDINARY = 0;// 普通 低质量
-    public static final int HIGH = 1;// 清晰
+    public static final int CROP_MODE_DEFAULT = 0;
+    public static final int CROP_MODE_1_1 = 11;
+    public static final int CROP_MODE_3_4 = 34;
+    public static final int CROP_MODE_3_2 = 32;
+    public static final int CROP_MODE_16_9 = 169;
+
+    /**
+     * scopes of crop
+     */
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef({CROP_MODE_DEFAULT,
+            CROP_MODE_1_1,
+            CROP_MODE_3_4,
+            CROP_MODE_3_2,
+            CROP_MODE_16_9})
+    public @interface CropMode {
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    // select mode const&annotation define
+    ///////////////////////////////////////////////////////////////////////////
+
+    public final static int SELECT_MODE_MULTIPLE = 1;// 多选
+    public final static int SELECT_MODE_SINGLE = 2;// 单选
+
+    /**
+     * mode for select
+     */
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef({SELECT_MODE_MULTIPLE,
+            SELECT_MODE_SINGLE})
+    public @interface SelectMode {
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    // Video record quality const&annotation define
+    ///////////////////////////////////////////////////////////////////////////
+
+    public static final int RECORD_QUALITY_ORDINARY = 0;// 普通 低质量
+    public static final int RECORD_QUALITY_HIGH = 1;// 清晰
+
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef({RECORD_QUALITY_ORDINARY,
+            RECORD_QUALITY_HIGH
+    })
+    public @interface VideoRecordQuality {
+    }
+
+
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    ///////////////////////////////////////////////////////////////////////////
+
 
     public static final int COPY_WIDTH = 0;
     public static final int COPY_HEIGHT = 0;
-    public final static int REQUEST_IMAGE = 88;
-    public final static int REQUEST_CAMERA = 99;
-    public final static int REQUEST_PREVIEW = 100;
-    public static final int READ_EXTERNAL_STORAGE = 0x01;
-    public static final int CAMERA = 0x02;
+
 
     public static final int SELECT_MAX_NUM = 9;
     public static final int MAX_COMPRESS_SIZE = 102400;
+
     public static final String EXTRA_THIS_CONFIG = "function_config";
     public static final String EXTRA_IS_TOP_ACTIVITY = "isTopActivity";
     public static final String EXTRA_BOTTOM_PREVIEW = "bottom_preview";
@@ -58,44 +101,50 @@ public class FunctionConfig implements Serializable {
     public final static String EXTRA_CROP_MODE = "cropMode";
     public final static String BACKGROUND_COLOR = "backgroundColor";
     public final static String CHECKED_DRAWABLE = "cb_drawable";
-    public final static String EXTRA_COMPRESS = "isCompress";
+    public final static String EXTRA_COMPRESS = "enablePictureCompress";
     public final static String EXTRA_VIDEO_SECOND = "videoSecond";
 
 
-    public final static String EXTRA_CROP_W = "crop_w";
-    public final static String EXTRA_CROP_H = "crop_h";
-    public final static String EXTRA_DEFINITION = "definition";
-    public final static String EXTRA_IS_CHECKED_NUM = "checkedNum";
-    public final static String EXTRA_PREVIEW_COLOR = "previewColor";
-    public final static String EXTRA_COMPLETE_COLOR = "completeColor";
-    public final static String EXTRA_COMPLETE_TEXT = "completeText";
-    public final static String EXTRA_BOTTOM_BG_COLOR = "bottomBgColor";
-    public final static String EXTRA_PREVIEW_BOTTOM_BG_COLOR = "previewBottomBgColor";
-    public final static String EXTRA_COMPRESS_QUALITY = "compressQuality";
+//    public final static String EXTRA_CROP_W = "crop_w";
+//    public final static String EXTRA_CROP_H = "crop_h";
+//    public final static String EXTRA_DEFINITION = "definition";
+//    public final static String EXTRA_IS_CHECKED_NUM = "checkedNum";
+//    public final static String EXTRA_PREVIEW_COLOR = "previewTxtColor";
+//    public final static String EXTRA_COMPLETE_COLOR = "completeTxtColor";
+//    public final static String EXTRA_COMPLETE_TEXT = "completeText";
+//    public final static String EXTRA_BOTTOM_BG_COLOR = "bottomBgColor";
+//    public final static String EXTRA_PREVIEW_BOTTOM_BG_COLOR = "previewBottomBgColor";
+//    public final static String EXTRA_COMPRESS_QUALITY = "compressQuality";
 
     @LocalMedia.MediaType
     private int type = LocalMedia.TYPE_PICTURE;
 
-    private int copyMode = COPY_MODEL_DEFAULT; // 裁剪模式; 默认、1:1、3:4、3:2、16:9
+    @CropMode
+    private int cropMode = CROP_MODE_DEFAULT; // 裁剪模式; 默认、1:1、3:4、3:2、16:9
+
     private int maxSelectNum = SELECT_MAX_NUM; // 多选最大可选数量
-    private int selectMode = MODE_MULTIPLE; // 单选 or 多选
+
+    @SelectMode
+    private int selectMode = SELECT_MODE_MULTIPLE; // 单选 or 多选
+
     private boolean isShowCamera = true; // 是否显示相机
     private boolean enablePreview = true; // 是否预览图片
     private boolean enableCrop; // 是否裁剪图片，只针对单选图片有效
     private boolean isPreviewVideo; // 是否可预览视频(播放)
-    private int imageSpanCount = 4; // 列表每行显示个数
-    private int themeStyle = Color.parseColor("#393a3e"); // 标题栏背景色;
-    private int checkedBoxDrawable = R.drawable.checkbox_selector;// 图片选择默认样式
+
+
+    private UIConfig uiConfig = new UIConfig();
+
     private int cropW = COPY_WIDTH; // 裁剪宽度  如果值大于图片原始宽高 将返回原图大小
     private int cropH = COPY_HEIGHT;// 裁剪高度  如果值大于图片原始宽高 将返回原图大小
     private int recordVideoSecond = 0;// 录视频秒数
-    private int recordVideoDefinition = 0;// 视频清晰度
-    private boolean isCompress = false;// 是否压缩图片，默认不压缩
-    private boolean isCheckNumMode = false;// 是否显示QQ风格选择图片
-    private int previewColor = Color.parseColor("#FA632D"); // 底部预览字体颜色
-    private int completeColor = Color.parseColor("#FA632D"); // 底部完成字体颜色
-    private int bottomBgColor = Color.parseColor("#fafafa"); // 底部背景色
-    protected int previewBottomBgColor = Color.parseColor("#dd393a3e"); // 预览底部背景色
+
+    @VideoRecordQuality
+    private int recordVideoDefinition = RECORD_QUALITY_ORDINARY;// 视频清晰度
+
+
+    private boolean enablePictureCompress = false;// 是否压缩图片，默认不压缩
+
     protected int compressQuality = 100;// 图片裁剪质量,默认无损
     protected List<LocalMedia> selectMedia = new ArrayList<>();// 已选择的图片
     protected int compressFlag = 1; // 1 系统自带压缩 2 luban压缩
@@ -177,51 +226,13 @@ public class FunctionConfig implements Serializable {
         this.compressQuality = compressQuality;
     }
 
-    public int getPreviewBottomBgColor() {
-        return previewBottomBgColor;
-    }
 
-    public void setPreviewBottomBgColor(int previewBottomBgColor) {
-        this.previewBottomBgColor = previewBottomBgColor;
-    }
-
-    public int getBottomBgColor() {
-        return bottomBgColor;
-    }
-
-    public void setBottomBgColor(int bottomBgColor) {
-        this.bottomBgColor = bottomBgColor;
-    }
-
-    public int getPreviewColor() {
-        return previewColor;
-    }
-
-    public void setPreviewColor(int previewColor) {
-        this.previewColor = previewColor;
-    }
-
-    public int getCompleteColor() {
-        return completeColor;
-    }
-
-    public void setCompleteColor(int completeColor) {
-        this.completeColor = completeColor;
-    }
-
-    public boolean isCheckNumMode() {  // TODO: 2017/8/17 change name
-        return isCheckNumMode;
-    }
-
-    public void setCheckNumMode(boolean checkNumMode) {
-        isCheckNumMode = checkNumMode;
-    }
-
+    @VideoRecordQuality
     public int getRecordVideoDefinition() {
         return recordVideoDefinition;
     }
 
-    public void setRecordVideoDefinition(int recordVideoDefinition) {
+    public void setRecordVideoDefinition(@VideoRecordQuality int recordVideoDefinition) {
         this.recordVideoDefinition = recordVideoDefinition;
     }
 
@@ -233,20 +244,12 @@ public class FunctionConfig implements Serializable {
         this.recordVideoSecond = recordVideoSecond;
     }
 
-    public int getImageSpanCount() {
-        return imageSpanCount;
+    public boolean getPictureCompressEnable() {
+        return enablePictureCompress;
     }
 
-    public void setImageSpanCount(int imageSpanCount) {
-        this.imageSpanCount = imageSpanCount;
-    }
-
-    public boolean isCompress() {
-        return isCompress;
-    }
-
-    public void setCompress(boolean compress) {
-        isCompress = compress;
+    public void setPictureCompressEnable(boolean enablePictureCompress) {
+        this.enablePictureCompress = enablePictureCompress;
     }
 
     public int getCropW() {
@@ -265,25 +268,88 @@ public class FunctionConfig implements Serializable {
         this.cropH = cropH;
     }
 
-    public int getCheckedBoxDrawable() {
-        return checkedBoxDrawable;
+    ///////////////////////////////////////////////////////////////////////////
+    // UIConfigDelegate
+    ///////////////////////////////////////////////////////////////////////////
+    public int getImageSpanCount() {
+        return uiConfig.getImageSpanCount();
     }
 
-    public void setCheckedBoxDrawable(int checkedBoxDrawable) {
-        this.checkedBoxDrawable = checkedBoxDrawable;
+    public void setImageSpanCount(int imageSpanCount) {
+        this.uiConfig.setImageSpanCount(imageSpanCount);
+    }
+
+    public int getPreviewBottomBgColor() {
+        return uiConfig.getPreviewBottomBgColor();
+    }
+
+    public void setPreviewBottomBgColor(int previewBottomBgColor) {
+        this.uiConfig.setPreviewBottomBgColor(previewBottomBgColor);
+    }
+
+    public int getBottomBgColor() {
+        return uiConfig.getBottomBgColor();
+    }
+
+    public void setBottomBgColor(int bottomBgColor) {
+        this.uiConfig.setBottomBgColor(bottomBgColor);
+    }
+
+
+    @Override
+    public boolean isDisplayCandidateNo() {
+        return uiConfig.isDisplayCandidateNo();
+    }
+
+    @Override
+    public void setDisplayCandidateNo(boolean displayCandidateNo) {
+        this.uiConfig.setDisplayCandidateNo(displayCandidateNo);
+    }
+
+    @Override
+    public int getPreviewTxtColor() {
+        return uiConfig.getPreviewTxtColor();
+    }
+
+    @Override
+    public void setPreviewTxtColor(int previewTxtColor) {
+        this.uiConfig.setPreviewTxtColor(previewTxtColor);
+    }
+
+    @Override
+    public int getCompleteTxtColor() {
+        return uiConfig.getCompleteTxtColor();
+    }
+
+    @Override
+    public void setCompleteTxtColor(int completeTxtColor) {
+        this.uiConfig.setCompleteTxtColor(completeTxtColor);
     }
 
     public int getThemeStyle() {
-        return themeStyle;
+        return uiConfig.getThemeStyle();
     }
 
     public void setThemeStyle(int themeStyle) {
-        this.themeStyle = themeStyle;
+        this.uiConfig.setThemeStyle(themeStyle);
     }
 
-    public
+    @Override
+    public int getCheckedBoxDrawable() {
+        return uiConfig.getCheckedBoxDrawable();
+    }
+
+    @Override
+    public void setCheckedBoxDrawable(int checkedBoxDrawable) {
+        this.uiConfig.setCheckedBoxDrawable(checkedBoxDrawable);
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    ///////////////////////////////////////////////////////////////////////////
+
     @LocalMedia.MediaType
-    int getType() {
+    public int getType() {
         return type;
     }
 
@@ -291,12 +357,13 @@ public class FunctionConfig implements Serializable {
         this.type = type;
     }
 
-    public int getCopyMode() {
-        return copyMode;
+    @CropMode
+    public int getCropMode() {
+        return cropMode;
     }
 
-    public void setCopyMode(int copyMode) {
-        this.copyMode = copyMode;
+    public void setCropMode(@CropMode int cropMode) {
+        this.cropMode = cropMode;
     }
 
     public int getMaxSelectNum() {
@@ -307,11 +374,12 @@ public class FunctionConfig implements Serializable {
         this.maxSelectNum = maxSelectNum;
     }
 
+    @SelectMode
     public int getSelectMode() {
         return selectMode;
     }
 
-    public void setSelectMode(int selectMode) {
+    public void setSelectMode(@SelectMode int selectMode) {
         this.selectMode = selectMode;
     }
 

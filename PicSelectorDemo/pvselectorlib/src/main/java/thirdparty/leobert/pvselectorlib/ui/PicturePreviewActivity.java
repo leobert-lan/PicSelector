@@ -33,7 +33,6 @@ import java.util.List;
 
 import thirdparty.leobert.pvselectorlib.R;
 import thirdparty.leobert.pvselectorlib.model.FunctionConfig;
-import thirdparty.leobert.pvselectorlib.model.LocalMediaLoader;
 import thirdparty.leobert.pvselectorlib.observable.ImagesObservable;
 import thirdparty.leobert.pvselectorlib.widget.PreviewViewPager;
 
@@ -85,7 +84,7 @@ public class PicturePreviewActivity extends PictureBaseActivity
         position = getIntent().getIntExtra(FunctionConfig.EXTRA_POSITION, 0);
         rl_title.setBackgroundColor(backgroundColor);
         ToolbarUtil.setColorNoTranslucent(this, backgroundColor);
-        tv_ok.setTextColor(completeColor);
+        tv_ok.setTextColor(completeTxtColor);
         select_bar_layout.setBackgroundColor(previewBottomBgColor);
         boolean is_bottom_preview = getIntent().getBooleanExtra(FunctionConfig.EXTRA_BOTTOM_PREVIEW, false);
         if (is_bottom_preview) {
@@ -297,7 +296,8 @@ public class PicturePreviewActivity extends PictureBaseActivity
         if (id == R.id.left_back) {
             finish();
         } else if (id == R.id.tv_ok) {
-            if (selectMode == FunctionConfig.MODE_MULTIPLE && enableCrop && type == LocalMediaLoader.TYPE_PICTURE) {
+            if (selectMode == FunctionConfig.SELECT_MODE_MULTIPLE
+                    && enableCrop && type == LocalMedia.TYPE_PICTURE) {
                 // 是图片和选择压缩并且是多张，调用批量压缩
                 startMultiCopy(selectImages);
             } else {
@@ -330,19 +330,19 @@ public class PicturePreviewActivity extends PictureBaseActivity
             MultiUCrop uCrop = MultiUCrop.of(Uri.parse(path), Uri.fromFile(new File(getCacheDir(), System.currentTimeMillis() + ".jpg")));
             MultiUCrop.Options options = new MultiUCrop.Options();
             switch (copyMode) {
-                case FunctionConfig.COPY_MODEL_DEFAULT:
+                case FunctionConfig.CROP_MODE_DEFAULT:
                     options.withAspectRatio(0, 0);
                     break;
-                case FunctionConfig.COPY_MODEL_1_1:
+                case FunctionConfig.CROP_MODE_1_1:
                     options.withAspectRatio(1, 1);
                     break;
-                case FunctionConfig.COPY_MODEL_3_2:
+                case FunctionConfig.CROP_MODE_3_2:
                     options.withAspectRatio(3, 2);
                     break;
-                case FunctionConfig.COPY_MODEL_3_4:
+                case FunctionConfig.CROP_MODE_3_4:
                     options.withAspectRatio(3, 4);
                     break;
-                case FunctionConfig.COPY_MODEL_16_9:
+                case FunctionConfig.CROP_MODE_16_9:
                     options.withAspectRatio(16, 9);
                     break;
             }

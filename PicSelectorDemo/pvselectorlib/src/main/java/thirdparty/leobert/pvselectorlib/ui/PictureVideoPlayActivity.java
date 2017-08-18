@@ -1,6 +1,8 @@
 package thirdparty.leobert.pvselectorlib.ui;
 
+import android.annotation.TargetApi;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
@@ -20,7 +22,7 @@ public class PictureVideoPlayActivity extends PictureBaseActivity implements Med
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        translucentStatusBar();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.picture_activity_video_play);
         video_path = getIntent().getStringExtra("video_path");
@@ -43,6 +45,25 @@ public class PictureVideoPlayActivity extends PictureBaseActivity implements Med
                 iv_play.setVisibility(View.INVISIBLE);
             }
         });
+    }
+
+    private void translucentStatusBar() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+            translucentStatusBarCompact_19();
+        else
+            translucentStatusBarCompact_14();
+
+    }
+
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    private void translucentStatusBarCompact_19() {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+    }
+
+    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+    private void translucentStatusBarCompact_14() {
+        // use full screen
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
 
 

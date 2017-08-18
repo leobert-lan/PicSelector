@@ -65,7 +65,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PictureMultiCuttingActivity extends FragmentActivity {
+public class PictureMultiUCropActivity extends FragmentActivity {
     private RecyclerView recyclerView;
     private PicturePhotoGalleryAdapter adapter;
     private List<LocalMedia> images = new ArrayList<>();
@@ -87,10 +87,7 @@ public class PictureMultiCuttingActivity extends FragmentActivity {
     @IntDef({NONE, SCALE, ROTATE, ALL})
     @Retention(RetentionPolicy.SOURCE)
     public @interface GestureTypes {
-
     }
-
-    private static final String TAG = "UCropActivity";
 
     private int mLogoColor;
 
@@ -160,7 +157,7 @@ public class PictureMultiCuttingActivity extends FragmentActivity {
         options.withMaxResultSize(maxSizeX, maxSizeY);
         options.background_color(backgroundColor);
         uCrop.withOptions(options);
-        uCrop.start(PictureMultiCuttingActivity.this);
+        uCrop.start(PictureMultiUCropActivity.this);
         overridePendingTransition(R.anim.fade, R.anim.hold);
     }
 
@@ -213,7 +210,7 @@ public class PictureMultiCuttingActivity extends FragmentActivity {
      * This method extracts {@link com.yalantis.ucrop.UCrop.Options #optionsBundle} from incoming intent
      * and setups Activity, {@link OverlayView} and {@link CropImageView} properly.
      */
-    @SuppressWarnings("deprecation")
+//    @SuppressWarnings("deprecation")
     private void processOptions(@NonNull Intent intent) {
         // Bitmap compression options
         String compressionFormatName = intent.getStringExtra(UCrop.Options.EXTRA_COMPRESSION_FORMAT_NAME);
@@ -223,7 +220,7 @@ public class PictureMultiCuttingActivity extends FragmentActivity {
         }
         mCompressFormat = (compressFormat == null) ? DEFAULT_COMPRESS_FORMAT : compressFormat;
 
-        mCompressQuality = intent.getIntExtra(UCrop.Options.EXTRA_COMPRESSION_QUALITY, PictureMultiCuttingActivity.DEFAULT_COMPRESS_QUALITY);
+        mCompressQuality = intent.getIntExtra(UCrop.Options.EXTRA_COMPRESSION_QUALITY, PictureMultiUCropActivity.DEFAULT_COMPRESS_QUALITY);
 
 
         // Crop image view options
@@ -232,7 +229,12 @@ public class PictureMultiCuttingActivity extends FragmentActivity {
         mGestureCropImageView.setImageToWrapCropBoundsAnimDuration(intent.getIntExtra(UCrop.Options.EXTRA_IMAGE_TO_CROP_BOUNDS_ANIM_DURATION, CropImageView.DEFAULT_IMAGE_TO_CROP_BOUNDS_ANIM_DURATION));
 
         // Overlay view options
-        mOverlayView.setFreestyleCropEnabled(intent.getBooleanExtra(UCrop.Options.EXTRA_FREE_STYLE_CROP, OverlayView.DEFAULT_FREESTYLE_CROP_MODE != OverlayView.FREESTYLE_CROP_MODE_DISABLE));
+        boolean enableFreestyleCrop =
+                intent.getBooleanExtra(UCrop.Options.EXTRA_FREE_STYLE_CROP,
+                OverlayView.DEFAULT_FREESTYLE_CROP_MODE != OverlayView.FREESTYLE_CROP_MODE_DISABLE);
+        mOverlayView.setFreestyleCropMode(enableFreestyleCrop ?
+                OverlayView.FREESTYLE_CROP_MODE_ENABLE :
+                OverlayView.FREESTYLE_CROP_MODE_DISABLE);
 
         mOverlayView.setDimmedColor(intent.getIntExtra(UCrop.Options.EXTRA_DIMMED_LAYER_COLOR, getResources().getColor(R.color.ucrop_color_default_dimmed)));
         mOverlayView.setCircleDimmedLayer(intent.getBooleanExtra(UCrop.Options.EXTRA_CIRCLE_DIMMED_LAYER, OverlayView.DEFAULT_CIRCLE_DIMMED_LAYER));
@@ -359,7 +361,7 @@ public class PictureMultiCuttingActivity extends FragmentActivity {
     }
 
     private void showDialog(String msg) {
-        dialog = new SweetAlertDialog(PictureMultiCuttingActivity.this);
+        dialog = new SweetAlertDialog(PictureMultiUCropActivity.this);
         dialog.setTitleText(msg);
         dialog.show();
     }

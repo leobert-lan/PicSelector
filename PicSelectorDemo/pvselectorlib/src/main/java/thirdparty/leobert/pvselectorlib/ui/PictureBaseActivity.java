@@ -14,6 +14,7 @@ import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
 import android.widget.Toast;
 
+import thirdparty.leobert.pvselectorlib.PVSelectorConsts;
 import thirdparty.leobert.pvselectorlib.R;
 import thirdparty.leobert.pvselectorlib.model.FunctionConfig;
 
@@ -35,7 +36,7 @@ public class PictureBaseActivity extends FragmentActivity {
     protected boolean enablePreview = false;
     protected boolean enableCrop = false;
     protected boolean enablePreviewVideo = true;
-    protected int selectMode = FunctionConfig.MODE_MULTIPLE;
+    protected int selectMode = FunctionConfig.SELECT_MODE_MULTIPLE;
     protected int backgroundColor = 0;
     protected int cb_drawable = 0;
     protected int cropW = 0;
@@ -44,8 +45,8 @@ public class PictureBaseActivity extends FragmentActivity {
     protected int definition = 3;
     protected boolean isCompress;
     protected boolean displayCandidateNo;
-    protected int previewColor; // 底部预览字体颜色
-    protected int completeColor; // 底部完成字体颜色
+    protected int previewTxtColor; // 底部预览字体颜色
+    protected int completeTxtColor; // 底部完成字体颜色
     protected CharSequence completeText; // 底部完成文字
     protected int bottomBgColor; // 底部背景色
     protected int previewBottomBgColor; // 预览底部背景色
@@ -70,19 +71,19 @@ public class PictureBaseActivity extends FragmentActivity {
         selectMode = config.getSelectMode();
         enableCrop = config.isEnableCrop();
         maxSelectNum = config.getMaxSelectNum();
-        copyMode = config.getCopyMode();
+        copyMode = config.getCropMode();
         enablePreviewVideo = config.isPreviewVideo();
         backgroundColor = config.getThemeStyle();
         cb_drawable = config.getCheckedBoxDrawable();
-        isCompress = config.isCompress();
+        isCompress = config.getPictureCompressEnable();
         spanCount = config.getImageSpanCount();
         cropW = config.getCropW();
         cropH = config.getCropH();
         recordVideoSecond = config.getRecordVideoSecond();
         definition = config.getRecordVideoDefinition();
-        displayCandidateNo = config.isCheckNumMode();
-        previewColor = config.getPreviewColor();
-        completeColor = config.getCompleteColor();
+        displayCandidateNo = config.isDisplayCandidateNo();
+        previewTxtColor = config.getPreviewTxtColor();
+        completeTxtColor = config.getCompleteTxtColor();
         bottomBgColor = config.getBottomBgColor();
         completeText = config.getCompleteText();
         if (completeText == null || completeText.equals("")) {
@@ -130,14 +131,14 @@ public class PictureBaseActivity extends FragmentActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
-            case FunctionConfig.READ_EXTERNAL_STORAGE:
+            case PVSelectorConsts.PermissionReqCode.READ_EXTERNAL_STORAGE:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     readLocalMedia();
                 } else {
                     showToast("读取内存卡权限已被拒绝");
                 }
                 break;
-            case FunctionConfig.CAMERA:
+            case PVSelectorConsts.PermissionReqCode.GRANT_CAMERA:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     startCamera();
                 } else {

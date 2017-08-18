@@ -139,7 +139,8 @@ public class OverlayView extends View {
      * Please use the new method {@link #setFreestyleCropMode setFreestyleCropMode} method as we have more than 1 freestyle crop mode.
      */
     public void setFreestyleCropEnabled(boolean freestyleCropEnabled) {
-        mFreestyleCropMode = freestyleCropEnabled ? FREESTYLE_CROP_MODE_ENABLE : FREESTYLE_CROP_MODE_DISABLE;
+        mFreestyleCropMode = freestyleCropEnabled ?
+                FREESTYLE_CROP_MODE_ENABLE : FREESTYLE_CROP_MODE_DISABLE;
     }
 
     @FreestyleMode
@@ -592,7 +593,9 @@ public class OverlayView extends View {
 
 
     @Retention(RetentionPolicy.SOURCE)
-    @IntDef({FREESTYLE_CROP_MODE_DISABLE, FREESTYLE_CROP_MODE_ENABLE, FREESTYLE_CROP_MODE_ENABLE_WITH_PASS_THROUGH})
+    @IntDef({FREESTYLE_CROP_MODE_DISABLE,
+            FREESTYLE_CROP_MODE_ENABLE,
+            FREESTYLE_CROP_MODE_ENABLE_WITH_PASS_THROUGH})
     public @interface FreestyleMode {
     }
 

@@ -10,15 +10,16 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import thirdparty.leobert.pvselectorlib.R;
-import thirdparty.leobert.pvselectorlib.model.LocalMediaLoader;
 import com.yalantis.ucrop.entity.LocalMedia;
 import com.yalantis.ucrop.entity.LocalMediaFolder;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class PictureAlbumDirectoryAdapter extends RecyclerView.Adapter<PictureAlbumDirectoryAdapter.ViewHolder> {
+import thirdparty.leobert.pvselectorlib.R;
+
+public class PictureAlbumDirectoryAdapter
+        extends RecyclerView.Adapter<PictureAlbumDirectoryAdapter.ViewHolder> {
     private Context mContext;
     private List<LocalMediaFolder> folders = new ArrayList<>();
 
@@ -50,12 +51,12 @@ public class PictureAlbumDirectoryAdapter extends RecyclerView.Adapter<PictureAl
         String imagePath = folder.getFirstImagePath();
         if (folder.isChecked()) {
             holder.tv_img_num.setVisibility(View.VISIBLE);
-            holder.tv_img_num.setText(folder.getCheckedNum() + "");
+            holder.tv_img_num.setText(String.valueOf(folder.getCheckedNum()));
         } else {
             holder.tv_img_num.setVisibility(View.INVISIBLE);
         }
         int type = folder.getType();
-        if (type == LocalMediaLoader.TYPE_VIDEO) {
+        if (type == LocalMedia.TYPE_VIDEO) {
             Glide.with(mContext).load(imagePath).thumbnail(0.5f).into(holder.first_image);
         } else {
             Glide.with(mContext)

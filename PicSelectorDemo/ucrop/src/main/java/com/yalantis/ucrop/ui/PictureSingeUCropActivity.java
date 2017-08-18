@@ -90,7 +90,7 @@ public class PictureSingeUCropActivity extends FragmentActivity {
     private RelativeLayout rl_title;
     private Bitmap.CompressFormat mCompressFormat = DEFAULT_COMPRESS_FORMAT;
     private int mCompressQuality = DEFAULT_COMPRESS_QUALITY;
-    private int type = 0;
+    @LocalMedia.MediaType private int type = LocalMedia.TYPE_PICTURE;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -223,10 +223,9 @@ public class PictureSingeUCropActivity extends FragmentActivity {
         backgroundColor = intent.getIntExtra("backgroundColor", 0);
         rl_title.setBackgroundColor(backgroundColor);
         isCompress = intent.getBooleanExtra("isCompress", false);
-        type = intent.getIntExtra("type", 0);
+        type = intent.getIntExtra("type", LocalMedia.TYPE_PICTURE);
         ToolbarUtil.setColorNoTranslucent(this, backgroundColor);
         initiateRootViews();
-
     }
 
     private void initiateRootViews() {

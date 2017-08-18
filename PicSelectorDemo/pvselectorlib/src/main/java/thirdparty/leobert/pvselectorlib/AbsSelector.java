@@ -17,7 +17,7 @@ abstract class AbsSelector<T> implements ICustomStyle<T> {
 
     AbsSelector() {
         config = new FunctionConfig();
-        getConfig().setCheckNumMode(false);
+        getConfig().setDisplayCandidateNo(false);
     }
 
     @Override
@@ -40,19 +40,19 @@ abstract class AbsSelector<T> implements ICustomStyle<T> {
 
     @Override
     public T setPreviewColor(int previewColor) {
-        getConfig().setPreviewColor(previewColor);
+        getConfig().setPreviewTxtColor(previewColor);
         return self();
     }
 
     @Override
     public T setCompleteColor(int completeColor) {
-        getConfig().setCompleteColor(completeColor);
+        getConfig().setCompleteTxtColor(completeColor);
         return self();
     }
 
     @Override
     public T enableCheckNumMode() {
-        getConfig().setCheckNumMode(true);
+        getConfig().setDisplayCandidateNo(true);
         return self();
     }
 

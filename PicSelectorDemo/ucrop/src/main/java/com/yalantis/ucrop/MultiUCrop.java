@@ -43,7 +43,7 @@ import android.support.annotation.Nullable;
 
 import com.yalantis.ucrop.entity.LocalMedia;
 import com.yalantis.ucrop.model.AspectRatio;
-import com.yalantis.ucrop.ui.PictureMultiCuttingActivity;
+import com.yalantis.ucrop.ui.PictureMultiUCropActivity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -194,12 +194,12 @@ public class MultiUCrop {
     }
 
     /**
-     * Get Intent to start {@link PictureMultiCuttingActivity}
+     * Get Intent to start {@link PictureMultiUCropActivity}
      *
-     * @return Intent for {@link PictureMultiCuttingActivity}
+     * @return Intent for {@link PictureMultiUCropActivity}
      */
     public Intent getIntent(@NonNull Context context) {
-        mCropIntent.setClass(context, PictureMultiCuttingActivity.class);
+        mCropIntent.setClass(context, PictureMultiUCropActivity.class);
         mCropIntent.putExtras(mCropOptionsBundle);
         return mCropIntent;
     }
@@ -353,9 +353,9 @@ public class MultiUCrop {
         /**
          * Choose what set of gestures will be enabled on each tab - if any.
          */
-        public void setAllowedGestures(@PictureMultiCuttingActivity.GestureTypes int tabScale,
-                                       @PictureMultiCuttingActivity.GestureTypes int tabRotate,
-                                       @PictureMultiCuttingActivity.GestureTypes int tabAspectRatio) {
+        public void setAllowedGestures(@PictureMultiUCropActivity.GestureTypes int tabScale,
+                                       @PictureMultiUCropActivity.GestureTypes int tabRotate,
+                                       @PictureMultiUCropActivity.GestureTypes int tabAspectRatio) {
             mOptionBundle.putIntArray(EXTRA_ALLOWED_GESTURES, new int[]{tabScale, tabRotate, tabAspectRatio});
         }
 

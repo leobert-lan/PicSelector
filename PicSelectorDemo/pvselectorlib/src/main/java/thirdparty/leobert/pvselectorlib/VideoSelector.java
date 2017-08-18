@@ -8,7 +8,6 @@ import java.lang.ref.WeakReference;
 import java.util.List;
 
 import thirdparty.leobert.pvselectorlib.model.FunctionConfig;
-import thirdparty.leobert.pvselectorlib.model.LocalMediaLoader;
 import thirdparty.leobert.pvselectorlib.model.PictureConfig;
 
 /**
@@ -23,7 +22,7 @@ class VideoSelector extends AbsSelector<IVideoSelector> implements IVideoSelecto
     VideoSelector(Context context) {
         super();
         contextRef = new WeakReference<>(context);
-        config.setType(LocalMediaLoader.TYPE_VIDEO);
+        config.setType(LocalMedia.TYPE_VIDEO);
         config.setPreviewVideo(false);
         config.setShowCamera(false);
     }
@@ -42,7 +41,7 @@ class VideoSelector extends AbsSelector<IVideoSelector> implements IVideoSelecto
     public IVideoSelector enableCamera() {
         config.setShowCamera(true);
         config.setRecordVideoSecond(0);//默认不限制时长
-        config.setRecordVideoDefinition(FunctionConfig.ORDINARY);
+        config.setRecordVideoDefinition(FunctionConfig.RECORD_QUALITY_ORDINARY);
         return this;
     }
 
@@ -74,13 +73,13 @@ class VideoSelector extends AbsSelector<IVideoSelector> implements IVideoSelecto
 
     @Override
     public IVideoSelector singleSelect() {
-        config.setSelectMode(FunctionConfig.MODE_SINGLE);
+        config.setSelectMode(FunctionConfig.SELECT_MODE_SINGLE);
         return this;
     }
 
     @Override
     public IVideoSelector multiSelect(int maxCount) {
-        config.setSelectMode(FunctionConfig.MODE_MULTIPLE);
+        config.setSelectMode(FunctionConfig.SELECT_MODE_MULTIPLE);
         config.setMaxSelectNum(maxCount);
         return this;
     }

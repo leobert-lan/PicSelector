@@ -13,14 +13,6 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import thirdparty.leobert.pvselectorlib.R;
-import thirdparty.leobert.pvselectorlib.adapter.PictureAlbumDirectoryAdapter;
-import thirdparty.leobert.pvselectorlib.decoration.RecycleViewDivider;
-import thirdparty.leobert.pvselectorlib.model.FunctionConfig;
-import thirdparty.leobert.pvselectorlib.model.LocalMediaLoader;
-import thirdparty.leobert.pvselectorlib.model.PictureConfig;
-import thirdparty.leobert.pvselectorlib.observable.ImagesObservable;
-import thirdparty.leobert.pvselectorlib.observable.ObserverListener;
 import com.yalantis.ucrop.entity.LocalMedia;
 import com.yalantis.ucrop.entity.LocalMediaFolder;
 import com.yalantis.ucrop.util.ToolbarUtil;
@@ -29,6 +21,15 @@ import com.yalantis.ucrop.util.Utils;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+import thirdparty.leobert.pvselectorlib.PVSelectorConsts;
+import thirdparty.leobert.pvselectorlib.R;
+import thirdparty.leobert.pvselectorlib.adapter.PictureAlbumDirectoryAdapter;
+import thirdparty.leobert.pvselectorlib.decoration.RecycleViewDivider;
+import thirdparty.leobert.pvselectorlib.model.FunctionConfig;
+import thirdparty.leobert.pvselectorlib.model.PictureConfig;
+import thirdparty.leobert.pvselectorlib.observable.ImagesObservable;
+import thirdparty.leobert.pvselectorlib.observable.ObserverListener;
 
 public class PictureAlbumDirectoryActivity extends PictureBaseActivity implements View.OnClickListener, PictureAlbumDirectoryAdapter.OnItemClickListener, ObserverListener {
 
@@ -65,11 +66,12 @@ public class PictureAlbumDirectoryActivity extends PictureBaseActivity implement
         tv_empty.setOnClickListener(this);
         ImagesObservable.getInstance().add(this);
         switch (type) {
-            case LocalMediaLoader.TYPE_PICTURE:
-                picture_tv_title.setText(getString(R.string.select_photo));
-                break;
-            case LocalMediaLoader.TYPE_VIDEO:
+            case LocalMedia.TYPE_VIDEO:
                 picture_tv_title.setText(getString(R.string.select_video));
+                break;
+            case LocalMedia.TYPE_PICTURE:
+            default:
+                picture_tv_title.setText(getString(R.string.select_photo));
                 break;
         }
 
@@ -99,11 +101,12 @@ public class PictureAlbumDirectoryActivity extends PictureBaseActivity implement
         } else {
             tv_empty.setVisibility(View.VISIBLE);
             switch (type) {
-                case LocalMediaLoader.TYPE_PICTURE:
-                    tv_empty.setText(getString(R.string.no_photo));
-                    break;
-                case LocalMediaLoader.TYPE_VIDEO:
+                case LocalMedia.TYPE_VIDEO:
                     tv_empty.setText(getString(R.string.no_video));
+                    break;
+                case LocalMedia.TYPE_PICTURE:
+                default:
+                    tv_empty.setText(getString(R.string.no_photo));
                     break;
             }
         }
@@ -157,7 +160,7 @@ public class PictureAlbumDirectoryActivity extends PictureBaseActivity implement
         int id = view.getId();
         if (id == R.id.tv_empty) {
             startEmptyImageActivity();
-        } else if (id == R.id.picture_tv_right){
+        } else if (id == R.id.picture_tv_right) {
             finish();
             overridePendingTransition(0, R.anim.slide_bottom_out);
         }
@@ -168,13 +171,14 @@ public class PictureAlbumDirectoryActivity extends PictureBaseActivity implement
      */
     private void startEmptyImageActivity() {
         List<LocalMedia> images = new ArrayList<>();
-        String title = "";
+        String title;
         switch (type) {
-            case LocalMediaLoader.TYPE_PICTURE:
-                title = getString(R.string.lately_image);
-                break;
-            case LocalMediaLoader.TYPE_VIDEO:
+            case LocalMedia.TYPE_VIDEO:
                 title = getString(R.string.lately_video);
+                break;
+            case LocalMedia.TYPE_PICTURE:
+            default:
+                title = getString(R.string.lately_image);
                 break;
         }
         startImageGridActivity(title, images);
@@ -193,15 +197,19 @@ public class PictureAlbumDirectoryActivity extends PictureBaseActivity implement
             return;
         }
         Intent intent = new Intent();
+        // TODO: 2017/8/18 use java observe
         List<LocalMediaFolder> folders = adapter.getFolderData();
         ImagesObservable.getInstance().saveLocalMedia(images);
         ImagesObservable.getInstance().saveLocalFolders(folders);
-        intent.putExtra(FunctionConfig.EXTRA_PREVIEW_SELECT_LIST, (Serializable) selectMedias);
+
+        intent.putExtra(FunctionConfig.EXTRA_PREVIEW_SELECT_LIST,
+                (Serializable) selectMedias);
         intent.putExtra(FunctionConfig.EXTRA_THIS_CONFIG, config);
         intent.putExtra(FunctionConfig.FOLDER_NAME, folderName);
         intent.putExtra(FunctionConfig.EXTRA_IS_TOP_ACTIVITY, true);
         intent.setClass(mContext, PictureImageGridActivity.class);
-        startActivityForResult(intent, FunctionConfig.REQUEST_IMAGE);
+        startActivityForResult(intent,
+                PVSelectorConsts.AcResultReqCode.REQUEST_SELECT_MEDIA);
     }
 
 
@@ -254,9 +262,10 @@ public class PictureAlbumDirectoryActivity extends PictureBaseActivity implement
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == FunctionConfig.REQUEST_IMAGE) {
+        if (requestCode == PVSelectorConsts.AcResultReqCode.REQUEST_SELECT_MEDIA) {
             if (resultCode == RESULT_OK) {
-                List<LocalMedia> result = (List<LocalMedia>) data.getSerializableExtra(FunctionConfig.EXTRA_RESULT);
+                List<LocalMedia> result =
+                        (List<LocalMedia>) data.getSerializableExtra(FunctionConfig.EXTRA_RESULT);
                 setResult(RESULT_OK, new Intent().putExtra(FunctionConfig.EXTRA_RESULT, (Serializable) result));
                 finish();
             }
