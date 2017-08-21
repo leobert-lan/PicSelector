@@ -14,7 +14,7 @@ public class CompressImageOptions implements CompressInterface {
     private CompressInterface.CompressListener listener;
 
     public static CompressInterface compress(Context context, CompressConfig config, List<LocalMedia> images, CompressInterface.CompressListener listener) {
-        if (config.getLubanOptions() != null) {
+        if (config.getLuBanOptions() != null) {
             return new LuBanCompress(context, config, images, listener);
         } else {
             return new CompressImageOptions(context, config, images, listener);

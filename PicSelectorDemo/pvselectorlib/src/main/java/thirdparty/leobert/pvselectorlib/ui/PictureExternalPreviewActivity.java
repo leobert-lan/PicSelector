@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import thirdparty.leobert.pvselectorlib.Consts;
 import thirdparty.leobert.pvselectorlib.R;
 import thirdparty.leobert.pvselectorlib.model.FunctionConfig;
 import thirdparty.leobert.pvselectorlib.model.PictureConfig;
@@ -34,8 +35,11 @@ public class PictureExternalPreviewActivity extends FragmentActivity {
         tv_title = (TextView) findViewById(R.id.tv_title);
         left_back = (ImageButton) findViewById(R.id.left_back);
         viewPager = (PreviewViewPager) findViewById(R.id.preview_pager);
-        position = getIntent().getIntExtra(FunctionConfig.EXTRA_POSITION, 0);
-        images = (List<LocalMedia>) getIntent().getSerializableExtra(FunctionConfig.EXTRA_PREVIEW_SELECT_LIST);
+
+        position = getIntent().getIntExtra(Consts.Extra.EXTRA_POSITION, 0);
+
+        images = (List<LocalMedia>) getIntent()
+                .getSerializableExtra(Consts.Extra.EXTRA_PREVIEW_SELECT_LIST);
         left_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

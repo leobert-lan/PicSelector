@@ -10,10 +10,13 @@ import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
+import thirdparty.leobert.pvselectorlib.Consts;
 import thirdparty.leobert.pvselectorlib.R;
 
-public class PictureVideoPlayActivity extends PictureBaseActivity implements MediaPlayer.OnErrorListener, MediaPlayer.OnCompletionListener {
-    private String video_path = "";
+public class PictureVideoPlayActivity extends PictureBaseActivity
+        implements MediaPlayer.OnErrorListener,
+        MediaPlayer.OnCompletionListener {
+    private String videoPath = "";
     private ImageView left_back;
     private MediaController mMediaController;
     private VideoView mVideoView;
@@ -25,7 +28,9 @@ public class PictureVideoPlayActivity extends PictureBaseActivity implements Med
         translucentStatusBar();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.picture_activity_video_play);
-        video_path = getIntent().getStringExtra("video_path");
+
+        videoPath = getIntent().getStringExtra(Consts.Extra.EXTRA_PREVIEW_VIDEO_PATH);
+
         left_back = (ImageView) findViewById(R.id.left_back);
         mVideoView = (VideoView) findViewById(R.id.video_view);
         iv_play = (ImageView) findViewById(R.id.iv_play);
@@ -72,7 +77,7 @@ public class PictureVideoPlayActivity extends PictureBaseActivity implements Med
         new Thread(new Runnable() {
             @Override
             public void run() {
-                mVideoView.setVideoPath(video_path);
+                mVideoView.setVideoPath(videoPath);
                 mVideoView.start();
             }
         }).start();

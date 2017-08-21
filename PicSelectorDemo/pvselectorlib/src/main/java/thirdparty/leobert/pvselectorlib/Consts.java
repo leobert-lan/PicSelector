@@ -30,12 +30,12 @@ import thirdparty.leobert.pvselectorlib.ui.PicturePreviewActivity;
 /**
  * <p><b>Package:</b> thirdparty.leobert.pvselectorlib </p>
  * <p><b>Project:</b> PicSelectorDemo </p>
- * <p><b>Classname:</b> PVSelectorConsts </p>
- * <p><b>Description:</b> TODO </p>
+ * <p><b>Classname:</b> Consts </p>
+ * <p><b>Description:</b> define & classify constants </p>
  * Created by leobert on 2017/8/18.
  */
 
-public interface PVSelectorConsts {
+public interface Consts {
 
     /**
      * use to tag the intent when request to grant permission
@@ -62,6 +62,47 @@ public interface PVSelectorConsts {
          * to get selected medias.
          */
         int REQUEST_MEDIA_PREVIEW = 100;
+    }
 
+    /**
+     * used to define place-hold keys in savedInstanceState's bundle
+     */
+    interface BundleKey {
+        /**
+         * keep the path that used to save the picture you will capture
+         * by camera
+         */
+        String CAMERA_SAVED_PATH = "CameraSavedPath";
+    }
+    
+    interface Extra {
+        String EXTRA_FUNCTION_CONFIG = "FUNCTION_CONFIG";
+
+        String EXTRA_IS_FIRST_STARTED = "IS_FIRST_STARTED";
+
+        String EXTRA_FROM_BOTTOMBAR_PREVIEW = "FROM_BOTTOMBAR_PREVIEW";
+
+        /**
+         * used to tag the position of the current media
+         * in the selected media list, and this tagged media
+         * will be previewed at first.
+         */
+        String EXTRA_POSITION = "POSITION";
+
+        String EXTRA_PREVIEW_LIST = "DATA_LIST_PREVIEW";
+        String EXTRA_PREVIEW_SELECT_LIST = "DATA_LIST_PREVIEW_SELECTED";
+        String EXTRA_RESULT = "SELECTED_RESULT";
+
+        /**
+         * used to put/get the name of the folder that contains media,
+         * when you choose one to have a quick look, all medias'(picture or video)
+         * snapshot will be displayed in the grid. And the folder name will be
+         * displayed as the title in the toolbar
+         */
+        String EXTRA_FOLDER_NAME = "FOLDER_NAME";
+
+        String PV_TYPE = "PV_TYPE";
+
+        String EXTRA_PREVIEW_VIDEO_PATH = "DATA_VIDEO_PREVIEW_PATH";
     }
 }

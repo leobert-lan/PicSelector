@@ -12,12 +12,12 @@ public class LuBanCompress implements CompressInterface {
     private List<LocalMedia> images;
     private CompressInterface.CompressListener listener;
     private Context context;
-    private LubanOptions options;
+    private LuBanOptions options;
     private ArrayList<File> files = new ArrayList<>();
 
     public LuBanCompress(Context context, CompressConfig config, List<LocalMedia> images,
                          CompressListener listener) {
-        options = config.getLubanOptions();
+        options = config.getLuBanOptions();
         this.images = images;
         this.listener = listener;
         this.context = context;
@@ -48,8 +48,8 @@ public class LuBanCompress implements CompressInterface {
     }
 
     private void compressOne() {
-        Luban.compress(context, files.get(0))
-                .putGear(Luban.CUSTOM_GEAR)
+        LuBan.compress(context, files.get(0))
+                .putGear(LuBan.CUSTOM_GEAR)
                 .setMaxHeight(options.getMaxHeight())
                 .setMaxWidth(options.getMaxWidth())
                 .setMaxSize(options.getMaxSize() / 1000)
@@ -75,8 +75,8 @@ public class LuBanCompress implements CompressInterface {
     }
 
     private void compressMulti() {
-        Luban.compress(context, files)
-                .putGear(Luban.CUSTOM_GEAR)
+        LuBan.compress(context, files)
+                .putGear(LuBan.CUSTOM_GEAR)
                 .setMaxSize(
                         options.getMaxSize() / 1000)                // limit the final image size（unit：Kb）
                 .setMaxHeight(options.getMaxHeight())             // limit image height

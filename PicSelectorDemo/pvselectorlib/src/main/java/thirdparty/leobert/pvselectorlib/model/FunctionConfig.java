@@ -71,50 +71,20 @@ public class FunctionConfig implements Serializable, UIConfig.UIConfigDelegate {
     ///////////////////////////////////////////////////////////////////////////
 
 
-    public static final int COPY_WIDTH = 0;
-    public static final int COPY_HEIGHT = 0;
+    /**
+     * zero mean will crop the real width
+     */
+    public static final int CROP_WIDTH_DEFAULT = 0;
+
+    /**
+     * zero mean will crop the real width
+     */
+    public static final int CROP_HEIGHT_DEFAULT = 0;
 
 
     public static final int SELECT_MAX_NUM = 9;
     public static final int MAX_COMPRESS_SIZE = 102400;
 
-    public static final String EXTRA_THIS_CONFIG = "function_config";
-    public static final String EXTRA_IS_TOP_ACTIVITY = "isTopActivity";
-    public static final String EXTRA_BOTTOM_PREVIEW = "bottom_preview";
-    public static final String EXTRA_POSITION = "position";
-    public static final String EXTRA_CUT_INDEX = "cutIndex";
-    public static final String EXTRA_PREVIEW_LIST = "previewList";
-    public static final String EXTRA_PREVIEW_SELECT_LIST = "previewSelectList";
-
-    public final static String FOLDER_NAME = "folderName";
-    public final static String REQUEST_OUTPUT = "outputList";
-    public final static String BUNDLE_CAMERA_PATH = "CameraPath";
-    public final static String EXTRA_SELECT_MODE = "SelectMode";
-    public final static String EXTRA_SHOW_CAMERA = "ShowCamera";
-    public final static String EXTRA_ENABLE_PREVIEW = "EnablePreview";
-    public final static String EXTRA_ENABLE_PREVIEW_VIDEO = "EnablePreviewVideo";
-    public final static String EXTRA_RESULT = "select_result";
-    public final static String EXTRA_ENABLE_CROP = "EnableCrop";
-    public final static String EXTRA_MAX_SELECT_NUM = "MaxSelectNum";
-    public final static String EXTRA_MAX_SPAN_COUNT = "spanCount";
-    public final static String EXTRA_TYPE = "type";
-    public final static String EXTRA_CROP_MODE = "cropMode";
-    public final static String BACKGROUND_COLOR = "backgroundColor";
-    public final static String CHECKED_DRAWABLE = "cb_drawable";
-    public final static String EXTRA_COMPRESS = "enablePictureCompress";
-    public final static String EXTRA_VIDEO_SECOND = "videoSecond";
-
-
-//    public final static String EXTRA_CROP_W = "crop_w";
-//    public final static String EXTRA_CROP_H = "crop_h";
-//    public final static String EXTRA_DEFINITION = "definition";
-//    public final static String EXTRA_IS_CHECKED_NUM = "checkedNum";
-//    public final static String EXTRA_PREVIEW_COLOR = "previewTxtColor";
-//    public final static String EXTRA_COMPLETE_COLOR = "completeTxtColor";
-//    public final static String EXTRA_COMPLETE_TEXT = "completeText";
-//    public final static String EXTRA_BOTTOM_BG_COLOR = "bottomBgColor";
-//    public final static String EXTRA_PREVIEW_BOTTOM_BG_COLOR = "previewBottomBgColor";
-//    public final static String EXTRA_COMPRESS_QUALITY = "compressQuality";
 
     @LocalMedia.MediaType
     private int type = LocalMedia.TYPE_PICTURE;
@@ -135,8 +105,8 @@ public class FunctionConfig implements Serializable, UIConfig.UIConfigDelegate {
 
     private UIConfig uiConfig = new UIConfig();
 
-    private int cropW = COPY_WIDTH; // 裁剪宽度  如果值大于图片原始宽高 将返回原图大小
-    private int cropH = COPY_HEIGHT;// 裁剪高度  如果值大于图片原始宽高 将返回原图大小
+    private int cropWidth = CROP_WIDTH_DEFAULT; // 裁剪宽度  如果值大于图片原始宽高 将返回原图大小
+    private int cropHeight = CROP_HEIGHT_DEFAULT;// 裁剪高度  如果值大于图片原始宽高 将返回原图大小
     private int recordVideoSecond = 0;// 录视频秒数
 
     @VideoRecordQuality
@@ -145,7 +115,7 @@ public class FunctionConfig implements Serializable, UIConfig.UIConfigDelegate {
 
     private boolean enablePictureCompress = false;// 是否压缩图片，默认不压缩
 
-    protected int compressQuality = 100;// 图片裁剪质量,默认无损
+    protected int compressQuality = 100;// 图片压缩质量,默认无损
     protected List<LocalMedia> selectMedia = new ArrayList<>();// 已选择的图片
     protected int compressFlag = 1; // 1 系统自带压缩 2 luban压缩
     protected int compressW;
@@ -252,20 +222,20 @@ public class FunctionConfig implements Serializable, UIConfig.UIConfigDelegate {
         this.enablePictureCompress = enablePictureCompress;
     }
 
-    public int getCropW() {
-        return cropW;
+    public int getCropWidth() {
+        return cropWidth;
     }
 
-    public void setCropW(int cropW) {
-        this.cropW = cropW;
+    public void setCropWidth(int cropWidth) {
+        this.cropWidth = cropWidth;
     }
 
-    public int getCropH() {
-        return cropH;
+    public int getCropHeight() {
+        return cropHeight;
     }
 
-    public void setCropH(int cropH) {
-        this.cropH = cropH;
+    public void setCropHeight(int cropHeight) {
+        this.cropHeight = cropHeight;
     }
 
     ///////////////////////////////////////////////////////////////////////////

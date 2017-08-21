@@ -31,25 +31,25 @@ public class CompressConfig implements Serializable {
     /**
      * Luban压缩配置
      */
-    private LubanOptions lubanOptions;
+    private LuBanOptions luBanOptions;
 
     public static CompressConfig ofDefaultConfig() {
         return new CompressConfig();
     }
 
-    public static CompressConfig ofLuban(LubanOptions options) {
+    public static CompressConfig ofLuban(LuBanOptions options) {
         return new CompressConfig(options);
     }
 
     private CompressConfig() {
     }
 
-    private CompressConfig(LubanOptions options) {
-        this.lubanOptions = options;
+    private CompressConfig(LuBanOptions options) {
+        this.luBanOptions = options;
     }
 
-    public LubanOptions getLubanOptions() {
-        return lubanOptions;
+    public LuBanOptions getLuBanOptions() {
+        return luBanOptions;
     }
 
     public int getMaxPixel() {

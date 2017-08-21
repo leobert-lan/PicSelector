@@ -33,7 +33,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
-public class Luban {
+public class LuBan {
 
     public static final int FIRST_GEAR = 1;
     public static final int THIRD_GEAR = 3;
@@ -46,24 +46,24 @@ public class Luban {
 
     private List<File> mFileList;
 
-    private LubanBuilder mBuilder;
+    private LuBanBuilder mBuilder;
 
-    private Luban(File cacheDir) {
-        mBuilder = new LubanBuilder(cacheDir);
+    private LuBan(File cacheDir) {
+        mBuilder = new LuBanBuilder(cacheDir);
     }
 
-    public static Luban compress(Context context, File file) {
-        Luban luban = new Luban(Luban.getPhotoCacheDir(context));
-        luban.mFile = file;
-        luban.mFileList = Collections.singletonList(file);
-        return luban;
+    public static LuBan compress(Context context, File file) {
+        LuBan luBan = new LuBan(LuBan.getPhotoCacheDir(context));
+        luBan.mFile = file;
+        luBan.mFileList = Collections.singletonList(file);
+        return luBan;
     }
 
-    public static Luban compress(Context context, List<File> files) {
-        Luban luban = new Luban(Luban.getPhotoCacheDir(context));
-        luban.mFileList = files;
-        luban.mFile = files.get(0);
-        return luban;
+    public static LuBan compress(Context context, List<File> files) {
+        LuBan luBan = new LuBan(LuBan.getPhotoCacheDir(context));
+        luBan.mFileList = files;
+        luBan.mFile = files.get(0);
+        return luBan;
     }
 
     /**
@@ -72,7 +72,7 @@ public class Luban {
      * @param gear
      * @return
      */
-    public Luban putGear(@GEAR int gear) {
+    public LuBan putGear(@GEAR int gear) {
         mBuilder.gear = gear;
         return this;
     }
@@ -83,7 +83,7 @@ public class Luban {
      * @param compressFormat
      * @return
      */
-    public Luban setCompressFormat(Bitmap.CompressFormat compressFormat) {
+    public LuBan setCompressFormat(Bitmap.CompressFormat compressFormat) {
         mBuilder.compressFormat = compressFormat;
         return this;
     }
@@ -94,7 +94,7 @@ public class Luban {
      * @param size
      * @return
      */
-    public Luban setMaxSize(int size) {
+    public LuBan setMaxSize(int size) {
         mBuilder.maxSize = size;
         return this;
     }
@@ -105,7 +105,7 @@ public class Luban {
      * @param width 最大宽度
      * @return
      */
-    public Luban setMaxWidth(int width) {
+    public LuBan setMaxWidth(int width) {
         mBuilder.maxWidth = width;
         return this;
     }
@@ -116,7 +116,7 @@ public class Luban {
      * @param height 最大高度
      * @return
      */
-    public Luban setMaxHeight(int height) {
+    public LuBan setMaxHeight(int height) {
         mBuilder.maxHeight = height;
         return this;
     }
@@ -127,12 +127,14 @@ public class Luban {
      * @param listener 接收回调结果
      */
     public void launch(final OnCompressListener listener) {
-        asObservable().subscribeOn(Schedulers.computation()).observeOn(AndroidSchedulers.mainThread()).doOnRequest(new Action1<Long>() {
-            @Override
-            public void call(Long aLong) {
-                listener.onStart();
-            }
-        }).subscribe(new Action1<File>() {
+        asObservable().subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnRequest(new Action1<Long>() {
+                    @Override
+                    public void call(Long aLong) {
+                        listener.onStart();
+                    }
+                }).subscribe(new Action1<File>() {
             @Override
             public void call(File file) {
                 listener.onSuccess(file);
@@ -177,7 +179,7 @@ public class Luban {
      * @return
      */
     public Observable<File> asObservable() {
-        LubanCompresser compresser = new LubanCompresser(mBuilder);
+        LuBanCompressor compresser = new LuBanCompressor(mBuilder);
         return compresser.singleAction(mFile);
     }
 
@@ -187,8 +189,8 @@ public class Luban {
      * @return
      */
     public Observable<List<File>> asListObservable() {
-        LubanCompresser compresser = new LubanCompresser(mBuilder);
-        return compresser.multiAction(mFileList);
+        LuBanCompressor compressor = new LuBanCompressor(mBuilder);
+        return compressor.multiAction(mFileList);
     }
 
     // Utils
@@ -202,7 +204,7 @@ public class Luban {
      * @see #getPhotoCacheDir(Context, String)
      */
     private static File getPhotoCacheDir(Context context) {
-        return getPhotoCacheDir(context, Luban.DEFAULT_DISK_CACHE_DIR);
+        return getPhotoCacheDir(context, LuBan.DEFAULT_DISK_CACHE_DIR);
     }
 
     /**
@@ -236,7 +238,7 @@ public class Luban {
      *
      * @return
      */
-    public Luban clearCache() {
+    public LuBan clearCache() {
         if (mBuilder.cacheDir.exists()) {
             deleteFile(mBuilder.cacheDir);
         }
@@ -262,6 +264,5 @@ public class Luban {
     @Documented
     @Inherited
     @interface GEAR {
-
     }
 }

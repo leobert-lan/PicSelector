@@ -5,7 +5,7 @@ import android.graphics.Bitmap;
 import java.io.File;
 
 
-public class LubanBuilder {
+public class LuBanBuilder {
 
     int maxSize;
 
@@ -17,9 +17,9 @@ public class LubanBuilder {
 
     Bitmap.CompressFormat compressFormat = Bitmap.CompressFormat.JPEG;
 
-    int gear = Luban.THIRD_GEAR;
+    int gear = LuBan.THIRD_GEAR;
 
-    LubanBuilder(File cacheDir) {
+    LuBanBuilder(File cacheDir) {
         this.cacheDir = cacheDir;
     }
 }

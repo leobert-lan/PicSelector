@@ -195,8 +195,8 @@ public class DemoActivity extends Activity implements RadioGroup.OnCheckedChange
                     config.setPreviewVideo(isPreviewVideo);
                     config.setRecordVideoDefinition(FunctionConfig.RECORD_QUALITY_HIGH);// 视频清晰度
                     config.setRecordVideoSecond(60);// 视频秒数
-                    config.setCropW(cropW);
-                    config.setCropH(cropH);
+                    config.setCropWidth(cropW);
+                    config.setCropHeight(cropH);
                     config.setDisplayCandidateNo(enableDisplayCandidateNo);
                     config.setCompressQuality(100);
                     config.setImageSpanCount(4);

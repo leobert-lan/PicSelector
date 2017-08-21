@@ -116,6 +116,7 @@ public class SweetAlertDialog extends Dialog {
 
 
     protected void onStart() {
+//        super.onStart();
         mDialogView.startAnimation(mModalInAnim);
     }
 
@@ -128,7 +129,8 @@ public class SweetAlertDialog extends Dialog {
     }
 
     /**
-     * The real Dialog.dismiss() will be invoked async-ly after the animation finishes.
+     * The real Dialog.dismiss() will be invoked async-ly
+     * after the animation finishes.
      */
     public void dismissWithAnimation() {
         dismissWithAnimation(false);
@@ -139,4 +141,5 @@ public class SweetAlertDialog extends Dialog {
         mDialogView.startAnimation(mModalOutAnim);
         dismiss();
     }
+
 }

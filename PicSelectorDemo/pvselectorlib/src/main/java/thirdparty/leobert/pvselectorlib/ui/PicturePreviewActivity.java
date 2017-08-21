@@ -31,6 +31,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import thirdparty.leobert.pvselectorlib.Consts;
 import thirdparty.leobert.pvselectorlib.R;
 import thirdparty.leobert.pvselectorlib.model.FunctionConfig;
 import thirdparty.leobert.pvselectorlib.observable.ImagesObservable;
@@ -77,19 +78,22 @@ public class PicturePreviewActivity extends PictureBaseActivity
         select_bar_layout = (RelativeLayout) findViewById(R.id.select_bar_layout);
         check = (TextView) findViewById(R.id.check);
         left_back.setOnClickListener(this);
-        tv_ok = (TextView) findViewById(R.id.tv_ok);
-        tv_img_num = (TextView) findViewById(R.id.tv_img_num);
+        tv_ok = (TextView) findViewById(R.id.bottombar_tv_select_complete);
+        tv_img_num = (TextView) findViewById(R.id.bottombar_tv_select_count);
         tv_title = (TextView) findViewById(R.id.tv_title);
         tv_ok.setOnClickListener(this);
-        position = getIntent().getIntExtra(FunctionConfig.EXTRA_POSITION, 0);
+
         rl_title.setBackgroundColor(backgroundColor);
         ToolbarUtil.setColorNoTranslucent(this, backgroundColor);
         tv_ok.setTextColor(completeTxtColor);
         select_bar_layout.setBackgroundColor(previewBottomBgColor);
-        boolean is_bottom_preview = getIntent().getBooleanExtra(FunctionConfig.EXTRA_BOTTOM_PREVIEW, false);
+
+        position = getIntent().getIntExtra(Consts.Extra.EXTRA_POSITION, 0);
+        boolean is_bottom_preview = getIntent()
+                .getBooleanExtra(Consts.Extra.EXTRA_FROM_BOTTOMBAR_PREVIEW, false);
         if (is_bottom_preview) {
             // 底部预览按钮过来
-            datas = (List<LocalMedia>) getIntent().getSerializableExtra(FunctionConfig.EXTRA_PREVIEW_LIST);
+            datas = (List<LocalMedia>) getIntent().getSerializableExtra(Consts.Extra.EXTRA_PREVIEW_LIST);
         } else {
             datas = ImagesObservable.getInstance().readLocalMedias();
         }
@@ -98,7 +102,8 @@ public class PicturePreviewActivity extends PictureBaseActivity
             tv_img_num.setBackgroundResource(R.drawable.message_oval_blue);
         }
 
-        selectImages = (List<LocalMedia>) getIntent().getSerializableExtra(FunctionConfig.EXTRA_PREVIEW_SELECT_LIST);
+        selectImages = (List<LocalMedia>) getIntent()
+                .getSerializableExtra(Consts.Extra.EXTRA_PREVIEW_SELECT_LIST);
 
         initViewPageAdapterData();
         ll_check.setOnClickListener(new View.OnClickListener() {
@@ -264,7 +269,10 @@ public class PicturePreviewActivity extends PictureBaseActivity
             mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    sendBroadcast(new Intent().setAction("app.action.refresh.data").putExtra(FunctionConfig.EXTRA_PREVIEW_SELECT_LIST, (Serializable) selectImages));
+                    sendBroadcast(new Intent()
+                            .setAction("app.action.refresh.data")
+                            .putExtra(Consts.Extra.EXTRA_PREVIEW_SELECT_LIST,
+                                    (Serializable) selectImages));
                 }
             }, 100);
         }
@@ -295,11 +303,11 @@ public class PicturePreviewActivity extends PictureBaseActivity
         int id = view.getId();
         if (id == R.id.left_back) {
             finish();
-        } else if (id == R.id.tv_ok) {
+        } else if (id == R.id.bottombar_tv_select_complete) {
             if (selectMode == FunctionConfig.SELECT_MODE_MULTIPLE
                     && enableCrop && type == LocalMedia.TYPE_PICTURE) {
                 // 是图片和选择压缩并且是多张，调用批量压缩
-                startMultiCopy(selectImages);
+                startMultiCrop(selectImages);
             } else {
                 onResult(selectImages);
             }
@@ -322,7 +330,7 @@ public class PicturePreviewActivity extends PictureBaseActivity
      *
      * @param medias
      */
-    protected void startMultiCopy(List<LocalMedia> medias) {
+    protected void startMultiCrop(List<LocalMedia> medias) {
         if (medias != null && medias.size() > 0) {
             LocalMedia media = medias.get(0);
             String path = media.getPath();

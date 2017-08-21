@@ -14,7 +14,7 @@ import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
 import android.widget.Toast;
 
-import thirdparty.leobert.pvselectorlib.PVSelectorConsts;
+import thirdparty.leobert.pvselectorlib.Consts;
 import thirdparty.leobert.pvselectorlib.R;
 import thirdparty.leobert.pvselectorlib.model.FunctionConfig;
 
@@ -64,7 +64,8 @@ public class PictureBaseActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         mContext = this;
         initScreenWidth();
-        config = (FunctionConfig) getIntent().getSerializableExtra(FunctionConfig.EXTRA_THIS_CONFIG);
+        config = (FunctionConfig) getIntent()
+                .getSerializableExtra(Consts.Extra.EXTRA_FUNCTION_CONFIG);
         type = config.getType();
         showCamera = config.isShowCamera();
         enablePreview = config.isEnablePreview();
@@ -77,8 +78,8 @@ public class PictureBaseActivity extends FragmentActivity {
         cb_drawable = config.getCheckedBoxDrawable();
         isCompress = config.getPictureCompressEnable();
         spanCount = config.getImageSpanCount();
-        cropW = config.getCropW();
-        cropH = config.getCropH();
+        cropW = config.getCropWidth();
+        cropH = config.getCropHeight();
         recordVideoSecond = config.getRecordVideoSecond();
         definition = config.getRecordVideoDefinition();
         displayCandidateNo = config.isDisplayCandidateNo();
@@ -131,14 +132,14 @@ public class PictureBaseActivity extends FragmentActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
-            case PVSelectorConsts.PermissionReqCode.READ_EXTERNAL_STORAGE:
+            case Consts.PermissionReqCode.READ_EXTERNAL_STORAGE:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     readLocalMedia();
                 } else {
                     showToast("读取内存卡权限已被拒绝");
                 }
                 break;
-            case PVSelectorConsts.PermissionReqCode.GRANT_CAMERA:
+            case Consts.PermissionReqCode.GRANT_CAMERA:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     startCamera();
                 } else {

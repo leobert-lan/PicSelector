@@ -79,7 +79,6 @@ public class PictureSingeUCropActivity extends FragmentActivity {
     @IntDef({NONE, SCALE, ROTATE, ALL})
     @Retention(RetentionPolicy.SOURCE)
     public @interface GestureTypes {
-
     }
 
     private int mLogoColor;

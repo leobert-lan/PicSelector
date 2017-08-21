@@ -39,14 +39,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import thirdparty.leobert.pvselectorlib.Consts;
 import thirdparty.leobert.pvselectorlib.Logger;
-import thirdparty.leobert.pvselectorlib.PVSelectorConsts;
 import thirdparty.leobert.pvselectorlib.R;
 import thirdparty.leobert.pvselectorlib.adapter.PictureImageGridAdapter;
 import thirdparty.leobert.pvselectorlib.compress.CompressConfig;
 import thirdparty.leobert.pvselectorlib.compress.CompressImageOptions;
 import thirdparty.leobert.pvselectorlib.compress.CompressInterface;
-import thirdparty.leobert.pvselectorlib.compress.LubanOptions;
+import thirdparty.leobert.pvselectorlib.compress.LuBanOptions;
 import thirdparty.leobert.pvselectorlib.decoration.GridSpacingItemDecoration;
 import thirdparty.leobert.pvselectorlib.model.FunctionConfig;
 import thirdparty.leobert.pvselectorlib.model.LocalMediaLoader;
@@ -71,7 +71,7 @@ public class PictureImageGridActivity extends PictureBaseActivity
     private String cameraPath;
     private SweetAlertDialog dialog;
     private List<LocalMediaFolder> folders = new ArrayList<>();
-    private boolean is_top_activity;
+    private boolean isFirstStarted;
     private BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -80,12 +80,14 @@ public class PictureImageGridActivity extends PictureBaseActivity
                 finish();
                 overridePendingTransition(0, R.anim.slide_bottom_out);
             } else if (action.equals("app.action.refresh.data")) {
-                List<LocalMedia> selectImages = (List<LocalMedia>) intent.getSerializableExtra(FunctionConfig.EXTRA_PREVIEW_SELECT_LIST);
+                List<LocalMedia> selectImages = (List<LocalMedia>) intent
+                        .getSerializableExtra(Consts.Extra.EXTRA_PREVIEW_SELECT_LIST);
                 if (selectImages != null)
                     adapter.bindSelectedMedias(selectImages);
             } else if (action.equals("app.action.crop_data")) {
                 // 裁剪返回的数据
-                List<LocalMedia> result = (List<LocalMedia>) intent.getSerializableExtra(FunctionConfig.EXTRA_RESULT);
+                List<LocalMedia> result = (List<LocalMedia>) intent
+                        .getSerializableExtra(Consts.Extra.EXTRA_RESULT);
                 if (result == null)
                     result = new ArrayList<>();
                 handleCropResult(result);
@@ -100,44 +102,38 @@ public class PictureImageGridActivity extends PictureBaseActivity
         Log.d(TAG, "onCreate");
         setContentView(R.layout.picture_activity_image_grid);
         registerReceiver(receiver, "app.activity.finish", "app.action.refresh.data", "app.action.crop_data");
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        rl_bottom = (RelativeLayout) findViewById(R.id.rl_bottom);
-        picture_left_back = (ImageButton) findViewById(R.id.picture_left_back);
-        rl_picture_title = (RelativeLayout) findViewById(R.id.rl_picture_title);
-        picture_tv_title = (TextView) findViewById(R.id.picture_tv_title);
-        picture_tv_right = (TextView) findViewById(R.id.picture_tv_right);
-        rl_picture_title.setBackgroundColor(backgroundColor);
-        ToolbarUtil.setColorNoTranslucent(this, backgroundColor);
-        tv_ok = (TextView) findViewById(R.id.tv_ok);
-        id_preview = (Button) findViewById(R.id.id_preview);
-        tv_img_num = (TextView) findViewById(R.id.tv_img_num);
-        id_preview.setOnClickListener(this);
-        tv_ok.setOnClickListener(this);
-        picture_left_back.setOnClickListener(this);
-        picture_tv_right.setOnClickListener(this);
-        is_top_activity = getIntent().getBooleanExtra(FunctionConfig.EXTRA_IS_TOP_ACTIVITY, false);
 
-        if (!is_top_activity) {
+        initUiInstance();
+
+        initUiEventListener();
+
+        isFirstStarted = getIntent()
+                .getBooleanExtra(Consts.Extra.EXTRA_IS_FIRST_STARTED, false);
+
+        if (!isFirstStarted) {
             // 第一次启动ImageActivity，没有获取过相册列表
             // 先判断手机是否有读取权限，主要是针对6.0已上系统
             if (hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
                 readLocalMedia();
             } else {
-                requestPermission(PVSelectorConsts.PermissionReqCode.READ_EXTERNAL_STORAGE,
+                requestPermission(Consts.PermissionReqCode.READ_EXTERNAL_STORAGE,
                         Manifest.permission.READ_EXTERNAL_STORAGE);
             }
         } else {
-            selectMedias = (List<LocalMedia>) getIntent().getSerializableExtra(FunctionConfig.EXTRA_PREVIEW_SELECT_LIST);
+            selectMedias = (List<LocalMedia>) getIntent()
+                    .getSerializableExtra(Consts.Extra.EXTRA_PREVIEW_SELECT_LIST);
         }
 
-        String folderName = getIntent().getStringExtra(FunctionConfig.FOLDER_NAME);
+        String folderName = getIntent()
+                .getStringExtra(Consts.Extra.EXTRA_FOLDER_NAME);
         folders = ImagesObservable.getInstance().readLocalFolders();
         if (folders == null) {
             folders = new ArrayList<>();
         }
 
         if (savedInstanceState != null) {
-            cameraPath = savedInstanceState.getString(FunctionConfig.BUNDLE_CAMERA_PATH);
+            cameraPath =
+                    savedInstanceState.getString(Consts.BundleKey.CAMERA_SAVED_PATH);
         }
 
         images = ImagesObservable.getInstance().readLocalMedias();
@@ -204,6 +200,27 @@ public class PictureImageGridActivity extends PictureBaseActivity
         adapter.setOnPhotoSelectChangedListener(PictureImageGridActivity.this);
     }
 
+    private void initUiInstance() {
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        rl_bottom = (RelativeLayout) findViewById(R.id.rl_bottom);
+        picture_left_back = (ImageButton) findViewById(R.id.picture_left_back);
+        rl_picture_title = (RelativeLayout) findViewById(R.id.rl_picture_title);
+        picture_tv_title = (TextView) findViewById(R.id.picture_tv_title);
+        picture_tv_right = (TextView) findViewById(R.id.picture_tv_right);
+        rl_picture_title.setBackgroundColor(backgroundColor);
+        ToolbarUtil.setColorNoTranslucent(this, backgroundColor);
+        tv_ok = (TextView) findViewById(R.id.bottombar_tv_select_complete);
+        id_preview = (Button) findViewById(R.id.bottombar_btn_preview);
+        tv_img_num = (TextView) findViewById(R.id.bottombar_tv_select_count);
+    }
+
+    private void initUiEventListener() {
+        id_preview.setOnClickListener(this);
+        tv_ok.setOnClickListener(this);
+        picture_left_back.setOnClickListener(this);
+        picture_tv_right.setOnClickListener(this);
+    }
+
     @Override
     protected void readLocalMedia() {
         /**
@@ -232,35 +249,19 @@ public class PictureImageGridActivity extends PictureBaseActivity
 
     @Override
     public void onClick(View view) {
-        Intent intent = new Intent();
         int id = view.getId();
         if (id == R.id.picture_left_back) {
             activityFinish(1);
         } else if (id == R.id.picture_tv_right) {
             activityFinish(2);
-        } else if (id == R.id.id_preview) {
-            if (Utils.isFastDoubleClick()) {
-                return;
-            }
-            List<LocalMedia> selectedImages = adapter.getSelectedImages();
-            List<LocalMedia> medias = new ArrayList<>();
-            for (LocalMedia media : selectedImages) {
-                medias.add(media);
-            }
-            intent.putExtra(FunctionConfig.EXTRA_PREVIEW_LIST, (Serializable) medias);
-            intent.putExtra(FunctionConfig.EXTRA_PREVIEW_SELECT_LIST, (Serializable) selectedImages);
-            intent.putExtra(FunctionConfig.EXTRA_POSITION, 0);
-            intent.putExtra(FunctionConfig.EXTRA_BOTTOM_PREVIEW, true);
-            intent.putExtra(FunctionConfig.EXTRA_THIS_CONFIG, config);
-            intent.setClass(mContext, PicturePreviewActivity.class);
-            startActivityForResult(intent,
-                    PVSelectorConsts.AcResultReqCode.REQUEST_MEDIA_PREVIEW);
-        } else if (id == R.id.tv_ok) {
+        } else if (id == R.id.bottombar_btn_preview) {
+            onBtnPreviewClicked();
+        } else if (id == R.id.bottombar_tv_select_complete) {
             List<LocalMedia> images = adapter.getSelectedImages();
             if (enableCrop && type == LocalMedia.TYPE_PICTURE
                     && selectMode == FunctionConfig.SELECT_MODE_MULTIPLE) {
                 // 是图片和选择压缩并且是多张，调用批量压缩
-                startMultiCopy(images);
+                startMultiCrop(images);
             } else {
                 // 图片才压缩，视频不管
                 if (isCompress && type == LocalMedia.TYPE_PICTURE) {
@@ -270,6 +271,36 @@ public class PictureImageGridActivity extends PictureBaseActivity
                 }
             }
         }
+    }
+
+    /**
+     * called when the "preview" button on clicked, located at the bottom bar
+     *
+     * will preview the whole selected medias
+     */
+    private void onBtnPreviewClicked() {
+        if (Utils.isFastDoubleClick()) {
+            return;
+        }
+        Intent intent = new Intent();
+
+        //build preview data
+        List<LocalMedia> selectedImages = adapter.getSelectedImages();
+        List<LocalMedia> medias = new ArrayList<>();
+        for (LocalMedia media : selectedImages)
+            medias.add(media);
+
+        intent.putExtra(Consts.Extra.EXTRA_PREVIEW_LIST,
+                (Serializable) medias);
+        intent.putExtra(Consts.Extra.EXTRA_PREVIEW_SELECT_LIST,
+                (Serializable) selectedImages);
+
+        intent.putExtra(Consts.Extra.EXTRA_POSITION, 0);
+        intent.putExtra(Consts.Extra.EXTRA_FROM_BOTTOMBAR_PREVIEW, true);
+        intent.putExtra(Consts.Extra.EXTRA_FUNCTION_CONFIG, config);
+        intent.setClass(this, PicturePreviewActivity.class);
+        startActivityForResult(intent,
+                Consts.AcResultReqCode.REQUEST_MEDIA_PREVIEW);
     }
 
     private void resultBack(List<LocalMedia> images) {
@@ -282,7 +313,7 @@ public class PictureImageGridActivity extends PictureBaseActivity
         if (hasPermission(Manifest.permission.CAMERA)) {
             startCamera();
         } else {
-            requestPermission(PVSelectorConsts.PermissionReqCode.GRANT_CAMERA,
+            requestPermission(Consts.PermissionReqCode.GRANT_CAMERA,
                     Manifest.permission.CAMERA);
         }
     }
@@ -352,10 +383,9 @@ public class PictureImageGridActivity extends PictureBaseActivity
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
         switch (type) {
-            // TODO: 2017/8/17 修改常量
             case LocalMedia.TYPE_PICTURE:
                 if (enableCrop && selectMode == FunctionConfig.SELECT_MODE_SINGLE) {
-                    startCopy(media.getPath());
+                    startCrop(media.getPath());
                 } else if (!enableCrop && selectMode == FunctionConfig.SELECT_MODE_SINGLE) {
                     ArrayList<LocalMedia> result = new ArrayList<>();
                     LocalMedia m = new LocalMedia();
@@ -374,12 +404,13 @@ public class PictureImageGridActivity extends PictureBaseActivity
                     }
                     ImagesObservable.getInstance().saveLocalMedia(previewImages);
                     List<LocalMedia> selectedImages = adapter.getSelectedImages();
-                    intent.putExtra(FunctionConfig.EXTRA_PREVIEW_SELECT_LIST, (Serializable) selectedImages);
-                    intent.putExtra(FunctionConfig.EXTRA_POSITION, position);
-                    intent.putExtra(FunctionConfig.EXTRA_THIS_CONFIG, config);
+                    intent.putExtra(Consts.Extra.EXTRA_PREVIEW_SELECT_LIST,
+                            (Serializable) selectedImages);
+                    intent.putExtra(Consts.Extra.EXTRA_POSITION, position);
+                    intent.putExtra(Consts.Extra.EXTRA_FUNCTION_CONFIG, config);
                     intent.setClass(mContext, PicturePreviewActivity.class);
                     startActivityForResult(intent,
-                            PVSelectorConsts.AcResultReqCode.REQUEST_MEDIA_PREVIEW);
+                            Consts.AcResultReqCode.REQUEST_MEDIA_PREVIEW);
                 }
                 break;
             case LocalMedia.TYPE_VIDEO:
@@ -396,8 +427,10 @@ public class PictureImageGridActivity extends PictureBaseActivity
                     if (Utils.isFastDoubleClick()) {
                         return;
                     }
-                    bundle.putString("video_path", media.getPath());
-                    bundle.putSerializable(FunctionConfig.EXTRA_THIS_CONFIG, config);
+                    bundle.putString(Consts.Extra.EXTRA_PREVIEW_VIDEO_PATH,
+                            media.getPath());
+                    bundle.putSerializable(Consts.Extra.EXTRA_FUNCTION_CONFIG,
+                            config);
                     startActivity(PictureVideoPlayActivity.class, bundle);
                 }
                 break;
@@ -410,7 +443,7 @@ public class PictureImageGridActivity extends PictureBaseActivity
      *
      * @param path
      */
-    protected void startCopy(String path) {
+    protected void startCrop(String path) {
 //        // 如果开启裁剪 并且是单选
 //        // 去裁剪
         UCrop uCrop = UCrop.of(Uri.parse(path), Uri.fromFile(new File(getCacheDir(), System.currentTimeMillis() + ".jpg")));
@@ -447,7 +480,7 @@ public class PictureImageGridActivity extends PictureBaseActivity
      *
      * @param medias
      */
-    protected void startMultiCopy(List<LocalMedia> medias) {
+    protected void startMultiCrop(List<LocalMedia> medias) {
         if (medias != null && medias.size() > 0) {
             LocalMedia media = medias.get(0);
             String path = media.getPath();
@@ -499,7 +532,7 @@ public class PictureImageGridActivity extends PictureBaseActivity
             }
             cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
             startActivityForResult(cameraIntent,
-                    PVSelectorConsts.AcResultReqCode.REQUEST_START_CAMERA);
+                    Consts.AcResultReqCode.REQUEST_START_CAMERA);
         }
     }
 
@@ -522,7 +555,7 @@ public class PictureImageGridActivity extends PictureBaseActivity
             cameraIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, recordVideoSecond);
             cameraIntent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, definition);
             startActivityForResult(cameraIntent,
-                    PVSelectorConsts.AcResultReqCode.REQUEST_START_CAMERA);
+                    Consts.AcResultReqCode.REQUEST_START_CAMERA);
         }
     }
 
@@ -533,7 +566,7 @@ public class PictureImageGridActivity extends PictureBaseActivity
         Log.d(TAG, "onActivityResult");
         if (resultCode == RESULT_OK) {
             // on take photo success
-            if (requestCode == PVSelectorConsts.AcResultReqCode.REQUEST_START_CAMERA) {
+            if (requestCode == Consts.AcResultReqCode.REQUEST_START_CAMERA) {
                 // 拍照返回
                 File file = new File(cameraPath);
                 sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)));
@@ -541,7 +574,7 @@ public class PictureImageGridActivity extends PictureBaseActivity
                     // 如果是单选 拍照后直接返回
                     if (enableCrop && type == LocalMedia.TYPE_PICTURE) {
                         // 如果允许裁剪，并且是图片
-                        startCopy(cameraPath);
+                        startCrop(cameraPath);
                     } else {
                         if (isCompress && type == LocalMedia.TYPE_PICTURE) {
                             // 压缩图片
@@ -669,7 +702,7 @@ public class PictureImageGridActivity extends PictureBaseActivity
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putString(FunctionConfig.BUNDLE_CAMERA_PATH, cameraPath);
+        outState.putString(Consts.BundleKey.CAMERA_SAVED_PATH, cameraPath);
     }
 
 
@@ -734,7 +767,7 @@ public class PictureImageGridActivity extends PictureBaseActivity
                 break;
             case 2:
                 // luban压缩
-                LubanOptions option = new LubanOptions.Builder()
+                LuBanOptions option = new LuBanOptions.Builder()
                         .setMaxHeight(compressH)
                         .setMaxWidth(compressW)
                         .setMaxSize(FunctionConfig.MAX_COMPRESS_SIZE)

@@ -95,7 +95,7 @@ public class PictureAlbumDirectoryAdapter
             first_image = (ImageView) itemView.findViewById(R.id.first_image);
             tv_folder_name = (TextView) itemView.findViewById(R.id.tv_folder_name);
             image_num = (TextView) itemView.findViewById(R.id.image_num);
-            tv_img_num = (TextView) itemView.findViewById(R.id.tv_img_num);
+            tv_img_num = (TextView) itemView.findViewById(R.id.bottombar_tv_select_count);
         }
     }
 

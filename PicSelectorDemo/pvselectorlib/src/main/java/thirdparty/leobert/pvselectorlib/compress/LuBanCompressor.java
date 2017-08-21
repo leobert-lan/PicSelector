@@ -20,23 +20,23 @@ import rx.schedulers.Schedulers;
 
 import static thirdparty.leobert.pvselectorlib.compress.Preconditions.checkNotNull;
 
-class LubanCompresser {
+class LuBanCompressor {
 
     private static final String TAG = "Luban Compress";
 
-    private final LubanBuilder mLuban;
+    private final LuBanBuilder mLuBan;
 
     private ByteArrayOutputStream mByteArrayOutputStream;
 
-    LubanCompresser(LubanBuilder luban) {
-        mLuban = luban;
+    LuBanCompressor(LuBanBuilder luban) {
+        mLuBan = luban;
     }
 
     Observable<File> singleAction(final File file) {
         return Observable.fromCallable(new Callable<File>() {
             @Override
             public File call() throws Exception {
-                return compressImage(mLuban.gear, file);
+                return compressImage(mLuBan.gear, file);
             }
         }).subscribeOn(Schedulers.computation());
     }
@@ -47,7 +47,7 @@ class LubanCompresser {
             observables.add(Observable.fromCallable(new Callable<File>() {
                 @Override
                 public File call() throws Exception {
-                    return compressImage(mLuban.gear, file);
+                    return compressImage(mLuBan.gear, file);
                 }
             }));
         }
@@ -65,11 +65,11 @@ class LubanCompresser {
 
     private File compressImage(int gear, File file) throws IOException {
         switch (gear) {
-            case Luban.THIRD_GEAR:
+            case LuBan.THIRD_GEAR:
                 return thirdCompress(file);
-            case Luban.CUSTOM_GEAR:
+            case LuBan.CUSTOM_GEAR:
                 return customCompress(file);
-            case Luban.FIRST_GEAR:
+            case LuBan.FIRST_GEAR:
                 return firstCompress(file);
             default:
                 return file;
@@ -187,33 +187,33 @@ class LubanCompresser {
         String filePath = file.getAbsolutePath();
 
         int angle = getImageSpinAngle(filePath);
-        long fileSize = mLuban.maxSize > 0 && mLuban.maxSize < file.length() / 1024 ? mLuban.maxSize
+        long fileSize = mLuBan.maxSize > 0 && mLuBan.maxSize < file.length() / 1024 ? mLuBan.maxSize
                 : file.length() / 1024;
 
         int[] size = getImageSize(filePath);
         int width = size[0];
         int height = size[1];
 
-        if (mLuban.maxSize > 0 && mLuban.maxSize < file.length() / 1024f) {
+        if (mLuBan.maxSize > 0 && mLuBan.maxSize < file.length() / 1024f) {
             // find a suitable size
-            float scale = (float) Math.sqrt(file.length() / 1024f / mLuban.maxSize);
+            float scale = (float) Math.sqrt(file.length() / 1024f / mLuBan.maxSize);
             width = (int) (width / scale);
             height = (int) (height / scale);
         }
 
         // check the width&height
-        if (mLuban.maxWidth > 0) {
-            width = Math.min(width, mLuban.maxWidth);
+        if (mLuBan.maxWidth > 0) {
+            width = Math.min(width, mLuBan.maxWidth);
         }
-        if (mLuban.maxHeight > 0) {
-            height = Math.min(height, mLuban.maxHeight);
+        if (mLuBan.maxHeight > 0) {
+            height = Math.min(height, mLuBan.maxHeight);
         }
         float scale = Math.min((float) width / size[0], (float) height / size[1]);
         width = (int) (size[0] * scale);
         height = (int) (size[1] * scale);
 
         // 不压缩
-        if (mLuban.maxSize > file.length() / 1024f && scale == 1) {
+        if (mLuBan.maxSize > file.length() / 1024f && scale == 1) {
             return file;
         }
 
@@ -222,12 +222,12 @@ class LubanCompresser {
 
     private String getCacheFilePath() {
         StringBuilder name = new StringBuilder("Luban_" + System.currentTimeMillis());
-        if (mLuban.compressFormat == Bitmap.CompressFormat.WEBP) {
+        if (mLuBan.compressFormat == Bitmap.CompressFormat.WEBP) {
             name.append(".webp");
         } else {
             name.append(".jpg");
         }
-        return mLuban.cacheDir.getAbsolutePath() + File.separator + name;
+        return mLuBan.cacheDir.getAbsolutePath() + File.separator + name;
     }
 
     /**
@@ -362,12 +362,12 @@ class LubanCompresser {
         }
 
         int options = 100;
-        bitmap.compress(mLuban.compressFormat, options, mByteArrayOutputStream);
+        bitmap.compress(mLuBan.compressFormat, options, mByteArrayOutputStream);
 
         while (mByteArrayOutputStream.size() / 1024 > size && options > 6) {
             mByteArrayOutputStream.reset();
             options -= 6;
-            bitmap.compress(mLuban.compressFormat, options, mByteArrayOutputStream);
+            bitmap.compress(mLuBan.compressFormat, options, mByteArrayOutputStream);
         }
         bitmap.recycle();
 

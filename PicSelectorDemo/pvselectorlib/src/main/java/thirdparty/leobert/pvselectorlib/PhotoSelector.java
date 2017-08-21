@@ -70,8 +70,8 @@ import thirdparty.leobert.pvselectorlib.model.PictureConfig;
     @Override
     public IPhotoSelector enableCrop(int w, int h) {
         config.setEnableCrop(true);
-        config.setCropH(h);
-        config.setCropW(w);
+        config.setCropHeight(h);
+        config.setCropWidth(w);
         return this;
     }
 
