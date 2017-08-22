@@ -22,7 +22,7 @@
         android:layout_marginTop="5dp"
         android:layout_toRightOf="@id/first_image"
         android:text="相机胶卷"
-        android:textColor="@color/black"
+        android:textColor="@color/ucrop_black"
         android:textSize="16sp" />
 
     <TextView
@@ -33,7 +33,7 @@
         android:layout_marginTop="5dp"
         android:layout_toRightOf="@id/tv_folder_name"
         android:text="(0)"
-        android:textColor="@color/grey"
+        android:textColor="@color/ucrop_grey"
         android:textSize="16sp" />
 
 

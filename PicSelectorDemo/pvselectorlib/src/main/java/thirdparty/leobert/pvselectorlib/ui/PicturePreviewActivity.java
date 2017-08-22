@@ -21,7 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.yalantis.ucrop.MultiUCrop;
-import com.yalantis.ucrop.UCrop;
+import com.yalantis.ucrop.Options;
 import com.yalantis.ucrop.dialog.OptAnimationLoader;
 import com.yalantis.ucrop.entity.LocalMedia;
 import com.yalantis.ucrop.util.ToolbarUtil;
@@ -37,7 +37,7 @@ import thirdparty.leobert.pvselectorlib.model.FunctionConfig;
 import thirdparty.leobert.pvselectorlib.observable.ImagesObservable;
 import thirdparty.leobert.pvselectorlib.widget.PreviewViewPager;
 
-public class PicturePreviewActivity extends PictureBaseActivity
+public class PicturePreviewActivity extends PVBaseActivity
         implements View.OnClickListener {
     private ImageButton left_back;
     private TextView tv_img_num, tv_title, tv_ok;
@@ -320,7 +320,9 @@ public class PicturePreviewActivity extends PictureBaseActivity
         for (LocalMedia media : images) {
             result.add(media);
         }
-        sendBroadcast(new Intent().setAction("app.action.crop_data").putExtra(UCrop.EXTRA_RESULT, (Serializable) result));
+        sendBroadcast(new Intent()
+                .setAction(Consts.BcActions.ACTION_IMAGE_CROPPED)
+                .putExtra(Consts.Extra.EXTRA_SERIALIZABLE_RESULT, (Serializable) result));
         finish();
         overridePendingTransition(0, R.anim.slide_bottom_out);
     }
@@ -335,9 +337,11 @@ public class PicturePreviewActivity extends PictureBaseActivity
             LocalMedia media = medias.get(0);
             String path = media.getPath();
             // 去裁剪
-            MultiUCrop uCrop = MultiUCrop.of(Uri.parse(path), Uri.fromFile(new File(getCacheDir(), System.currentTimeMillis() + ".jpg")));
-            MultiUCrop.Options options = new MultiUCrop.Options();
-            switch (copyMode) {
+            MultiUCrop multiUCrop = MultiUCrop.of(Uri.parse(path),
+                    Uri.fromFile(new File(getCacheDir(),
+                            System.currentTimeMillis() + ".jpg")));
+            Options options = new Options.OptionsImpl();
+            switch (cropMode) {
                 case FunctionConfig.CROP_MODE_DEFAULT:
                     options.withAspectRatio(0, 0);
                     break;
@@ -358,9 +362,9 @@ public class PicturePreviewActivity extends PictureBaseActivity
             options.setCompressionQuality(compressQuality);
             options.withMaxResultSize(cropW, cropH);
             options.background_color(backgroundColor);
-            options.copyMode(copyMode);
-            uCrop.withOptions(options);
-            uCrop.start(PicturePreviewActivity.this);
+            options.cropMode(cropMode);
+            multiUCrop.withOptions(options);
+            multiUCrop.start(PicturePreviewActivity.this);
         }
 
     }

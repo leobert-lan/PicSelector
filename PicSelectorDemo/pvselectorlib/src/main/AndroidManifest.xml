@@ -7,12 +7,12 @@
         android:supportsRtl="true">
 
         <activity
-            android:name=".ui.PictureAlbumDirectoryActivity"
+            android:name=".ui.AlbumDirectoryListActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Slider" />
         <activity
-            android:name=".ui.PictureImageGridActivity"
+            android:name=".ui.MediaFolderContentDisplayActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Slider" />
@@ -22,7 +22,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Slider" />
         <activity
-            android:name=".ui.PictureVideoPlayActivity"
+            android:name=".ui.VideoDisplayActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Slider" />
@@ -40,7 +40,7 @@
             android:theme="@style/Theme.Slider" />
 
         <activity
-            android:name="com.yalantis.ucrop.ui.PictureSingeUCropActivity"
+            android:name="com.yalantis.ucrop.ui.PictureSingleUCropActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Slider" />

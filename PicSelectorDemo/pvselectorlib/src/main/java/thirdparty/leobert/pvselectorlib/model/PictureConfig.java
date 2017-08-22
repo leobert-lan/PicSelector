@@ -6,9 +6,9 @@ import android.content.Intent;
 
 import thirdparty.leobert.pvselectorlib.Consts;
 import thirdparty.leobert.pvselectorlib.R;
-import thirdparty.leobert.pvselectorlib.ui.PictureAlbumDirectoryActivity;
+import thirdparty.leobert.pvselectorlib.ui.AlbumDirectoryListActivity;
+import thirdparty.leobert.pvselectorlib.ui.MediaFolderContentDisplayActivity;
 import thirdparty.leobert.pvselectorlib.ui.PictureExternalPreviewActivity;
-import thirdparty.leobert.pvselectorlib.ui.PictureImageGridActivity;
 
 import com.yalantis.ucrop.entity.LocalMedia;
 import com.yalantis.ucrop.util.Utils;
@@ -57,8 +57,8 @@ public class PictureConfig {
             config = new FunctionConfig();
         }
         // 这里仿ios微信相册启动模式
-        Intent intent1 = new Intent(mContext, PictureAlbumDirectoryActivity.class);
-        Intent intent2 = new Intent(mContext, PictureImageGridActivity.class);
+        Intent intent1 = new Intent(mContext, AlbumDirectoryListActivity.class);
+        Intent intent2 = new Intent(mContext, MediaFolderContentDisplayActivity.class);
         Intent[] intents = new Intent[2];
         intent1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent2.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -73,7 +73,7 @@ public class PictureConfig {
     }
 
     /**
-     * 外部图片预览
+     * 外部图片预览,当宿主存在对已选择的图片再次进行预览的需求时，可以用此处快捷实现，且风格近似
      *
      * @param position
      * @param medias

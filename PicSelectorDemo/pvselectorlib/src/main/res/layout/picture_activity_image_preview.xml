@@ -2,22 +2,22 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
+    android:background="@color/ucrop_black"
     android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/rl_title"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:background="@color/bar_grey">
+        android:background="@color/ucrop_bar_grey">
 
         <ImageButton
             android:id="@+id/left_back"
             android:layout_width="48dp"
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
-            android:background="@color/transparent"
-            android:src="@drawable/back"
+            android:background="@color/ucrop_transparent"
+            android:src="@drawable/drawable_nav_back"
             android:visibility="visible" />
 
         <TextView
@@ -64,7 +64,7 @@
         android:id="@+id/select_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:background="@color/bar_grey_90"
+        android:background="@color/ucrop_bar_grey_90"
         android:gravity="center_vertical">
 
         <LinearLayout
@@ -97,7 +97,7 @@
                 android:gravity="center|left"
                 android:paddingRight="12dp"
                 android:text="请选择"
-                android:textColor="@color/tab_color_true"
+                android:textColor="@color/ucrop_tab_color_true"
                 android:textSize="14sp" />
 
         </LinearLayout>

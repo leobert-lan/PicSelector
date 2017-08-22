@@ -24,7 +24,7 @@
 
 <resources>
 
-    <!--uCrop Activity-->
+    <!--singleUCrop Activity-->
     <dimen name="ucrop_padding_crop_frame">16dp</dimen>
     <dimen name="ucrop_size_dot_scale_text_view">8dp</dimen>
     <dimen name="ucrop_height_horizontal_wheel_progress_line">20dp</dimen>

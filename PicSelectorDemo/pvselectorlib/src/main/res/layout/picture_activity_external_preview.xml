@@ -2,22 +2,22 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
+    android:background="@color/ucrop_black"
     android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/rl_title"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:background="@color/bar_grey">
+        android:background="@color/ucrop_bar_grey">
 
         <ImageButton
             android:id="@+id/left_back"
             android:layout_width="48dp"
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
-            android:background="@color/transparent"
-            android:src="@drawable/back"
+            android:background="@color/ucrop_transparent"
+            android:src="@drawable/drawable_nav_back"
             android:visibility="visible" />
 
         <TextView

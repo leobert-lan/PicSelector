@@ -47,8 +47,8 @@ buildscript {
     repositories {
         jcenter()
     }
-    tasks.withType(org.gradle.api.tasks.compile.JavaCompile){
-        options.encoding="UTF-8"
+    tasks.withType(org.gradle.api.tasks.compile.JavaCompile) {
+        options.encoding = "UTF-8"
         options.compilerArgs << "-Xlint:unchecked"
     }
     dependencies {
@@ -67,7 +67,7 @@ dependencies {
 //    compile 'individual.leobert.libs:ucrop:2.3.0'
     compile project(':ucrop')
 
-        compile 'io.reactivex:rxjava:1.1.6'
+    compile 'io.reactivex:rxjava:1.1.6'
     compile 'io.reactivex:rxandroid:1.1.0'
 }
 
@@ -78,12 +78,13 @@ task sourcesJar(type: Jar) {
 
 task javadoc(type: Javadoc) {
     source = android.sourceSets.main.java.srcDirs
-    exclude "thirdparty/leobert/pvselectorlib","com/yalantis/ucrop"//,"com/google/zxing"//如果你要排除一些目录下的，要这样写,不能是com.zbar.lib
+    exclude "thirdparty/leobert/pvselectorlib", "com/yalantis/ucrop"
+//,"com/google/zxing"//如果你要排除一些目录下的，要这样写,不能是com.zbar.lib
     classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
 }
 
 javadoc {
-    options{
+    options {
         encoding "UTF-8"
         charSet 'UTF-8'
         author true
@@ -101,7 +102,6 @@ artifacts {
     archives javadocJar
     archives sourcesJar
 }
-
 
 // 根节点添加
 install {
@@ -148,7 +148,7 @@ bintray {
 //    user = isHasFile ? properties.getProperty("bintray_user") : System.getenv("bintray.user")
 //    key = isHasFile ? properties.getProperty("bintray_apikey") : System.getenv("bintray.apikey")
 
-    user =  properties.getProperty("bintray_user")
+    user = properties.getProperty("bintray_user")
     key = properties.getProperty("bintray_apikey")
 
 

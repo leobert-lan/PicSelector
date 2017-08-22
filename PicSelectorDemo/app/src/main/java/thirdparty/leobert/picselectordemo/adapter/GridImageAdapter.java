@@ -142,7 +142,7 @@ public class GridImageAdapter extends
                     Glide.with(mContext)
                             .load(path)
                             .asBitmap().centerCrop()
-                            .placeholder(R.color.color_f6)
+                            .placeholder(R.color.ucrop_color_f6)
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .into(viewHolder.mImg);
                     break;

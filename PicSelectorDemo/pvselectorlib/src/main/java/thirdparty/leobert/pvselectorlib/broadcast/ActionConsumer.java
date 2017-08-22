@@ -22,43 +22,25 @@
  * SOFTWARE.
  */
 
-package com.yalantis.ucrop;
+package thirdparty.leobert.pvselectorlib.broadcast;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
-import android.support.annotation.NonNull;
-
-import com.yalantis.ucrop.ui.PictureMultiUCropActivity;
 
 /**
- * Builder class to ease Intent setup.
+ * <p><b>Package:</b> thirdparty.leobert.pvselectorlib.broadcast </p>
+ * <p><b>Project:</b> PicSelectorDemo </p>
+ * <p><b>Classname:</b> ActionConsumer </p>
+ * <p><b>Description:</b> a consumer to listen&consume the action of broadcast </p>
+ * Created by leobert on 2017/8/21.
  */
-public class MultiUCrop extends UCrop<MultiUCrop> {
 
+public interface ActionConsumer {
     /**
-     * This method creates new Intent builder and sets both source and destination image URIs.
-     *
-     * @param source      Uri for image to crop
-     * @param destination Uri for saving the cropped image
+     * @return the String action tag that this
+     * Consumer listened in the broadcast.
      */
-    public static MultiUCrop of(@NonNull Uri source, @NonNull Uri destination) {
-        return new MultiUCrop(source, destination);
-    }
+    String getListenedAction();
 
-    private MultiUCrop(@NonNull Uri source, @NonNull Uri destination) {
-        super(source, destination);
-        instance = this;
-    }
-
-    /**
-     * Get Intent to start {@link PictureMultiUCropActivity}
-     *
-     * @return Intent for {@link PictureMultiUCropActivity}
-     */
-    public Intent getIntent(@NonNull Context context) {
-        mCropIntent.setClass(context, PictureMultiUCropActivity.class);
-        mCropIntent.putExtras(mCropOptionsBundle);
-        return mCropIntent;
-    }
+    void consume(Context context, Intent intent);
 }

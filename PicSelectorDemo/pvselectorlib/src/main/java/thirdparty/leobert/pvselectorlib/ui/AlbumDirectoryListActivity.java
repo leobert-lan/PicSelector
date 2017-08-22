@@ -1,6 +1,5 @@
 package thirdparty.leobert.pvselectorlib.ui;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -25,14 +24,17 @@ import java.util.List;
 import thirdparty.leobert.pvselectorlib.Consts;
 import thirdparty.leobert.pvselectorlib.R;
 import thirdparty.leobert.pvselectorlib.adapter.PictureAlbumDirectoryAdapter;
+import thirdparty.leobert.pvselectorlib.broadcast.consumers.FinishActionConsumer;
 import thirdparty.leobert.pvselectorlib.decoration.RecycleViewDivider;
-import thirdparty.leobert.pvselectorlib.model.FunctionConfig;
 import thirdparty.leobert.pvselectorlib.model.PictureConfig;
 import thirdparty.leobert.pvselectorlib.observable.ImagesObservable;
 import thirdparty.leobert.pvselectorlib.observable.ObserverListener;
 
-public class PictureAlbumDirectoryActivity
-        extends PictureBaseActivity
+/**
+ * display the list of media folder.
+ */
+public class AlbumDirectoryListActivity
+        extends PVBaseActivity
         implements View.OnClickListener,
         PictureAlbumDirectoryAdapter.OnItemClickListener,
         ObserverListener {
@@ -40,18 +42,26 @@ public class PictureAlbumDirectoryActivity
     private List<LocalMediaFolder> folders = new ArrayList<>();
     private PictureAlbumDirectoryAdapter adapter;
     private RecyclerView recyclerView;
-    private TextView tv_empty;
-    private RelativeLayout rl_picture_title;
-    private TextView picture_tv_title, picture_tv_right;
+
+    private TextView tvHintEmptyFolder;
+
+    private RelativeLayout rlToolBar;
+
+    /** tv widget, display activity title/label */
+    private TextView tvTitle;
+
+    /** tv widget, located at the right in the toolbar, refers to cancel select in
+     * this case */
+    private TextView tvOpCancel;
+
     private List<LocalMedia> selectMedias = new ArrayList<>();
-    private BroadcastReceiver receiver = new BroadcastReceiver() {
+
+
+    private FinishActionConsumer finishActionConsumer = new FinishActionConsumer() {
         @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (action.equals("app.activity.finish")) {
-                finish();
-                overridePendingTransition(0, R.anim.slide_bottom_out);
-            }
+        public void consume(Context context, Intent intent) {
+            finish();
+            overridePendingTransition(0, R.anim.slide_bottom_out);
         }
     };
 
@@ -59,58 +69,79 @@ public class PictureAlbumDirectoryActivity
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.picture_activity_album);
-        registerReceiver(receiver, "app.activity.finish");
+
+        registerBroadcastConsumer(finishActionConsumer);
+
         if (selectMedias == null)
             selectMedias = new ArrayList<>();
+
+        initUiInstance();
+        initUiEventListener();
+        initData();
+    }
+
+    @Override
+    protected void initUiInstance() {
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        tv_empty = (TextView) findViewById(R.id.tv_empty);
-        rl_picture_title = (RelativeLayout) findViewById(R.id.rl_picture_title);
-        picture_tv_title = (TextView) findViewById(R.id.picture_tv_title);
-        picture_tv_right = (TextView) findViewById(R.id.picture_tv_right);
-        tv_empty.setOnClickListener(this);
-        ImagesObservable.getInstance().add(this);
-        switch (type) {
-            case LocalMedia.TYPE_VIDEO:
-                picture_tv_title.setText(getString(R.string.select_video));
-                break;
-            case LocalMedia.TYPE_PICTURE:
-            default:
-                picture_tv_title.setText(getString(R.string.select_photo));
-                break;
-        }
+        tvHintEmptyFolder = (TextView) findViewById(R.id.tv_empty);
+        rlToolBar = (RelativeLayout) findViewById(R.id.album_rl_toolbar);
+        tvTitle = (TextView) findViewById(R.id.album_tv_title);
+        tvOpCancel = (TextView) findViewById(R.id.album_toolbar_rightop);
+
+        tvTitle.setText(initTitleName());
 
         ToolbarUtil.setColorNoTranslucent(this, backgroundColor);
-        rl_picture_title.setBackgroundColor(backgroundColor);
-        picture_tv_right.setText(getString(R.string.cancel));
-        picture_tv_right.setOnClickListener(this);
+        rlToolBar.setBackgroundColor(backgroundColor);
+        tvOpCancel.setText(getString(R.string.txt_cancel));
+
         adapter = new PictureAlbumDirectoryAdapter(this);
         LinearLayoutManager manager = new LinearLayoutManager(this);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new RecycleViewDivider(
-                mContext, LinearLayoutManager.HORIZONTAL, Utils.dip2px(this, 0.5f), ContextCompat.getColor(this, R.color.line_color)));
+                mContext, LinearLayoutManager.HORIZONTAL, Utils.dip2px(this, 0.5f), ContextCompat.getColor(this, R.color.ucrop_line_color)));
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    protected void initUiEventListener() {
+        tvHintEmptyFolder.setOnClickListener(this);
+        ImagesObservable.getInstance().add(this);
+        tvOpCancel.setOnClickListener(this);
         adapter.setOnItemClickListener(this);
-        initData();
+    }
+
+    private String initTitleName() {
+        String ret;
+        switch (type) {
+            case LocalMedia.TYPE_VIDEO:
+                ret = getString(R.string.select_video);
+                break;
+            case LocalMedia.TYPE_PICTURE:
+            default:
+                ret = getString(R.string.select_photo);
+                break;
+        }
+        return ret;
     }
 
     /**
      * 初始化数据
      */
     protected void initData() {
-        if (folders.size() > 0) {
-            tv_empty.setVisibility(View.GONE);
+        if (folders.size() > 0) { // show list
+            tvHintEmptyFolder.setVisibility(View.GONE);
             adapter.bindFolderData(folders);
             notifyDataCheckedStatus(selectMedias);
         } else {
-            tv_empty.setVisibility(View.VISIBLE);
-            switch (type) {
+            tvHintEmptyFolder.setVisibility(View.VISIBLE);
+            switch (type) { //show empty view
                 case LocalMedia.TYPE_VIDEO:
-                    tv_empty.setText(getString(R.string.no_video));
+                    tvHintEmptyFolder.setText(getString(R.string.no_video));
                     break;
                 case LocalMedia.TYPE_PICTURE:
                 default:
-                    tv_empty.setText(getString(R.string.no_photo));
+                    tvHintEmptyFolder.setText(getString(R.string.no_photo));
                     break;
             }
         }
@@ -164,7 +195,7 @@ public class PictureAlbumDirectoryActivity
         int id = view.getId();
         if (id == R.id.tv_empty) {
             startEmptyImageActivity();
-        } else if (id == R.id.picture_tv_right) {
+        } else if (id == R.id.album_toolbar_rightop) {
             finish();
             overridePendingTransition(0, R.anim.slide_bottom_out);
         }
@@ -174,7 +205,7 @@ public class PictureAlbumDirectoryActivity
      *
      */
     private void startEmptyImageActivity() {
-        List<LocalMedia> images = new ArrayList<>();
+        List<LocalMedia> medias = new ArrayList<>();
         String title;
         switch (type) {
             case LocalMedia.TYPE_VIDEO:
@@ -185,7 +216,7 @@ public class PictureAlbumDirectoryActivity
                 title = getString(R.string.lately_image);
                 break;
         }
-        startImageGridActivity(title, images);
+        startImageGridActivity(title, medias);
     }
 
     @Override
@@ -196,14 +227,15 @@ public class PictureAlbumDirectoryActivity
     }
 
 
-    private void startImageGridActivity(String folderName, final List<LocalMedia> images) {
+    private void startImageGridActivity(String folderName,
+                                        final List<LocalMedia> medias) {
         if (Utils.isFastDoubleClick()) {
             return;
         }
         Intent intent = new Intent();
         // TODO: 2017/8/18 use java observe
         List<LocalMediaFolder> folders = adapter.getFolderData();
-        ImagesObservable.getInstance().saveLocalMedia(images);
+        ImagesObservable.getInstance().saveLocalMedia(medias);
         ImagesObservable.getInstance().saveLocalFolders(folders);
 
         intent.putExtra(Consts.Extra.EXTRA_PREVIEW_SELECT_LIST,
@@ -211,7 +243,7 @@ public class PictureAlbumDirectoryActivity
         intent.putExtra(Consts.Extra.EXTRA_FUNCTION_CONFIG, config);
         intent.putExtra(Consts.Extra.EXTRA_FOLDER_NAME, folderName);
         intent.putExtra(Consts.Extra.EXTRA_IS_FIRST_STARTED, true);
-        intent.setClass(mContext, PictureImageGridActivity.class);
+        intent.setClass(mContext, MediaFolderContentDisplayActivity.class);
         startActivityForResult(intent,
                 Consts.AcResultReqCode.REQUEST_SELECT_MEDIA);
     }
@@ -227,13 +259,13 @@ public class PictureAlbumDirectoryActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (receiver != null) {
-            unregisterReceiver(receiver);
-        }
-        clearData();
+//        if (receiver != null) {
+//            unregisterReceiver(receiver);
+//        }
+        clearReference();
     }
 
-    protected void clearData() {
+    protected void clearReference() {
         // 释放静态变量
         PictureConfig.getPictureConfig().resultCallback = null;
         PictureConfig.pictureConfig = null;
@@ -259,8 +291,8 @@ public class PictureAlbumDirectoryActivity
         if (selectMedias == null)
             selectMedias = new ArrayList<>();
         notifyDataCheckedStatus(selectMedias);
-        if (tv_empty.getVisibility() == View.VISIBLE && adapter.getFolderData().size() > 0)
-            tv_empty.setVisibility(View.GONE);
+        if (tvHintEmptyFolder.getVisibility() == View.VISIBLE && adapter.getFolderData().size() > 0)
+            tvHintEmptyFolder.setVisibility(View.GONE);
     }
 
 
@@ -269,8 +301,8 @@ public class PictureAlbumDirectoryActivity
         if (requestCode == Consts.AcResultReqCode.REQUEST_SELECT_MEDIA) {
             if (resultCode == RESULT_OK) {
                 List<LocalMedia> result =
-                        (List<LocalMedia>) data.getSerializableExtra(Consts.Extra.EXTRA_RESULT);
-                setResult(RESULT_OK, new Intent().putExtra(Consts.Extra.EXTRA_RESULT, (Serializable) result));
+                        (List<LocalMedia>) data.getSerializableExtra(Consts.Extra.EXTRA_SERIALIZABLE_RESULT);
+                setResult(RESULT_OK, new Intent().putExtra(Consts.Extra.EXTRA_SERIALIZABLE_RESULT, (Serializable) result));
                 finish();
             }
         }

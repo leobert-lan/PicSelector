@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import thirdparty.leobert.pvselectorlib.Consts;
 import thirdparty.leobert.pvselectorlib.R;
-import thirdparty.leobert.pvselectorlib.model.FunctionConfig;
 import thirdparty.leobert.pvselectorlib.model.PictureConfig;
 import thirdparty.leobert.pvselectorlib.widget.PreviewViewPager;
 import com.yalantis.ucrop.entity.LocalMedia;
@@ -21,8 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PictureExternalPreviewActivity extends FragmentActivity {
-    private ImageButton left_back;
-    private TextView tv_title;
+    private ImageButton navBack;
+    private TextView tvTitle;
     private PreviewViewPager viewPager;
     private List<LocalMedia> images = new ArrayList<>();
     private int position = 0;
@@ -32,25 +31,34 @@ public class PictureExternalPreviewActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.picture_activity_external_preview);
-        tv_title = (TextView) findViewById(R.id.tv_title);
-        left_back = (ImageButton) findViewById(R.id.left_back);
-        viewPager = (PreviewViewPager) findViewById(R.id.preview_pager);
+
+        initUiInstance();
+        initUiEventListener();
 
         position = getIntent().getIntExtra(Consts.Extra.EXTRA_POSITION, 0);
-
         images = (List<LocalMedia>) getIntent()
                 .getSerializableExtra(Consts.Extra.EXTRA_PREVIEW_SELECT_LIST);
-        left_back.setOnClickListener(new View.OnClickListener() {
+
+        initViewPageAdapterData();
+    }
+
+    private void initUiInstance() {
+        tvTitle = (TextView) findViewById(R.id.tv_title);
+        navBack = (ImageButton) findViewById(R.id.left_back);
+        viewPager = (PreviewViewPager) findViewById(R.id.preview_pager);
+    }
+
+    private void initUiEventListener() {
+        navBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
             }
         });
-        initViewPageAdapterData();
     }
 
     private void initViewPageAdapterData() {
-        tv_title.setText(position + 1 + "/" + images.size());
+        tvTitle.setText(position + 1 + "/" + images.size());
         adapter = new SimpleFragmentAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(position);
@@ -62,7 +70,7 @@ public class PictureExternalPreviewActivity extends FragmentActivity {
 
             @Override
             public void onPageSelected(int position) {
-                tv_title.setText(position + 1 + "/" + images.size());
+                tvTitle.setText(position + 1 + "/" + images.size());
             }
 
             @Override
@@ -71,16 +79,16 @@ public class PictureExternalPreviewActivity extends FragmentActivity {
         });
     }
 
-    public class SimpleFragmentAdapter extends FragmentPagerAdapter {
+    private class SimpleFragmentAdapter extends FragmentPagerAdapter {
 
-        public SimpleFragmentAdapter(FragmentManager fm) {
+        SimpleFragmentAdapter(FragmentManager fm) {
             super(fm);
         }
 
         @Override
         public Fragment getItem(int position) {
-            PictureImagePreviewFragment fragment = PictureImagePreviewFragment.getInstance(images.get(position).getPath(), images);
-            return fragment;
+            return PictureImagePreviewFragment.getInstance(images.get(position).getPath(),
+                    images);
         }
 
         @Override

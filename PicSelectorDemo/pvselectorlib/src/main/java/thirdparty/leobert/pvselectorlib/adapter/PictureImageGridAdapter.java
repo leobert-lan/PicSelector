@@ -375,9 +375,9 @@ public class PictureImageGridAdapter
                 Animation animation = OptAnimationLoader.loadAnimation(context, R.anim.modal_in);
                 holder.check.startAnimation(animation);
             }
-            holder.picture.setColorFilter(ContextCompat.getColor(context, R.color.image_overlay2), PorterDuff.Mode.SRC_ATOP);
+            holder.picture.setColorFilter(ContextCompat.getColor(context, R.color.ucrop_image_overlay2), PorterDuff.Mode.SRC_ATOP);
         } else {
-            holder.picture.setColorFilter(ContextCompat.getColor(context, R.color.image_overlay), PorterDuff.Mode.SRC_ATOP);
+            holder.picture.setColorFilter(ContextCompat.getColor(context, R.color.ucrop_image_overlay), PorterDuff.Mode.SRC_ATOP);
         }
     }
 

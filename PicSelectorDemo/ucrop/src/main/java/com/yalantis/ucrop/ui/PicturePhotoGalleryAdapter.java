@@ -81,7 +81,7 @@ public class PicturePhotoGalleryAdapter extends RecyclerView.Adapter<PicturePhot
 
         Glide.with(context)
                 .load(path)
-                .placeholder(R.color.grey)
+                .placeholder(R.color.ucrop_grey)
                 .crossFade()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .centerCrop()

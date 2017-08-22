@@ -13,7 +13,7 @@ import android.widget.VideoView;
 import thirdparty.leobert.pvselectorlib.Consts;
 import thirdparty.leobert.pvselectorlib.R;
 
-public class PictureVideoPlayActivity extends PictureBaseActivity
+public class VideoDisplayActivity extends PVBaseActivity
         implements MediaPlayer.OnErrorListener,
         MediaPlayer.OnCompletionListener {
     private String videoPath = "";

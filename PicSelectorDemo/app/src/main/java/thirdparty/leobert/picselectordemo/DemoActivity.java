@@ -110,7 +110,7 @@ public class DemoActivity extends Activity implements RadioGroup.OnCheckedChange
             @Override
             public void onClick(View v) {
                 maxSelectNum++;
-                select_num.setText(maxSelectNum + "");
+                select_num.setText(String.valueOf(maxSelectNum));
                 adapter.setSelectMax(maxSelectNum);
             }
         });
@@ -139,7 +139,7 @@ public class DemoActivity extends Activity implements RadioGroup.OnCheckedChange
                     // 进入相册
                     /**
                      * type --> 1图片 or 2视频
-                     * copyMode -->裁剪比例，默认、1:1、3:4、3:2、16:9
+                     * cropMode -->裁剪比例，默认、1:1、3:4、3:2、16:9
                      * maxSelectNum --> 可选择图片的数量
                      * selectMode         --> 单选 or 多选
                      * isShow       --> 是否显示拍照选项 这里自动根据type 启动拍照或录视频
@@ -205,14 +205,14 @@ public class DemoActivity extends Activity implements RadioGroup.OnCheckedChange
                     config.setCompressW(compressW);
                     config.setCompressH(compressH);
                     if (theme) {
-                        config.setThemeStyle(ContextCompat.getColor(DemoActivity.this, R.color.blue));
+                        config.setThemeStyle(ContextCompat.getColor(DemoActivity.this, R.color.ucrop_blue));
                         // 可以自定义底部 预览 完成 文字的颜色和背景色
                         if (!enableDisplayCandidateNo) {
                             // QQ 风格模式下 这里自己搭配颜色，使用蓝色可能会不好看
                             config.setPreviewTxtColor(ContextCompat.getColor(DemoActivity.this, R.color.white));
                             config.setCompleteTxtColor(ContextCompat.getColor(DemoActivity.this, R.color.white));
-                            config.setPreviewBottomBgColor(ContextCompat.getColor(DemoActivity.this, R.color.blue));
-                            config.setBottomBgColor(ContextCompat.getColor(DemoActivity.this, R.color.blue));
+                            config.setPreviewBottomBgColor(ContextCompat.getColor(DemoActivity.this, R.color.ucrop_blue));
+                            config.setBottomBgColor(ContextCompat.getColor(DemoActivity.this, R.color.ucrop_blue));
                         }
                     }
                     if (selectImageType) {

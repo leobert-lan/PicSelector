@@ -2,6 +2,8 @@ package thirdparty.leobert.pvselectorlib.model;
 
 import android.support.annotation.IntDef;
 
+import com.yalantis.ucrop.UcropConsts;
+import com.yalantis.ucrop.annotation.UCropMode;
 import com.yalantis.ucrop.entity.LocalMedia;
 
 import java.io.Serializable;
@@ -17,22 +19,28 @@ public class FunctionConfig implements Serializable, UIConfig.UIConfigDelegate {
     //  crop mode const&annotation define
     ///////////////////////////////////////////////////////////////////////////
 
-    public static final int CROP_MODE_DEFAULT = 0;
-    public static final int CROP_MODE_1_1 = 11;
-    public static final int CROP_MODE_3_4 = 34;
-    public static final int CROP_MODE_3_2 = 32;
-    public static final int CROP_MODE_16_9 = 169;
+    @UCropMode
+    public static final int CROP_MODE_DEFAULT = UcropConsts.CROP_MODE_DEFAULT;
+    @UCropMode
+    public static final int CROP_MODE_1_1 = UcropConsts.CROP_MODE_1_1;
+    @UCropMode
+    public static final int CROP_MODE_3_4 = UcropConsts.CROP_MODE_3_4;
+    @UCropMode
+    public static final int CROP_MODE_3_2 = UcropConsts.CROP_MODE_3_2;
+    @UCropMode
+    public static final int CROP_MODE_16_9 = UcropConsts.CROP_MODE_16_9;
 
     /**
      * scopes of crop
      */
     @Retention(RetentionPolicy.SOURCE)
-    @IntDef({CROP_MODE_DEFAULT,
-            CROP_MODE_1_1,
-            CROP_MODE_3_4,
-            CROP_MODE_3_2,
-            CROP_MODE_16_9})
-    public @interface CropMode {
+//    @IntDef({CROP_MODE_DEFAULT,
+//            CROP_MODE_1_1,
+//            CROP_MODE_3_4,
+//            CROP_MODE_3_2,
+//            CROP_MODE_16_9})
+    @UCropMode
+    public @interface CropMode{
     }
 
     ///////////////////////////////////////////////////////////////////////////

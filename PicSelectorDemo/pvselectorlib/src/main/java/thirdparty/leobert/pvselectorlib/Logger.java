@@ -27,7 +27,7 @@ public class Logger {
         Log.e(TAG, subTag + "\n" + msg);
     }
 
-    public static <E> String stringnify(Collection<E> collection) {
+    public static <E> String stringify(Collection<E> collection) {
         if (collection == null) {
             return "collection is null";
         } else if (collection.size() == 0) {

@@ -11,14 +11,14 @@
         android:id="@+id/rl_title"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:background="@color/bar_grey">
+        android:background="@color/ucrop_bar_grey">
 
         <ImageButton
             android:id="@+id/left_back"
             android:layout_width="48dp"
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
-            android:background="@color/transparent"
+            android:background="@color/ucrop_transparent"
             android:src="@mipmap/back"
             android:visibility="visible" />
 
@@ -166,7 +166,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="5dp"
                 android:text="裁剪模式"
-                android:textColor="@color/black" />
+                android:textColor="@color/ucrop_black" />
 
             <RadioGroup
                 android:id="@+id/rgbs3"

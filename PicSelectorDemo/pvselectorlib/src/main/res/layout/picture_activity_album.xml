@@ -5,13 +5,13 @@
     android:background="@color/ucrop_color_toolbar_widget">
 
     <RelativeLayout
-        android:id="@+id/rl_picture_title"
+        android:id="@+id/album_rl_toolbar"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:background="#393a3e">
 
         <TextView
-            android:id="@+id/picture_tv_title"
+            android:id="@+id/album_tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -24,7 +24,7 @@
             android:textSize="18sp" />
 
         <TextView
-            android:id="@+id/picture_tv_right"
+            android:id="@+id/album_toolbar_rightop"
             android:layout_width="48dp"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
@@ -41,16 +41,16 @@
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/rl_picture_title" />
+        android:layout_below="@id/album_rl_toolbar" />
 
     <TextView
         android:id="@+id/tv_empty"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/rl_picture_title"
+        android:layout_below="@id/album_rl_toolbar"
         android:gravity="center"
         android:text="相册空空如也，赶紧去拍几张吧~"
-        android:textColor="@color/grey"
+        android:textColor="@color/ucrop_grey"
         android:textSize="16sp"
         android:visibility="gone" />
 </RelativeLayout>

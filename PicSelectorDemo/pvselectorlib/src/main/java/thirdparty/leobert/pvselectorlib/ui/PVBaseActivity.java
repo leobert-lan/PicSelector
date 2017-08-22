@@ -12,18 +12,22 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.widget.Toast;
 
-import thirdparty.leobert.pvselectorlib.Consts;
-import thirdparty.leobert.pvselectorlib.R;
-import thirdparty.leobert.pvselectorlib.model.FunctionConfig;
-
+import com.yalantis.ucrop.UcropConsts;
 import com.yalantis.ucrop.entity.LocalMedia;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class PictureBaseActivity extends FragmentActivity {
+import thirdparty.leobert.pvselectorlib.Consts;
+import thirdparty.leobert.pvselectorlib.R;
+import thirdparty.leobert.pvselectorlib.broadcast.ActionConsumer;
+import thirdparty.leobert.pvselectorlib.broadcast.ActionListenedBroadCastReceiver;
+import thirdparty.leobert.pvselectorlib.model.FunctionConfig;
+
+public abstract class PVBaseActivity extends FragmentActivity {
     protected Context mContext;
 
     @LocalMedia.MediaType
@@ -31,7 +35,11 @@ public class PictureBaseActivity extends FragmentActivity {
 
     protected int maxSelectNum = 0;
     protected int spanCount = 4;
-    protected int copyMode = 0;
+
+    @FunctionConfig.CropMode
+//    @UcropConsts.CropMode
+    protected int cropMode = FunctionConfig.CROP_MODE_DEFAULT;
+
     protected boolean showCamera = false;
     protected boolean enablePreview = false;
     protected boolean enableCrop = false;
@@ -43,7 +51,7 @@ public class PictureBaseActivity extends FragmentActivity {
     protected int cropH = 0;
     protected int recordVideoSecond = 0;
     protected int definition = 3;
-    protected boolean isCompress;
+    protected boolean enableCompress;
     protected boolean displayCandidateNo;
     protected int previewTxtColor; // 底部预览字体颜色
     protected int completeTxtColor; // 底部完成字体颜色
@@ -62,6 +70,10 @@ public class PictureBaseActivity extends FragmentActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initBase();
+    }
+
+    private void initBase() {
         mContext = this;
         initScreenWidth();
         config = (FunctionConfig) getIntent()
@@ -72,11 +84,11 @@ public class PictureBaseActivity extends FragmentActivity {
         selectMode = config.getSelectMode();
         enableCrop = config.isEnableCrop();
         maxSelectNum = config.getMaxSelectNum();
-        copyMode = config.getCropMode();
+        cropMode = config.getCropMode();
         enablePreviewVideo = config.isPreviewVideo();
         backgroundColor = config.getThemeStyle();
         cb_drawable = config.getCheckedBoxDrawable();
-        isCompress = config.getPictureCompressEnable();
+        enableCompress = config.getPictureCompressEnable();
         spanCount = config.getImageSpanCount();
         cropW = config.getCropWidth();
         cropH = config.getCropHeight();
@@ -100,6 +112,12 @@ public class PictureBaseActivity extends FragmentActivity {
         if (displayCandidateNo) {
             cb_drawable = R.drawable.checkbox_num_selector;
         }
+    }
+
+    protected void initUiInstance() {
+    }
+
+    protected void initUiEventListener() {
     }
 
     /**
@@ -201,6 +219,20 @@ public class PictureBaseActivity extends FragmentActivity {
         registerReceiver(receiver, intentFilter);
     }
 
+    private ActionListenedBroadCastReceiver broadCastReceiver;
+
+    protected void registerBroadcastConsumer(ActionConsumer... consumers) {
+        if (broadCastReceiver != null) {
+            final String TAG = getClass().getName();
+            Log.d(TAG,TAG+" may have registered bcr before,try to unregister now");
+            broadCastReceiver.unregister(this);
+        }
+
+        broadCastReceiver
+                = new ActionListenedBroadCastReceiver(consumers);
+        broadCastReceiver.registe(this);
+    }
+
 
     protected void showToast(String msg) {
         Toast.makeText(mContext, msg, Toast.LENGTH_LONG).show();
@@ -231,4 +263,10 @@ public class PictureBaseActivity extends FragmentActivity {
         mScreenWidth = dm.widthPixels;
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (broadCastReceiver != null)
+            broadCastReceiver.unregister(this);
+    }
 }

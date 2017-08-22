@@ -24,7 +24,15 @@
 
 package thirdparty.leobert.pvselectorlib;
 
-import thirdparty.leobert.pvselectorlib.ui.PictureImageGridActivity;
+import android.support.annotation.StringDef;
+
+import com.yalantis.ucrop.UcropConsts;
+import com.yalantis.ucrop.annotation.UCropResultExtraKey;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
+import thirdparty.leobert.pvselectorlib.ui.MediaFolderContentDisplayActivity;
 import thirdparty.leobert.pvselectorlib.ui.PicturePreviewActivity;
 
 /**
@@ -47,7 +55,7 @@ public interface Consts {
 
     interface AcResultReqCode {
         /**
-         * used to start {@link PictureImageGridActivity}, to select
+         * used to start {@link MediaFolderContentDisplayActivity}, to select
          * media in the given folder.
          */
         int REQUEST_SELECT_MEDIA = 88;
@@ -74,7 +82,7 @@ public interface Consts {
          */
         String CAMERA_SAVED_PATH = "CameraSavedPath";
     }
-    
+
     interface Extra {
         String EXTRA_FUNCTION_CONFIG = "FUNCTION_CONFIG";
 
@@ -91,7 +99,9 @@ public interface Consts {
 
         String EXTRA_PREVIEW_LIST = "DATA_LIST_PREVIEW";
         String EXTRA_PREVIEW_SELECT_LIST = "DATA_LIST_PREVIEW_SELECTED";
-        String EXTRA_RESULT = "SELECTED_RESULT";
+
+        @ResultExtraKey
+        String EXTRA_SERIALIZABLE_RESULT = UcropConsts.Extra.EXTRA_SERIALIZABLE_RESULT;
 
         /**
          * used to put/get the name of the folder that contains media,
@@ -104,5 +114,35 @@ public interface Consts {
         String PV_TYPE = "PV_TYPE";
 
         String EXTRA_PREVIEW_VIDEO_PATH = "DATA_VIDEO_PREVIEW_PATH";
+    }
+
+    /**
+     * refers to broadcast actions
+     */
+    interface BcActions {
+
+        /**
+         * finish the backend activities which bind with this action
+         */
+        String ACTION_FINISH_ACTIVITY = "app.activity.finish";
+
+        /**
+         * refresh the media content data in the folder. broadcast-action
+         * will be sent when data has been changed, e.g. image captured
+         */
+        String ACTION_REFRESH_DATA = "app.action.refresh.data";
+
+        /**
+         * resolve the cropped image(s) in the bundle of the intent.broadcast-action
+         * will be sent when image(s) cropped
+         */
+        String ACTION_IMAGE_CROPPED = UcropConsts.BcActions.ACTION_IMAGE_CROPPED;
+                //"app.action.image_cropped";
+    }
+
+    @Retention(RetentionPolicy.SOURCE)
+    @StringDef({Extra.EXTRA_SERIALIZABLE_RESULT})
+    @UCropResultExtraKey
+    @interface ResultExtraKey {
     }
 }

@@ -29,12 +29,12 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 
-import com.yalantis.ucrop.ui.PictureMultiUCropActivity;
+import com.yalantis.ucrop.ui.PictureSingleUCropActivity;
 
 /**
  * Builder class to ease Intent setup.
  */
-public class MultiUCrop extends UCrop<MultiUCrop> {
+public class SingleUCrop extends UCrop<SingleUCrop>{
 
     /**
      * This method creates new Intent builder and sets both source and destination image URIs.
@@ -42,23 +42,24 @@ public class MultiUCrop extends UCrop<MultiUCrop> {
      * @param source      Uri for image to crop
      * @param destination Uri for saving the cropped image
      */
-    public static MultiUCrop of(@NonNull Uri source, @NonNull Uri destination) {
-        return new MultiUCrop(source, destination);
+    public static SingleUCrop of(@NonNull Uri source, @NonNull Uri destination) {
+        return new SingleUCrop(source, destination);
     }
 
-    private MultiUCrop(@NonNull Uri source, @NonNull Uri destination) {
+    private SingleUCrop(@NonNull Uri source, @NonNull Uri destination) {
         super(source, destination);
         instance = this;
     }
 
     /**
-     * Get Intent to start {@link PictureMultiUCropActivity}
+     * Get Intent to start {@link PictureSingleUCropActivity}
      *
-     * @return Intent for {@link PictureMultiUCropActivity}
+     * @return Intent for {@link PictureSingleUCropActivity}
      */
     public Intent getIntent(@NonNull Context context) {
-        mCropIntent.setClass(context, PictureMultiUCropActivity.class);
+        mCropIntent.setClass(context, PictureSingleUCropActivity.class);
         mCropIntent.putExtras(mCropOptionsBundle);
         return mCropIntent;
     }
+
 }
