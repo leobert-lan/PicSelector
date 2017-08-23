@@ -19,6 +19,8 @@ import com.yalantis.ucrop.entity.LocalMedia;
 import java.util.ArrayList;
 import java.util.List;
 
+/** if preview needed after selected done, use this activity can fast
+ * implement requirement*/
 public class PictureExternalPreviewActivity extends FragmentActivity {
     private ImageButton navBack;
     private TextView tvTitle;
@@ -30,7 +32,7 @@ public class PictureExternalPreviewActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.picture_activity_external_preview);
+        setContentView(R.layout.activity_picture_external_preview);
 
         initUiInstance();
         initUiEventListener();

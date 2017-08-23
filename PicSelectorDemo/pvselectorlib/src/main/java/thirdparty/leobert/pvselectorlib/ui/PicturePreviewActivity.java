@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,12 +40,14 @@ import thirdparty.leobert.pvselectorlib.widget.PreviewViewPager;
 public class PicturePreviewActivity extends PVBaseActivity
         implements View.OnClickListener {
     private ImageButton navBack;
-    private TextView tv_img_num, tv_title, tv_ok;
-    private RelativeLayout select_bar_layout;
+    private TextView tvSelectedCount;
+    private TextView tvTitle;
+    private TextView tvOpComplete;
     private PreviewViewPager viewPager;
     private int position;
-    private RelativeLayout rl_title;
-    private LinearLayout ll_check;
+
+    private View selectorArea;
+
     private List<LocalMedia> datas = new ArrayList<>();
     private List<LocalMedia> selectImages = new ArrayList<>();
     private TextView check;
@@ -79,48 +80,82 @@ public class PicturePreviewActivity extends PVBaseActivity
         registerBroadcastConsumer(finishActionConsumer,
                 multiCropCompleteActionConsumer);
 
-        rl_title = (RelativeLayout) findViewById(R.id.rl_title);
-        navBack = (ImageButton) findViewById(R.id.left_back);
-        viewPager = (PreviewViewPager) findViewById(R.id.preview_pager);
-        ll_check = (LinearLayout) findViewById(R.id.ll_check);
-        select_bar_layout = (RelativeLayout) findViewById(R.id.select_bar_layout);
-        check = (TextView) findViewById(R.id.check);
-        navBack.setOnClickListener(this);
-        tv_ok = (TextView) findViewById(R.id.bottombar_tv_select_complete);
-        tv_img_num = (TextView) findViewById(R.id.bottombar_tv_select_count);
-        tv_title = (TextView) findViewById(R.id.tv_title);
-        tv_ok.setOnClickListener(this);
-
-        rl_title.setBackgroundColor(backgroundColor);
-        ToolbarUtil.setColorNoTranslucent(this, backgroundColor);
-        tv_ok.setTextColor(completeTxtColor);
-        select_bar_layout.setBackgroundColor(previewBottomBgColor);
-
+        adapter = new SimpleFragmentAdapter(getSupportFragmentManager());
         position = getIntent().getIntExtra(Consts.Extra.EXTRA_POSITION, 0);
-        boolean is_bottom_preview = getIntent()
+        boolean from_bottom_preview = getIntent()
                 .getBooleanExtra(Consts.Extra.EXTRA_FROM_BOTTOMBAR_PREVIEW, false);
-        if (is_bottom_preview) {
+
+        if (from_bottom_preview)
             // 底部预览按钮过来
             datas = (List<LocalMedia>) getIntent().getSerializableExtra(Consts.Extra.EXTRA_PREVIEW_LIST);
-        } else {
+        else
             datas = ImagesObservable.getInstance().readLocalMedias();
-        }
-
-        if (displayCandidateNo) {
-            tv_img_num.setBackgroundResource(R.drawable.message_oval_blue);
-        }
 
         selectImages = (List<LocalMedia>) getIntent()
                 .getSerializableExtra(Consts.Extra.EXTRA_PREVIEW_SELECT_LIST);
 
+        initUiInstance();
         initViewPageAdapterData();
-        ll_check.setOnClickListener(new View.OnClickListener() {
+        initUiEventListener();
+    }
+
+    @Override
+    protected void initUiInstance() {
+        RelativeLayout rlToolBar = (RelativeLayout) findViewById(R.id.rl_title);
+        navBack = (ImageButton) findViewById(R.id.left_back);
+        viewPager = (PreviewViewPager) findViewById(R.id.preview_pager);
+        selectorArea = findViewById(R.id.toolbar_area_selector);
+        RelativeLayout bottomBar =
+                (RelativeLayout) findViewById(R.id.preview_bottom_bar);
+        check = (TextView) findViewById(R.id.check);
+        tvOpComplete = (TextView) findViewById(R.id.bottombar_tv_select_complete);
+        tvSelectedCount = (TextView) findViewById(R.id.bottombar_tv_select_count);
+        tvTitle = (TextView) findViewById(R.id.tv_title);
+
+        rlToolBar.setBackgroundColor(backgroundColor);
+        ToolbarUtil.setColorNoTranslucent(this, backgroundColor);
+        tvOpComplete.setTextColor(completeTxtColor);
+        bottomBar.setBackgroundColor(previewBottomBgColor);
+
+
+        if (displayCandidateNo)
+            tvSelectedCount.setBackgroundResource(R.drawable.message_oval_blue);
+    }
+
+    @Override
+    protected void initUiEventListener() {
+        navBack.setOnClickListener(this);
+        tvOpComplete.setOnClickListener(this);
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                tvTitle.setText(position + 1 + "/" + datas.size());
+                if (displayCandidateNo) {
+                    LocalMedia media = datas.get(position);
+                    check.setText(String.valueOf(media.getGridItemInfoHolder().getCandidateNo()));
+                    rebuildSelectPosition(media);
+                }
+                freshCheckStateByPosition(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
+
+        selectorArea.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // 刷新图片列表中图片状态
                 boolean hasBeenSelected = check.isSelected();
 
-                if (selectImages.size() >= maxSelectNum && !hasBeenSelected) { /*try to add selected but onLimit*/
+                if (selectImages.size() >= maxSelectNum && !hasBeenSelected) {
+                    /*try to add selected but over threshold*/
                     Toast.makeText(PicturePreviewActivity.this,
                             getString(R.string.message_max_num, maxSelectNum),
                             Toast.LENGTH_LONG).show();
@@ -130,72 +165,55 @@ public class PicturePreviewActivity extends PVBaseActivity
 
                 LocalMedia localMedia = datas.get(viewPager.getCurrentItem());
 
-                if (hasBeenSelected) { /*update to unSelected*/
-                    check.setSelected(false);
-
-                    for (LocalMedia media : selectImages) {
-                        if (media.getPath().equals(localMedia.getPath())) {
-                            selectImages.remove(media);
-                            rebuildCandidateNo();
-                            rebuildSelectPosition(media);
-                            break;
-                        }
-                    }
-
-                } else { /*update to selected*/
-//                    hasBeenSelected = true;
-                    check.setSelected(true);
-
-                    //handle UI animation
-                    Animation animation = OptAnimationLoader.loadAnimation(mContext, R.anim.modal_in);
-                    check.startAnimation(animation);
-
-                    selectImages.add(localMedia);
-
-                    final int candidateNo = selectImages.size();
-
-                    localMedia.getGridItemInfoHolder().setCandidateNo(candidateNo);
-                    if (displayCandidateNo) {
-                        check.setText(String.valueOf(candidateNo));
-                    }
-                }
+                if (hasBeenSelected)  /*update to unSelected*/
+                    change2UnSelected(localMedia);
+                else  /*update to selected*/
+                    change2Selected(localMedia);
 
                 onSelectNumChanged(true);
             }
         });
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+    }
 
-            }
+    private void change2UnSelected(LocalMedia localMedia) {
+        check.setSelected(false);
 
-            @Override
-            public void onPageSelected(int position) {
-                tv_title.setText(position + 1 + "/" + datas.size());
-                if (displayCandidateNo) {
-                    LocalMedia media = datas.get(position);
-                    check.setText(String.valueOf(media.getGridItemInfoHolder().getCandidateNo()));
-                    rebuildSelectPosition(media);
-                }
-                onImageChecked(position);
+        for (LocalMedia media : selectImages) {
+            if (media.getPath().equals(localMedia.getPath())) {
+                selectImages.remove(media);
+                rebuildCandidateNo();
+                rebuildSelectPosition(media);
+                break;
             }
+        }
+    }
 
-            @Override
-            public void onPageScrollStateChanged(int state) {
-            }
-        });
+    private void change2Selected(LocalMedia localMedia) {
+        check.setSelected(true);
+
+        //handle UI animation
+        Animation animation = OptAnimationLoader.loadAnimation(mContext, R.anim.modal_in);
+        check.startAnimation(animation);
+
+        selectImages.add(localMedia);
+
+        final int candidateNo = selectImages.size();
+        localMedia.getGridItemInfoHolder().setCandidateNo(candidateNo);
+        if (displayCandidateNo) {
+            check.setText(String.valueOf(candidateNo));
+        }
     }
 
     private void initViewPageAdapterData() {
-        tv_title.setText(position + 1 + "/" + datas.size());
-        adapter = new SimpleFragmentAdapter(getSupportFragmentManager());
+        tvTitle.setText(position + 1 + "/" + datas.size());
         check.setBackgroundResource(cb_drawable);
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(position);
         onSelectNumChanged(false);
-        onImageChecked(position);
+        freshCheckStateByPosition(position);
+
+
         if (displayCandidateNo) {
-            tv_img_num.setBackgroundResource(R.drawable.message_oval_blue);
             LocalMedia media = datas.get(position);
             check.setText(media.getGridItemInfoHolder().getCandidateNo());
             rebuildSelectPosition(media);
@@ -219,7 +237,7 @@ public class PicturePreviewActivity extends PVBaseActivity
     }
 
     /**
-     * 更新选择的顺序
+     * rebuild candidate No. order
      */
     private void rebuildCandidateNo() {
         for (int index = 0, len = selectImages.size(); index < len; index++) {
@@ -229,19 +247,19 @@ public class PicturePreviewActivity extends PVBaseActivity
     }
 
     /**
-     * 判断当前图片是否选中
+     * fresh state by data
      *
-     * @param position
+     * @param position index of the data
      */
-    public void onImageChecked(int position) {
+    public void freshCheckStateByPosition(int position) {
         check.setSelected(isSelected(datas.get(position)));
     }
 
     /**
-     * 当前图片是否选中
+     * check whether the given picture has been selected
      *
-     * @param image
-     * @return
+     * @param image the given picture to be checked
+     * @return true if has been selected,false otherwise
      */
     public boolean isSelected(LocalMedia image) {
         for (LocalMedia media : selectImages) {
@@ -256,21 +274,21 @@ public class PicturePreviewActivity extends PVBaseActivity
      * 更新图片选择数量
      */
     public void onSelectNumChanged(boolean isRefresh) {
-        Animation animation = null;
+        Animation animation;
         boolean enable = selectImages.size() != 0;
         if (enable) {
-            tv_ok.setEnabled(true);
-            tv_ok.setAlpha(1.0f);
+            tvOpComplete.setEnabled(true);
+            tvOpComplete.setAlpha(1.0f);
             animation = AnimationUtils.loadAnimation(mContext, R.anim.modal_in);
-            tv_img_num.startAnimation(animation);
-            tv_img_num.setVisibility(View.VISIBLE);
-            tv_img_num.setText(selectImages.size() + "");
-            tv_ok.setText("已完成");
+            tvSelectedCount.startAnimation(animation);
+            tvSelectedCount.setVisibility(View.VISIBLE);
+            tvSelectedCount.setText(String.valueOf(selectImages.size()));
+            tvOpComplete.setText("已完成");
         } else {
-            tv_ok.setEnabled(false);
-            tv_ok.setAlpha(0.5f);
-            tv_img_num.setVisibility(View.INVISIBLE);
-            tv_ok.setText("请选择");
+            tvOpComplete.setEnabled(false);
+            tvOpComplete.setAlpha(0.5f);
+            tvSelectedCount.setVisibility(View.INVISIBLE);
+            tvOpComplete.setText("请选择");
         }
 
         if (isRefresh) {
@@ -287,16 +305,16 @@ public class PicturePreviewActivity extends PVBaseActivity
     }
 
 
-    public class SimpleFragmentAdapter extends FragmentPagerAdapter {
+    private class SimpleFragmentAdapter extends FragmentPagerAdapter {
 
-        public SimpleFragmentAdapter(FragmentManager fm) {
+        SimpleFragmentAdapter(FragmentManager fm) {
             super(fm);
         }
 
         @Override
         public Fragment getItem(int position) {
-            PicturePreviewFragment fragment = PicturePreviewFragment.getInstance(datas.get(position).getPath(), selectImages);
-            return fragment;
+            final String path = datas.get(position).getPath();
+            return PicturePreviewFragment.getInstance(path, selectImages);
         }
 
         @Override
@@ -312,13 +330,12 @@ public class PicturePreviewActivity extends PVBaseActivity
         if (id == R.id.left_back) {
             finish();
         } else if (id == R.id.bottombar_tv_select_complete) {
-            if (selectMode == FunctionConfig.SELECT_MODE_MULTIPLE
-                    && enableCrop && type == LocalMedia.TYPE_PICTURE) {
-                // 是图片和选择压缩并且是多张，调用批量压缩
+            if (type == LocalMedia.TYPE_PICTURE
+                    && selectMode == FunctionConfig.SELECT_MODE_MULTIPLE
+                    && enableCrop)
                 startMultiCrop(selectImages);
-            } else {
+            else
                 onResult(selectImages);
-            }
         }
     }
 
@@ -336,9 +353,7 @@ public class PicturePreviewActivity extends PVBaseActivity
     }
 
     /**
-     * 多图裁剪
-     *
-     * @param medias
+     * @param medias to be cropped
      */
     protected void startMultiCrop(List<LocalMedia> medias) {
         if (medias != null && medias.size() > 0) {

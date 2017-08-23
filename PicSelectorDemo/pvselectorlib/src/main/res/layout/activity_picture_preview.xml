@@ -32,13 +32,12 @@
             android:textColor="@color/ucrop_color_toolbar_widget"
             android:textSize="18sp" />
 
-        <LinearLayout
-            android:id="@+id/ll_check"
+        <FrameLayout
+            android:id="@+id/toolbar_area_selector"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
             android:gravity="center"
-            android:orientation="vertical"
             android:paddingLeft="16dp"
             android:paddingRight="16dp">
 
@@ -50,7 +49,7 @@
                 android:gravity="center"
                 android:textColor="@color/ucrop_color_toolbar_widget"
                 android:textSize="12sp" />
-        </LinearLayout>
+        </FrameLayout>
     </RelativeLayout>
 
 
@@ -61,7 +60,7 @@
         android:layout_weight="1" />
 
     <RelativeLayout
-        android:id="@+id/select_bar_layout"
+        android:id="@+id/preview_bottom_bar"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:background="@color/ucrop_bar_grey_90"

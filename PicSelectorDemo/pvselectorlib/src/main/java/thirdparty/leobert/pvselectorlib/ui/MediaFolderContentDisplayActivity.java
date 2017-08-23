@@ -77,10 +77,10 @@ public class MediaFolderContentDisplayActivity extends PVBaseActivity
     private TextView tvOpComplete;
 
     private RelativeLayout rlBottomBar;
-    private ImageButton navBack;
 
     private RelativeLayout rlToolBar;
     private TextView tvTitle;
+    private ImageButton navBack;
 
     /**
      * located at the right in the toolbar,cancel select when clicked

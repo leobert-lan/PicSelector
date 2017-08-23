@@ -186,7 +186,7 @@ public class PictureImageGridAdapter
             contentView = itemView;
             picture = (ImageView) itemView.findViewById(R.id.picture);
             check = (TextView) itemView.findViewById(R.id.check);
-            ll_check = (LinearLayout) itemView.findViewById(R.id.ll_check);
+            ll_check = (LinearLayout) itemView.findViewById(R.id.toolbar_area_selector);
             tv_duration = (TextView) itemView.findViewById(R.id.tv_duration);
             rl_duration = (RelativeLayout) itemView.findViewById(R.id.rl_duration);
         }
