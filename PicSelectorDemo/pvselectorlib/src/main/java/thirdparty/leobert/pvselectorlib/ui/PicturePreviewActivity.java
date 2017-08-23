@@ -369,7 +369,7 @@ public class PicturePreviewActivity extends PVBaseActivity
             options.setLocalMedia(medias);
             options.setCompressionQuality(compressQuality);
             options.withMaxResultSize(cropW, cropH);
-            options.background_color(backgroundColor);
+            options.backgroundColor(backgroundColor);
             options.cropMode(cropMode);
             multiUCrop.withOptions(options);
             multiUCrop.start(PicturePreviewActivity.this);

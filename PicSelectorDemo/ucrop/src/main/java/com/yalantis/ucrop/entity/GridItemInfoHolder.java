@@ -30,7 +30,7 @@ import java.io.Serializable;
  * <p><b>Package:</b> com.yalantis.ucrop.entity </p>
  * <p><b>Project:</b> PicSelectorDemo </p>
  * <p><b>Classname:</b> GridItemInfoHolder </p>
- * <p><b>Description:</b> TODO </p>
+ * <p><b>Description:</b> extended bean for item-ui-state </p>
  * Created by leobert on 2017/8/17.
  */
 

@@ -36,7 +36,8 @@ import java.util.List;
  * <p><b>Package:</b> thirdparty.leobert.pvselectorlib.broadcast </p>
  * <p><b>Project:</b> PicSelectorDemo </p>
  * <p><b>Classname:</b> ActionListenedBroadCastReceiver </p>
- * <p><b>Description:</b> TODO </p>
+ * <p><b>Description:</b> a SubClass of BroadCastReceiver. Consumer
+ * will be called when fix action be found</p>
  * Created by leobert on 2017/8/21.
  */
 
@@ -80,7 +81,7 @@ public final class ActionListenedBroadCastReceiver extends BroadcastReceiver {
         return intentFilter;
     }
 
-    public void registe(Context context) {
+    public void register(Context context) {
         context.registerReceiver(this, genIntentFilter());
     }
 

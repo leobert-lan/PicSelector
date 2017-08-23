@@ -25,6 +25,9 @@
 package thirdparty.leobert.pvselectorlib.model;
 
 import android.graphics.Color;
+import android.support.annotation.ColorInt;
+import android.support.annotation.ColorRes;
+import android.support.annotation.DrawableRes;
 
 import java.io.Serializable;
 
@@ -40,15 +43,24 @@ import thirdparty.leobert.pvselectorlib.R;
 
 public class UIConfig implements Serializable {
     private int imageSpanCount = 4; // 列表每行显示个数
-    private int themeStyle = Color.parseColor("#393a3e"); // 标题栏背景色;
 
+    @ColorInt
+    private int themeColor = Color.parseColor("#393a3e"); // 标题栏背景色;
+
+    @DrawableRes
     private int checkedBoxDrawable = R.drawable.checkbox_selector;// 图片选择默认样式
     private boolean displayCandidateNo = false;// 是否显示QQ风格选择图片
 
+    @ColorInt
     private int previewTxtColor = Color.parseColor("#FA632D"); // 底部预览字体颜色
+
+    @ColorInt
     private int completeTxtColor = Color.parseColor("#FA632D"); // 底部完成字体颜色
 
+    @ColorInt
     private int bottomBgColor = Color.parseColor("#fafafa"); // 底部背景色
+
+    @ColorInt
     protected int previewBottomBgColor = Color.parseColor("#dd393a3e"); // 预览底部背景色
 
     public int getImageSpanCount() {
@@ -59,19 +71,21 @@ public class UIConfig implements Serializable {
         this.imageSpanCount = imageSpanCount;
     }
 
-    public int getThemeStyle() {
-        return themeStyle;
+    @ColorInt
+    public int getThemeColor() {
+        return themeColor;
     }
 
-    public void setThemeStyle(int themeStyle) {
-        this.themeStyle = themeStyle;
+    public void setThemeColor(@ColorInt int themeColor) {
+        this.themeColor = themeColor;
     }
 
+    @DrawableRes
     public int getCheckedBoxDrawable() {
         return checkedBoxDrawable;
     }
 
-    public void setCheckedBoxDrawable(int checkedBoxDrawable) {
+    public void setCheckedBoxDrawable(@DrawableRes int checkedBoxDrawable) {
         this.checkedBoxDrawable = checkedBoxDrawable;
     }
 
@@ -83,35 +97,39 @@ public class UIConfig implements Serializable {
         this.displayCandidateNo = displayCandidateNo;
     }
 
+    @ColorInt
     public int getPreviewTxtColor() {
         return previewTxtColor;
     }
 
-    public void setPreviewTxtColor(int previewTxtColor) {
+    public void setPreviewTxtColor(@ColorInt int previewTxtColor) {
         this.previewTxtColor = previewTxtColor;
     }
 
+    @ColorInt
     public int getCompleteTxtColor() {
         return completeTxtColor;
     }
 
-    public void setCompleteTxtColor(int completeTxtColor) {
+    public void setCompleteTxtColor(@ColorInt int completeTxtColor) {
         this.completeTxtColor = completeTxtColor;
     }
 
+    @ColorInt
     public int getBottomBgColor() {
         return bottomBgColor;
     }
 
-    public void setBottomBgColor(int bottomBgColor) {
+    public void setBottomBgColor(@ColorInt int bottomBgColor) {
         this.bottomBgColor = bottomBgColor;
     }
 
+    @ColorInt
     public int getPreviewBottomBgColor() {
         return previewBottomBgColor;
     }
 
-    public void setPreviewBottomBgColor(int previewBottomBgColor) {
+    public void setPreviewBottomBgColor(@ColorInt int previewBottomBgColor) {
         this.previewBottomBgColor = previewBottomBgColor;
     }
 
@@ -121,32 +139,38 @@ public class UIConfig implements Serializable {
 
         void setImageSpanCount(int imageSpanCount);
 
-        int getThemeStyle();
+        @ColorInt
+        int getThemeColor();
 
-        void setThemeStyle(int themeStyle);
+        void setThemeColor(@ColorInt int themeColor);
 
+        @DrawableRes
         int getCheckedBoxDrawable();
 
-        void setCheckedBoxDrawable(int checkedBoxDrawable);
+        void setCheckedBoxDrawable(@DrawableRes int checkedBoxDrawable);
 
         boolean isDisplayCandidateNo();
 
         void setDisplayCandidateNo(boolean displayCandidateNo);
 
+        @ColorInt
         int getPreviewTxtColor();
 
-        void setPreviewTxtColor(int previewTxtColor);
+        void setPreviewTxtColor(@ColorInt int previewTxtColor);
 
+        @ColorInt
         int getCompleteTxtColor();
 
-        void setCompleteTxtColor(int completeTxtColor);
+        void setCompleteTxtColor(@ColorInt int completeTxtColor);
 
+        @ColorInt
         int getBottomBgColor();
 
-        void setBottomBgColor(int bottomBgColor);
+        void setBottomBgColor(@ColorInt int bottomBgColor);
 
+        @ColorInt
         int getPreviewBottomBgColor();
 
-        void setPreviewBottomBgColor(int previewBottomBgColor);
+        void setPreviewBottomBgColor(@ColorInt int previewBottomBgColor);
     }
 }

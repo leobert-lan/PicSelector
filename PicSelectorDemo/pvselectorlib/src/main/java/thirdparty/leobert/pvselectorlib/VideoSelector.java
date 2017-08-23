@@ -15,7 +15,8 @@ import thirdparty.leobert.pvselectorlib.model.PictureConfig;
  * Created by leobert on 2017/2/8.
  */
 
-class VideoSelector extends AbsSelector<IVideoSelector> implements IVideoSelector{
+class VideoSelector extends AbsSelector<IVideoSelector>
+        implements IVideoSelector{
 
     private final WeakReference<Context> contextRef;
 
@@ -48,7 +49,8 @@ class VideoSelector extends AbsSelector<IVideoSelector> implements IVideoSelecto
     @Override
     public IVideoSelector setRecordVideoSecond(int maxRecordSecond) {
         if (!config.isShowCamera()) {
-            Logger.e(VideoSelector.class.getSimpleName(),"please call enableCamera at first");
+            Logger.e(VideoSelector.class.getSimpleName(),
+                    "please call enableCamera at first");
             enableCamera();
         }
         config.setRecordVideoSecond(maxRecordSecond);
@@ -58,7 +60,8 @@ class VideoSelector extends AbsSelector<IVideoSelector> implements IVideoSelecto
     @Override
     public IVideoSelector setRecordVideoDefinition(int videoDefinition) {
         if (!config.isShowCamera()) {
-            Logger.e(VideoSelector.class.getSimpleName(),"please call enableCamera at first");
+            Logger.e(VideoSelector.class.getSimpleName(),
+                    "please call enableCamera at first");
             enableCamera();
         }
         config.setRecordVideoDefinition(videoDefinition);
@@ -94,7 +97,8 @@ class VideoSelector extends AbsSelector<IVideoSelector> implements IVideoSelecto
     public void launch(PictureConfig.OnSelectResultCallback resultCallback) {
         Context context = contextRef.get();
         if (context == null) {
-            Logger.e(VideoSelector.class.getSimpleName(), "context is null,maybe activity finished");
+            Logger.e(VideoSelector.class.getSimpleName(),
+                    "context is null,maybe activity finished");
             return;
         }
         PictureConfig.init(config);

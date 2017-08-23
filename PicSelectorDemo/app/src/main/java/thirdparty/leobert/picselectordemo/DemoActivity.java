@@ -129,7 +129,7 @@ public class DemoActivity extends Activity implements RadioGroup.OnCheckedChange
         });
 
 //        PVSelector.getVideoSelector(this).multiSelect(4).enableCamera().enablePreview()
-//                .setCompleteColor(ContextCompat.getColor(this, R.color.colorPrimary)).launch(resultCallback);
+//                .setCompleteTxtColor(ContextCompat.getColor(this, R.color.colorPrimary)).launch(resultCallback);
 
     }
 
@@ -162,8 +162,8 @@ public class DemoActivity extends Activity implements RadioGroup.OnCheckedChange
                      * setRecordVideoDefinition 视频清晰度  Constants.RECORD_QUALITY_HIGH 清晰  Constants.RECORD_QUALITY_ORDINARY 低质量
                      * setImageSpanCount -->每行显示个数
                      * setCheckNumMode 是否显示QQ选择风格(带数字效果)
-                     * setPreviewColor 预览文字颜色
-                     * setCompleteColor 完成文字颜色
+                     * setPreviewTxtColor 预览文字颜色
+                     * setCompleteTxtColor 完成文字颜色
                      * setPreviewBottomBgColor 预览界面底部背景色
                      * setBottomBgColor 选择图片页面底部背景色
                      * setCompressQuality 设置裁剪质量，默认无损裁剪
@@ -210,7 +210,7 @@ public class DemoActivity extends Activity implements RadioGroup.OnCheckedChange
                     config.setCompressW(compressW);
                     config.setCompressH(compressH);
                     if (theme) {
-                        config.setThemeStyle(ContextCompat.getColor(DemoActivity.this, R.color.ucrop_blue));
+                        config.setThemeColor(ContextCompat.getColor(DemoActivity.this, R.color.ucrop_blue));
                         // 可以自定义底部 预览 完成 文字的颜色和背景色
                         if (!enableDisplayCandidateNo) {
                             // QQ 风格模式下 这里自己搭配颜色，使用蓝色可能会不好看

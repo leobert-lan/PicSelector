@@ -1,5 +1,8 @@
 package thirdparty.leobert.pvselectorlib;
 
+import android.support.annotation.ColorInt;
+import android.support.annotation.DrawableRes;
+
 import thirdparty.leobert.pvselectorlib.model.FunctionConfig;
 
 /**
@@ -27,37 +30,38 @@ abstract class AbsSelector<T> implements ICustomStyle<T> {
     }
 
     @Override
-    public T setThemeColor(int mainColor) {
-        getConfig().setThemeStyle(mainColor);
+    public T setThemeColor(@ColorInt int mainColor) {
+        getConfig().setThemeColor(mainColor);
+        return self();
+    }
+
+
+    @Override
+    public T setBottomBarBgColor(@ColorInt int color) {
+        getConfig().setBottomBgColor(color);
         return self();
     }
 
     @Override
-    public T setBottomBgColor(int bottomBgColor) {
-        getConfig().setBottomBgColor(bottomBgColor);
+    public T setPreviewTxtColor(@ColorInt int color) {
+        getConfig().setPreviewTxtColor(color);
         return self();
     }
 
     @Override
-    public T setPreviewColor(int previewColor) {
-        getConfig().setPreviewTxtColor(previewColor);
+    public T setCompleteTxtColor(@ColorInt int color) {
+        getConfig().setCompleteTxtColor(color);
         return self();
     }
 
     @Override
-    public T setCompleteColor(int completeColor) {
-        getConfig().setCompleteTxtColor(completeColor);
-        return self();
-    }
-
-    @Override
-    public T enableCheckNumMode() {
+    public T enableDisplayCandidateNo() {
         getConfig().setDisplayCandidateNo(true);
         return self();
     }
 
     @Override
-    public T setCheckedBoxDrawable(int drawableResId) {
+    public T setCheckedBoxDrawable(@DrawableRes int drawableResId) {
         getConfig().setCheckedBoxDrawable(drawableResId);
         return self();
     }

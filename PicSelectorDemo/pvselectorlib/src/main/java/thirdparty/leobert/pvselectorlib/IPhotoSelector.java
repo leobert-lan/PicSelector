@@ -4,13 +4,14 @@ import com.yalantis.ucrop.entity.LocalMedia;
 
 import java.util.List;
 
+import thirdparty.leobert.pvselectorlib.model.FunctionConfig;
 import thirdparty.leobert.pvselectorlib.model.PictureConfig;
 
 /**
  * <p><b>Package</b> thirdparty.leobert.pvselectorlib
  * <p><b>Project</b> PicSelectorDemo
  * <p><b>Classname</b> IPhotoSelector
- * <p><b>Description</b>: TODO
+ * <p><b>Description</b>: API for Picture Selector
  * <p>Created by leobert on 2017/2/7.
  */
 
@@ -43,7 +44,7 @@ public interface IPhotoSelector extends ICustomStyle<IPhotoSelector>{
 
     IPhotoSelector enableCrop();
 
-    IPhotoSelector enableCrop(int mode);
+    IPhotoSelector enableCrop(@FunctionConfig.CropMode int mode);
 
     /**
      * 裁剪，如果值大于图片原始宽高 将返回原图大小
@@ -60,7 +61,7 @@ public interface IPhotoSelector extends ICustomStyle<IPhotoSelector>{
      * @param enableQualityCompress 是否启用质量压缩
      * @return this
      */
-    IPhotoSelector useSystemCompressOnCrop(boolean enablePixelCompress,boolean enableQualityCompress);
+    IPhotoSelector useSystemCompress(boolean enablePixelCompress, boolean enableQualityCompress);
 
 
     /**
@@ -69,7 +70,7 @@ public interface IPhotoSelector extends ICustomStyle<IPhotoSelector>{
      * @param maxHeight 最大高度
      * @return
      */
-    IPhotoSelector enableLubanCompressOnCrop(int maxWidth,int maxHeight);
+    IPhotoSelector enableLuBanCompress(int maxWidth, int maxHeight);
 
     /**
      * 设置已选择的内容

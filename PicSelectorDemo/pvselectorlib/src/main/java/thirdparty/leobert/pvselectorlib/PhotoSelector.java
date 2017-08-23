@@ -7,6 +7,7 @@ import com.yalantis.ucrop.entity.LocalMedia;
 import java.lang.ref.WeakReference;
 import java.util.List;
 
+import thirdparty.leobert.pvselectorlib.compress.CompressConfig;
 import thirdparty.leobert.pvselectorlib.model.FunctionConfig;
 import thirdparty.leobert.pvselectorlib.model.PictureConfig;
 
@@ -15,7 +16,8 @@ import thirdparty.leobert.pvselectorlib.model.PictureConfig;
  * Created by leobert on 2017/2/8.
  */
 
-/*public*/ class PhotoSelector extends AbsSelector<IPhotoSelector> implements IPhotoSelector {
+/*public*/ class PhotoSelector extends AbsSelector<IPhotoSelector>
+        implements IPhotoSelector {
 
     private final WeakReference<Context> contextRef;
 
@@ -76,9 +78,10 @@ import thirdparty.leobert.pvselectorlib.model.PictureConfig;
     }
 
     @Override
-    public IPhotoSelector useSystemCompressOnCrop(boolean enablePixelCompress, boolean enableQualityCompress) {
+    public IPhotoSelector useSystemCompress(boolean enablePixelCompress,
+                                            boolean enableQualityCompress) {
         config.setPictureCompressEnable(true);
-        config.setCompressScheme(1);
+        config.setCompressScheme(CompressConfig.SCHEME_SYSTEM);
         config.setEnablePixelCompress(enablePixelCompress);
         config.setEnableQualityCompress(enableQualityCompress);
         // TODO: 2017/2/8 quality
@@ -87,9 +90,9 @@ import thirdparty.leobert.pvselectorlib.model.PictureConfig;
     }
 
     @Override
-    public IPhotoSelector enableLubanCompressOnCrop(int maxWidth, int maxHeight) {
+    public IPhotoSelector enableLuBanCompress(int maxWidth, int maxHeight) {
         config.setPictureCompressEnable(true);
-        config.setCompressScheme(2);
+        config.setCompressScheme(CompressConfig.SCHEME_LUBAN);
         config.setCompressH(maxHeight);
         config.setCompressW(maxWidth);
         return this;

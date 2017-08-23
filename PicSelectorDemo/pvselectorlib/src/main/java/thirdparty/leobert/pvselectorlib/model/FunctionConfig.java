@@ -1,5 +1,6 @@
 package thirdparty.leobert.pvselectorlib.model;
 
+import android.support.annotation.ColorInt;
 import android.support.annotation.IntDef;
 
 import com.yalantis.ucrop.UcropConsts;
@@ -42,7 +43,7 @@ public class FunctionConfig implements Serializable, UIConfig.UIConfigDelegate {
 //            CROP_MODE_3_2,
 //            CROP_MODE_16_9})
     @UCropMode
-    public @interface CropMode{
+    public @interface CropMode {
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -255,27 +256,36 @@ public class FunctionConfig implements Serializable, UIConfig.UIConfigDelegate {
     ///////////////////////////////////////////////////////////////////////////
     // UIConfigDelegate
     ///////////////////////////////////////////////////////////////////////////
+
+    @Override
     public int getImageSpanCount() {
         return uiConfig.getImageSpanCount();
     }
 
+    @Override
     public void setImageSpanCount(int imageSpanCount) {
         this.uiConfig.setImageSpanCount(imageSpanCount);
     }
 
+    @ColorInt
+    @Override
     public int getPreviewBottomBgColor() {
         return uiConfig.getPreviewBottomBgColor();
     }
 
-    public void setPreviewBottomBgColor(int previewBottomBgColor) {
+    @Override
+    public void setPreviewBottomBgColor(@ColorInt int previewBottomBgColor) {
         this.uiConfig.setPreviewBottomBgColor(previewBottomBgColor);
     }
 
+    @ColorInt
+    @Override
     public int getBottomBgColor() {
         return uiConfig.getBottomBgColor();
     }
 
-    public void setBottomBgColor(int bottomBgColor) {
+    @Override
+    public void setBottomBgColor(@ColorInt int bottomBgColor) {
         this.uiConfig.setBottomBgColor(bottomBgColor);
     }
 
@@ -291,31 +301,36 @@ public class FunctionConfig implements Serializable, UIConfig.UIConfigDelegate {
     }
 
     @Override
+    @ColorInt
     public int getPreviewTxtColor() {
         return uiConfig.getPreviewTxtColor();
     }
 
     @Override
-    public void setPreviewTxtColor(int previewTxtColor) {
+    public void setPreviewTxtColor(@ColorInt int previewTxtColor) {
         this.uiConfig.setPreviewTxtColor(previewTxtColor);
     }
 
     @Override
+    @ColorInt
     public int getCompleteTxtColor() {
         return uiConfig.getCompleteTxtColor();
     }
 
     @Override
-    public void setCompleteTxtColor(int completeTxtColor) {
+    public void setCompleteTxtColor(@ColorInt int completeTxtColor) {
         this.uiConfig.setCompleteTxtColor(completeTxtColor);
     }
 
-    public int getThemeStyle() {
-        return uiConfig.getThemeStyle();
+    @ColorInt
+    @Override
+    public int getThemeColor() {
+        return uiConfig.getThemeColor();
     }
 
-    public void setThemeStyle(int themeStyle) {
-        this.uiConfig.setThemeStyle(themeStyle);
+    @Override
+    public void setThemeColor(@ColorInt int themeColor) {
+        this.uiConfig.setThemeColor(themeColor);
     }
 
     @Override

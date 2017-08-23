@@ -107,7 +107,7 @@ public class PictureMultiUCropActivity extends UCropActivity {
         options.setPosition(cropIndex);
         options.setCompressionQuality(mCompressQuality);
         options.withMaxResultSize(maxSizeX, maxSizeY);
-        options.background_color(backgroundColor);
+        options.backgroundColor(backgroundColor);
         uCrop.withOptions(options);
         uCrop.start(PictureMultiUCropActivity.this);
         overridePendingTransition(R.anim.fade, R.anim.hold);

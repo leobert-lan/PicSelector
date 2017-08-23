@@ -541,7 +541,7 @@ public class MediaFolderContentDisplayActivity extends PVBaseActivity
 
         options.setCompressionQuality(compressQuality);
         options.withMaxResultSize(cropW, cropH);
-        options.background_color(backgroundColor);
+        options.backgroundColor(backgroundColor);
 //        options.cropMode(cropMode); just as options.withAspectRatio()
         options.setCompressEnabled(enableCompress);
         singleUCrop.withOptions(options);
@@ -581,7 +581,7 @@ public class MediaFolderContentDisplayActivity extends PVBaseActivity
             options.setLocalMedia(medias);
             options.setCompressionQuality(compressQuality);
             options.withMaxResultSize(cropW, cropH);
-            options.background_color(backgroundColor);
+            options.backgroundColor(backgroundColor);
             options.setCompressEnabled(enableCompress);
             multiUCrop.withOptions(options);
             multiUCrop.start(MediaFolderContentDisplayActivity.this);

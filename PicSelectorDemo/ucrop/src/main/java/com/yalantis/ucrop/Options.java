@@ -64,7 +64,7 @@ public interface Options extends UcropConsts.Extra {
      */
     void setCompressionFormat(@NonNull Bitmap.CompressFormat format);
 
-    void background_color(int color);
+    void backgroundColor(int color);
 
     void cropMode(@UCropMode int cropMode);
 
@@ -281,7 +281,7 @@ public interface Options extends UcropConsts.Extra {
         }
 
         @Override
-        public void background_color(int color) {
+        public void backgroundColor(int color) {
             mOptionBundle.putInt(EXTRA_COLOR_BACKGROUND, color);
         }
 

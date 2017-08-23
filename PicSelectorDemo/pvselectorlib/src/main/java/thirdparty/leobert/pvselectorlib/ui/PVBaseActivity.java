@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.ColorInt;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -45,7 +47,11 @@ public abstract class PVBaseActivity extends FragmentActivity {
     protected boolean enableCrop = false;
     protected boolean enablePreviewVideo = true;
     protected int selectMode = FunctionConfig.SELECT_MODE_MULTIPLE;
+
+    @ColorInt
     protected int backgroundColor = 0;
+
+    @DrawableRes
     protected int cb_drawable = 0;
     protected int cropW = 0;
     protected int cropH = 0;
@@ -53,11 +59,21 @@ public abstract class PVBaseActivity extends FragmentActivity {
     protected int definition = 3;
     protected boolean enableCompress;
     protected boolean displayCandidateNo;
+
+    @ColorInt
     protected int previewTxtColor; // 底部预览字体颜色
+
+    @ColorInt
     protected int completeTxtColor; // 底部完成字体颜色
+
     protected CharSequence completeText; // 底部完成文字
+
+    @ColorInt
     protected int bottomBgColor; // 底部背景色
+
+    @ColorInt
     protected int previewBottomBgColor; // 预览底部背景色
+
     protected int compressQuality = 0;// 压缩图片质量
     protected List<LocalMedia> selectMedias = new ArrayList<>();
     protected FunctionConfig config = new FunctionConfig();
@@ -88,7 +104,7 @@ public abstract class PVBaseActivity extends FragmentActivity {
         maxSelectNum = config.getMaxSelectNum();
         cropMode = config.getCropMode();
         enablePreviewVideo = config.isPreviewVideo();
-        backgroundColor = config.getThemeStyle();
+        backgroundColor = config.getThemeColor();
         cb_drawable = config.getCheckedBoxDrawable();
         enableCompress = config.getPictureCompressEnable();
         spanCount = config.getImageSpanCount();
@@ -232,7 +248,7 @@ public abstract class PVBaseActivity extends FragmentActivity {
 
         broadCastReceiver
                 = new ActionListenedBroadCastReceiver(consumers);
-        broadCastReceiver.registe(this);
+        broadCastReceiver.register(this);
     }
 
 

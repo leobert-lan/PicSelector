@@ -1,12 +1,15 @@
 package thirdparty.leobert.pvselectorlib;
 
+import android.support.annotation.ColorInt;
+import android.support.annotation.ColorRes;
+import android.support.annotation.DrawableRes;
+
 /**
  * 自定义样式
  * Created by leobert on 2017/2/8.
  */
 
 public interface ICustomStyle<T> {
-    // TODO: 2017/8/18 sync the function with UIConfigDelegate
 
     /**
      * @param spanCount 单行数量上限
@@ -16,29 +19,29 @@ public interface ICustomStyle<T> {
     /**
      * @param mainColor 主色 Context.getColor(resId)
      */
-    T setThemeColor(int mainColor);
+    T setThemeColor(@ColorInt int mainColor);
 
     /**
      * 设置选择图片页面底部背景色
      *
-     * @param bottomBgColor
+     * @param color
      */
-    T setBottomBgColor(int bottomBgColor);
+    T setBottomBarBgColor(@ColorInt int color);
 
 
     /**
      * "预览"文字颜色
      *
-     * @param previewColor
+     * @param color
      */
-    T setPreviewColor(int previewColor);
+    T setPreviewTxtColor(@ColorInt int color);
 
     /**
      * “已完成”文字颜色
      *
-     * @param completeColor
+     * @param color
      */
-    T setCompleteColor(int completeColor);
+    T setCompleteTxtColor(@ColorInt int color);
 
     /**
      * 设置完成选取的文字
@@ -49,8 +52,8 @@ public interface ICustomStyle<T> {
     /**
      * 启用计数checkbox
      */
-    T enableCheckNumMode();
+    T enableDisplayCandidateNo();
 
-    T setCheckedBoxDrawable(int drawableResId);
+    T setCheckedBoxDrawable(@DrawableRes int drawableResId);
 
 }

@@ -26,24 +26,32 @@ public class CompressImageUtil {
     }
 
     public void compress(String imagePath, CompressListener listener) {
-        if (config.isEnablePixelCompress()) {
-            try {
-                compressImageByPixel(imagePath, listener);
-            } catch (FileNotFoundException e) {
-                listener.onCompressFailed(imagePath, String.format("图片压缩失败,%s", e.toString()));
-                e.printStackTrace();
-            }
-        } else {
-            int rotation = RotateUtil.getBitmapDegree(imagePath);
-            Bitmap origin = BitmapFactory.decodeFile(imagePath);
-            Bitmap res;
-            if (rotation != 0) {
-                 res = RotateUtil.rotateBitmapByDegree(origin, rotation);
-            } else {
-                res = origin;
-            }
-            compressImageByQuality(res, imagePath, listener);
+        if (config.isEnablePixelCompress())
+            pixelCompress(imagePath, listener);
+        else
+            qualityCompress(imagePath, listener);
+    }
+
+    private void pixelCompress(String imagePath, CompressListener listener) {
+        try {
+            compressImageByPixel(imagePath, listener);
+        } catch (FileNotFoundException e) {
+            listener.onCompressFailed(imagePath,
+                    String.format("图片压缩失败,%s", e.toString()));
+            e.printStackTrace();
         }
+    }
+
+    private void qualityCompress(String imagePath, CompressListener listener) {
+        int rotation = RotateUtil.getBitmapDegree(imagePath);
+        Bitmap origin = BitmapFactory.decodeFile(imagePath);
+        Bitmap res;
+        if (rotation != 0) {
+            res = RotateUtil.rotateBitmapByDegree(origin, rotation);
+        } else {
+            res = origin;
+        }
+        compressImageByQuality(res, imagePath, listener);
     }
 
     /**
@@ -62,23 +70,24 @@ public class CompressImageUtil {
         new Thread(new Runnable() {//开启多线程进行压缩处理
             @Override
             public void run() {
-                // TODO Auto-generated method stub
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 int options = 100;
                 bitmap.compress(Bitmap.CompressFormat.JPEG, options, baos);//质量压缩方法，把压缩后的数据存放到baos中 (100表示不压缩，0表示压缩到最小)
                 while (baos.toByteArray().length > config.getMaxSize()) {//循环判断如果压缩后图片是否大于指定大小,大于继续压缩
-                    baos.reset();//重置baos即让下一次的写入覆盖之前的内容
-                    options -= 5;//图片质量每次减少5
-                    if (options <= 5) options = 5;//如果图片质量小于5，为保证压缩后的图片质量，图片最底压缩质量为5
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, options, baos);//将压缩后的图片保存到baos中
-                    if (options == 5) break;//如果图片的质量已降到最低则，不再进行压缩
+                    baos.reset();
+                    options -= 5;
+                    if (options <= 5)
+                        options = 5;
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, options, baos);
+                    if (options == 5)
+                        break;
                 }
 //				if(bitmap!=null&&!bitmap.isRecycled()){
 //					bitmap.recycle();//回收内存中的图片
 //				}
                 try {
                     File thumbnailFile = getThumbnailFile(new File(imgPath));
-                    FileOutputStream fos = new FileOutputStream(thumbnailFile);//将压缩后的图片保存的本地上指定路径中
+                    FileOutputStream fos = new FileOutputStream(thumbnailFile);
                     fos.write(baos.toByteArray());
                     fos.flush();
                     fos.close();
@@ -91,21 +100,16 @@ public class CompressImageUtil {
         }).start();
     }
 
-    /**
-     * 按比例缩小图片的像素以达到压缩的目的
-     *
-     * @param imgPath
-     * @return
-     * @author JPH
-     * @date 2014-12-5下午11:30:59
-     */
-    private void compressImageByPixel(String imgPath, CompressListener listener) throws FileNotFoundException {
+
+    private void compressImageByPixel(String imgPath,
+                                      CompressListener listener)
+            throws FileNotFoundException {
         if (imgPath == null) {
             sendMsg(false, imgPath, "要压缩的文件不存在", listener);
             return;
         }
         BitmapFactory.Options newOpts = new BitmapFactory.Options();
-        newOpts.inJustDecodeBounds = true;//只读边,不读内容
+        newOpts.inJustDecodeBounds = true;
         BitmapFactory.decodeFile(imgPath, newOpts);
         newOpts.inJustDecodeBounds = false;
         int width = newOpts.outWidth;
@@ -141,14 +145,11 @@ public class CompressImageUtil {
         }
     }
 
-    /**
-     * 发送压缩结果的消息
-     *
-     * @param isSuccess 压缩是否成功
-     * @param imagePath
-     * @param message
-     */
-    private void sendMsg(final boolean isSuccess, final String imagePath, final String message, final CompressListener listener) {
+
+    private void sendMsg(final boolean isSuccess,
+                         final String imagePath,
+                         final String message,
+                         final CompressListener listener) {
         mhHandler.post(new Runnable() {
             @Override
             public void run() {
