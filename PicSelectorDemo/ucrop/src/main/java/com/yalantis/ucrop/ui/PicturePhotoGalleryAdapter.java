@@ -73,10 +73,10 @@ public class PicturePhotoGalleryAdapter extends RecyclerView.Adapter<PicturePhot
             path = photoInfo.getPath();
         }
         if (photoInfo.isCropped()) {
-            holder.iv_dot.setVisibility(View.VISIBLE);
-            holder.iv_dot.setImageResource(R.drawable.crop_oval_true);
+            holder.positionDot.setVisibility(View.VISIBLE);
+            holder.positionDot.setImageResource(R.drawable.crop_oval_true);
         } else {
-            holder.iv_dot.setVisibility(View.GONE);
+            holder.positionDot.setVisibility(View.GONE);
         }
 
         Glide.with(context)
@@ -85,7 +85,7 @@ public class PicturePhotoGalleryAdapter extends RecyclerView.Adapter<PicturePhot
                 .crossFade()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .centerCrop()
-                .into(holder.mIvPhoto);
+                .into(holder.imageSnapShot);
     }
 
 
@@ -96,13 +96,13 @@ public class PicturePhotoGalleryAdapter extends RecyclerView.Adapter<PicturePhot
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView mIvPhoto;
-        ImageView iv_dot;
+        ImageView imageSnapShot;
+        ImageView positionDot;
 
         public ViewHolder(View view) {
             super(view);
-            mIvPhoto = (ImageView) view.findViewById(R.id.iv_photo);
-            iv_dot = (ImageView) view.findViewById(R.id.iv_dot);
+            imageSnapShot = (ImageView) view.findViewById(R.id.iv_photo);
+            positionDot = (ImageView) view.findViewById(R.id.iv_dot);
         }
     }
 

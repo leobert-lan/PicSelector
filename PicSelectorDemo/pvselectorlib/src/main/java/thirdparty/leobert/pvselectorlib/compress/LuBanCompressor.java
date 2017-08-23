@@ -187,8 +187,8 @@ class LuBanCompressor {
         String filePath = file.getAbsolutePath();
 
         int angle = getImageSpinAngle(filePath);
-        long fileSize = mLuBan.maxSize > 0 && mLuBan.maxSize < file.length() / 1024 ? mLuBan.maxSize
-                : file.length() / 1024;
+        long fileSize = mLuBan.maxSize > 0 && mLuBan.maxSize < file.length() / 1024 ?
+                mLuBan.maxSize: file.length() / 1024;
 
         int[] size = getImageSize(filePath);
         int width = size[0];

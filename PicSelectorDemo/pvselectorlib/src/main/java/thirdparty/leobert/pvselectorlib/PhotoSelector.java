@@ -78,7 +78,7 @@ import thirdparty.leobert.pvselectorlib.model.PictureConfig;
     @Override
     public IPhotoSelector useSystemCompressOnCrop(boolean enablePixelCompress, boolean enableQualityCompress) {
         config.setPictureCompressEnable(true);
-        config.setCompressFlag(1);
+        config.setCompressScheme(1);
         config.setEnablePixelCompress(enablePixelCompress);
         config.setEnableQualityCompress(enableQualityCompress);
         // TODO: 2017/2/8 quality
@@ -89,7 +89,7 @@ import thirdparty.leobert.pvselectorlib.model.PictureConfig;
     @Override
     public IPhotoSelector enableLubanCompressOnCrop(int maxWidth, int maxHeight) {
         config.setPictureCompressEnable(true);
-        config.setCompressFlag(2);
+        config.setCompressScheme(2);
         config.setCompressH(maxHeight);
         config.setCompressW(maxWidth);
         return this;

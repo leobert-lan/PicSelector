@@ -115,18 +115,21 @@ public interface UcropConsts {
     int CROP_MODE_16_9 = 169;
 
 
-
-
     /**
      * refers to broadcast actions
      */
     interface BcActions {
-
 
         /**
          * resolve the cropped image(s) in the bundle of the intent.broadcast-action
          * will be sent when image(s) cropped
          */
         String ACTION_IMAGE_CROPPED = "app.action.image_cropped";
+
+        /**
+         * as the signal of multi-crop complete.
+         */
+        String ACTION_MULTI_IMAGE_CROPPED_COMPLETE =
+                "app.action.crop.multi.complete";
     }
 }

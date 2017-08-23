@@ -39,6 +39,14 @@ public class LuBan {
     public static final int THIRD_GEAR = 3;
     public static final int CUSTOM_GEAR = 4;
 
+    @IntDef({FIRST_GEAR, THIRD_GEAR, CUSTOM_GEAR})
+    @Target(ElementType.PARAMETER)
+    @Retention(RetentionPolicy.SOURCE)
+    @Documented
+    @Inherited
+    @interface GEAR {
+    }
+
     private static final String TAG = "Luban";
     private static String DEFAULT_DISK_CACHE_DIR = "luban_disk_cache";
 
@@ -258,11 +266,5 @@ public class LuBan {
         fileOrDirectory.delete();
     }
 
-    @IntDef({FIRST_GEAR, THIRD_GEAR, CUSTOM_GEAR})
-    @Target(ElementType.PARAMETER)
-    @Retention(RetentionPolicy.SOURCE)
-    @Documented
-    @Inherited
-    @interface GEAR {
-    }
+
 }

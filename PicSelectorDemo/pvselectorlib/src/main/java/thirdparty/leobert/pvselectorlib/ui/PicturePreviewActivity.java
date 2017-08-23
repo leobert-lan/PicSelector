@@ -1,6 +1,5 @@
 package thirdparty.leobert.pvselectorlib.ui;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -33,13 +32,15 @@ import java.util.List;
 
 import thirdparty.leobert.pvselectorlib.Consts;
 import thirdparty.leobert.pvselectorlib.R;
+import thirdparty.leobert.pvselectorlib.broadcast.consumers.FinishActionConsumer;
+import thirdparty.leobert.pvselectorlib.broadcast.consumers.MultiCropCompleteActionConsumer;
 import thirdparty.leobert.pvselectorlib.model.FunctionConfig;
 import thirdparty.leobert.pvselectorlib.observable.ImagesObservable;
 import thirdparty.leobert.pvselectorlib.widget.PreviewViewPager;
 
 public class PicturePreviewActivity extends PVBaseActivity
         implements View.OnClickListener {
-    private ImageButton left_back;
+    private ImageButton navBack;
     private TextView tv_img_num, tv_title, tv_ok;
     private RelativeLayout select_bar_layout;
     private PreviewViewPager viewPager;
@@ -51,33 +52,40 @@ public class PicturePreviewActivity extends PVBaseActivity
     private TextView check;
     private SimpleFragmentAdapter adapter;
     private Handler mHandler = new Handler();
-    private BroadcastReceiver receiver = new BroadcastReceiver() {
+
+    private FinishActionConsumer finishActionConsumer
+            = new FinishActionConsumer() {
         @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (action.equals("app.activity.finish")) {
-                finish();
-                overridePendingTransition(0, R.anim.slide_bottom_out);
-            } else if (action.equals("app.action.finish.preview")) {
-                // 多图裁剪完关闭 预览界面，在图片列表中进行压缩，所以这里区分开来，不用统一的关闭activity
-                finish();
-                overridePendingTransition(0, R.anim.slide_bottom_out);
-            }
+        public void consume(Context context, Intent intent) {
+            finish();
+            overridePendingTransition(0, R.anim.slide_bottom_out);
+        }
+    };
+
+    private MultiCropCompleteActionConsumer multiCropCompleteActionConsumer
+            = new MultiCropCompleteActionConsumer() {
+        @Override
+        public void consume(Context context, Intent intent) {
+            finish();
+            overridePendingTransition(0, R.anim.slide_bottom_out);
         }
     };
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.picture_activity_image_preview);
-        registerReceiver(receiver, "app.activity.finish", "app.action.finish.preview");
+        setContentView(R.layout.activity_picture_preview);
+
+        registerBroadcastConsumer(finishActionConsumer,
+                multiCropCompleteActionConsumer);
+
         rl_title = (RelativeLayout) findViewById(R.id.rl_title);
-        left_back = (ImageButton) findViewById(R.id.left_back);
+        navBack = (ImageButton) findViewById(R.id.left_back);
         viewPager = (PreviewViewPager) findViewById(R.id.preview_pager);
         ll_check = (LinearLayout) findViewById(R.id.ll_check);
         select_bar_layout = (RelativeLayout) findViewById(R.id.select_bar_layout);
         check = (TextView) findViewById(R.id.check);
-        left_back.setOnClickListener(this);
+        navBack.setOnClickListener(this);
         tv_ok = (TextView) findViewById(R.id.bottombar_tv_select_complete);
         tv_img_num = (TextView) findViewById(R.id.bottombar_tv_select_count);
         tv_title = (TextView) findViewById(R.id.tv_title);
@@ -287,7 +295,7 @@ public class PicturePreviewActivity extends PVBaseActivity
 
         @Override
         public Fragment getItem(int position) {
-            PictureImagePreviewFragment fragment = PictureImagePreviewFragment.getInstance(datas.get(position).getPath(), selectImages);
+            PicturePreviewFragment fragment = PicturePreviewFragment.getInstance(datas.get(position).getPath(), selectImages);
             return fragment;
         }
 
@@ -369,12 +377,4 @@ public class PicturePreviewActivity extends PVBaseActivity
 
     }
 
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (receiver != null) {
-            unregisterReceiver(receiver);
-        }
-    }
 }

@@ -29,6 +29,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import com.yalantis.ucrop.MultiUCrop;
 import com.yalantis.ucrop.Options;
@@ -117,27 +118,32 @@ public class PictureMultiUCropActivity extends UCropActivity {
                                 float resultAspectRatio,
                                 int imageWidth,
                                 int imageHeight) {
-        try {
-            images.get(cropIndex).setCroppedPath(uri.getPath());
-            images.get(cropIndex).setCropped(true);
-            cropIndex++;
-            if (cropIndex >= images.size()) {
-                sendBroadcast(new Intent().setAction("app.action.finish.preview"));
-                sendBroadcast(new Intent().setAction(UcropConsts.BcActions.ACTION_IMAGE_CROPPED)
-                        .putExtra(UcropConsts.Extra.EXTRA_SERIALIZABLE_RESULT, (Serializable) images));
-                // 裁剪完成，看是否压缩
-                for (LocalMedia media : images) {
-                    media.setCropped(true);
-                }
-                finish();
-                overridePendingTransition(0, R.anim.hold);
-            } else {
-                finish();
-                startMultiCopy(images.get(cropIndex).getPath());
+
+        images.get(cropIndex).setCroppedPath(uri.getPath());
+        images.get(cropIndex).setCropped(true);
+        cropIndex++;
+        if (cropIndex >= images.size()) {
+            // send the multi-crop-complete signal
+            Log.d(getClass().getSimpleName(),"sent ACTION_MULTI_IMAGE_CROPPED_COMPLETE");
+            sendBroadcast(new Intent()
+                    .setAction(UcropConsts.BcActions
+                            .ACTION_MULTI_IMAGE_CROPPED_COMPLETE));
+
+            sendBroadcast(new Intent()
+                    .setAction(UcropConsts.BcActions.ACTION_IMAGE_CROPPED)
+                    .putExtra(UcropConsts.Extra.EXTRA_SERIALIZABLE_RESULT,
+                            (Serializable) images));
+            // 裁剪完成，看是否压缩
+            for (LocalMedia media : images) {
+                media.setCropped(true);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+            finish();
+            overridePendingTransition(0, R.anim.hold);
+        } else {
+            finish();
+            startMultiCopy(images.get(cropIndex).getPath());
         }
+
         cancelDialog();
     }
 

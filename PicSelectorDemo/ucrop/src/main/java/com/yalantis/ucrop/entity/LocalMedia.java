@@ -139,15 +139,6 @@ public class LocalMedia implements Serializable {
     }
 
 
-//    public boolean isChecked() {
-//        return isChecked;
-//    }
-//
-//    public void setChecked(boolean checked) {
-//        isChecked = checked;
-//    }
-
-
     public GridItemInfoHolder getGridItemInfoHolder() {
         return gridItemInfoHolder;
     }

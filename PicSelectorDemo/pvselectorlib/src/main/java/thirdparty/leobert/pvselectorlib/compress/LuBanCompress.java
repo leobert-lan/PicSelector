@@ -15,7 +15,9 @@ public class LuBanCompress implements CompressInterface {
     private LuBanOptions options;
     private ArrayList<File> files = new ArrayList<>();
 
-    public LuBanCompress(Context context, CompressConfig config, List<LocalMedia> images,
+    public LuBanCompress(Context context,
+                         CompressConfig config,
+                         List<LocalMedia> images,
                          CompressListener listener) {
         options = config.getLuBanOptions();
         this.images = images;
@@ -31,20 +33,19 @@ public class LuBanCompress implements CompressInterface {
         }
         for (LocalMedia image : images) {
             if (image == null) {
-                listener.onCompressError(images, " There are pictures of compress  is null.");
+                listener.onCompressError(images, " There are pictures of fetchCompressInterface  is null.");
                 return;
             }
-            if (image.isCropped()) {
+            if (image.isCropped())
                 files.add(new File(image.getCroppedPath()));
-            } else {
+            else
                 files.add(new File(image.getPath()));
-            }
         }
-        if (images.size() == 1) {
+
+        if (images.size() == 1)
             compressOne();
-        } else {
+        else
             compressMulti();
-        }
     }
 
     private void compressOne() {
@@ -69,7 +70,7 @@ public class LuBanCompress implements CompressInterface {
 
                     @Override
                     public void onError(Throwable e) {
-                        listener.onCompressError(images, e.getMessage() + " is compress failures");
+                        listener.onCompressError(images, e.getMessage() + " is fetchCompressInterface failures");
                     }
                 });
     }
@@ -94,7 +95,8 @@ public class LuBanCompress implements CompressInterface {
 
                     @Override
                     public void onError(Throwable e) {
-                        listener.onCompressError(images, e.getMessage() + " is compress failures");
+                        listener.onCompressError(images, "[fetchCompressInterface failure] message:\r" +
+                                e.getMessage());
                     }
                 });
     }

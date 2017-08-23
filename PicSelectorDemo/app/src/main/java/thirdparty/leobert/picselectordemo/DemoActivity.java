@@ -20,6 +20,7 @@ import java.util.List;
 
 import thirdparty.leobert.picselectordemo.adapter.GridImageAdapter;
 import thirdparty.leobert.picselectordemo.util.FullyGridLayoutManager;
+import thirdparty.leobert.pvselectorlib.compress.CompressConfig;
 import thirdparty.leobert.pvselectorlib.model.FunctionConfig;
 import thirdparty.leobert.pvselectorlib.model.PictureConfig;
 
@@ -48,7 +49,10 @@ public class DemoActivity extends Activity implements RadioGroup.OnCheckedChange
     private int compressH = 0;
     private boolean isCompress = false;
     private boolean enableDisplayCandidateNo = false;
-    private int compressFlag = 1;// 1 系统自带压缩 2 luban压缩
+
+    @CompressConfig.CompressScheme
+    private int compressFlag = CompressConfig.SCHEME_SYSTEM;
+
     private List<LocalMedia> selectMedia = new ArrayList<>();
     private Context mContext;
 
@@ -119,7 +123,8 @@ public class DemoActivity extends Activity implements RadioGroup.OnCheckedChange
             @Override
             public void onItemClick(int position, View v) {
                 // 这里可预览图片
-                PictureConfig.getPictureConfig().externalPicturePreview(mContext, position, selectMedia);
+                PictureConfig.getPictureConfig()
+                        .externalPicturePreview(mContext, position, selectMedia);
             }
         });
 
@@ -163,7 +168,7 @@ public class DemoActivity extends Activity implements RadioGroup.OnCheckedChange
                      * setBottomBgColor 选择图片页面底部背景色
                      * setCompressQuality 设置裁剪质量，默认无损裁剪
                      * setSelectMedia 已选择的图片
-                     * setCompressFlag 1为系统自带压缩  2为第三方luban压缩
+                     * setCompressScheme 1为系统自带压缩  2为第三方luban压缩
                      * 注意-->type为2时 设置isPreview or isCrop 无效
                      * 注意：Options可以为空，默认标准模式
                      */
@@ -201,7 +206,7 @@ public class DemoActivity extends Activity implements RadioGroup.OnCheckedChange
                     config.setCompressQuality(100);
                     config.setImageSpanCount(4);
                     config.setSelectMedia(selectMedia);
-                    config.setCompressFlag(compressFlag);
+                    config.setCompressScheme(compressFlag);
                     config.setCompressW(compressW);
                     config.setCompressH(compressH);
                     if (theme) {
@@ -330,19 +335,19 @@ public class DemoActivity extends Activity implements RadioGroup.OnCheckedChange
                 break;
             case R.id.rb_compress_true:
                 isCompress = true;
-                if (compressFlag == 2) {
+                if (compressFlag == CompressConfig.SCHEME_LUBAN) {
                     ll_luban_wh.setVisibility(View.VISIBLE);
                 }
                 rgbs10.setVisibility(View.VISIBLE);
                 break;
             case R.id.rb_system:
-                compressFlag = 1;
+                compressFlag = CompressConfig.SCHEME_SYSTEM;
                 ll_luban_wh.setVisibility(View.GONE);
                 et_compress_height.setText("");
                 et_compress_width.setText("");
                 break;
             case R.id.rb_luban:
-                compressFlag = 2;
+                compressFlag = CompressConfig.SCHEME_LUBAN;
                 ll_luban_wh.setVisibility(View.VISIBLE);
                 break;
         }

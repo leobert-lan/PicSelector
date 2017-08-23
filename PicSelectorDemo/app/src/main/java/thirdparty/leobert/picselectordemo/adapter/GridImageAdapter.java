@@ -136,7 +136,7 @@ public class GridImageAdapter extends
                 case LocalMedia.TYPE_PICTURE:
                     // 图片
                     if (media.isCompressed()) {
-                        Logger.i("compress image result", new File(media.getCompressPath()).length() / 1024 + "k");
+                        Logger.i("fetchCompressInterface image result", new File(media.getCompressPath()).length() / 1024 + "k");
                     }
 
                     Glide.with(mContext)

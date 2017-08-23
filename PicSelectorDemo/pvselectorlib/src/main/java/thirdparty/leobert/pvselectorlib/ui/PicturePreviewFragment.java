@@ -25,12 +25,12 @@ import thirdparty.leobert.pvselectorlib.Consts;
 import thirdparty.leobert.pvselectorlib.R;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
-public class PictureImagePreviewFragment extends Fragment {
+public class PicturePreviewFragment extends Fragment {
     public static final String PATH = "path";
     private List<LocalMedia> selectImages = new ArrayList<>();
 
-    public static PictureImagePreviewFragment getInstance(String path, List<LocalMedia> medias) {
-        PictureImagePreviewFragment fragment = new PictureImagePreviewFragment();
+    public static PicturePreviewFragment getInstance(String path, List<LocalMedia> medias) {
+        PicturePreviewFragment fragment = new PicturePreviewFragment();
         Bundle bundle = new Bundle();
         bundle.putString(PATH, path);
         bundle.putSerializable(Consts.Extra.EXTRA_PREVIEW_SELECT_LIST,
@@ -42,8 +42,9 @@ public class PictureImagePreviewFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View contentView = inflater.inflate(R.layout.picture_fragment_image_preview, container, false);
-        final ImageView imageView = (ImageView) contentView.findViewById(R.id.preview_image);
+        View contentView = inflater.inflate(R.layout.fragment_picture_preview, container, false);
+        final ImageView imageView =
+                (ImageView) contentView.findViewById(R.id.preview_image);
         final PhotoViewAttacher mAttacher = new PhotoViewAttacher(imageView);
         selectImages = (List<LocalMedia>) getArguments()
                 .getSerializable(Consts.Extra.EXTRA_PREVIEW_SELECT_LIST);

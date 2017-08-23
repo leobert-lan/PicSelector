@@ -137,7 +137,13 @@ public interface Consts {
          * will be sent when image(s) cropped
          */
         String ACTION_IMAGE_CROPPED = UcropConsts.BcActions.ACTION_IMAGE_CROPPED;
-                //"app.action.image_cropped";
+        //"app.action.image_cropped";
+
+        /**
+         * as the signal of multi-crop complete.
+         */
+        String ACTION_MULTI_IMAGE_CROPPED_COMPLETE =
+                UcropConsts.BcActions.ACTION_MULTI_IMAGE_CROPPED_COMPLETE;
     }
 
     @Retention(RetentionPolicy.SOURCE)

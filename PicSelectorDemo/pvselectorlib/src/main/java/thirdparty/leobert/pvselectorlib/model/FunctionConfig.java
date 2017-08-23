@@ -12,6 +12,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.List;
 
+import thirdparty.leobert.pvselectorlib.compress.CompressConfig;
+
 public class FunctionConfig implements Serializable, UIConfig.UIConfigDelegate {
 
 
@@ -107,7 +109,7 @@ public class FunctionConfig implements Serializable, UIConfig.UIConfigDelegate {
 
     private boolean isShowCamera = true; // 是否显示相机
     private boolean enablePreview = true; // 是否预览图片
-    private boolean enableCrop; // 是否裁剪图片，只针对单选图片有效
+    private boolean enableCrop; // effective for picture
     private boolean isPreviewVideo; // 是否可预览视频(播放)
 
 
@@ -125,7 +127,10 @@ public class FunctionConfig implements Serializable, UIConfig.UIConfigDelegate {
 
     protected int compressQuality = 100;// 图片压缩质量,默认无损
     protected List<LocalMedia> selectMedia = new ArrayList<>();// 已选择的图片
-    protected int compressFlag = 1; // 1 系统自带压缩 2 luban压缩
+
+    @CompressConfig.CompressScheme
+    protected int compressScheme = CompressConfig.SCHEME_SYSTEM;
+
     protected int compressW;
     protected int compressH;
 
@@ -155,12 +160,13 @@ public class FunctionConfig implements Serializable, UIConfig.UIConfigDelegate {
         this.compressH = compressH;
     }
 
-    public int getCompressFlag() {
-        return compressFlag;
+    @CompressConfig.CompressScheme
+    public int getCompressScheme() {
+        return compressScheme;
     }
 
-    public void setCompressFlag(int compressFlag) {
-        this.compressFlag = compressFlag;
+    public void setCompressScheme(@CompressConfig.CompressScheme int compressScheme) {
+        this.compressScheme = compressScheme;
     }
 
     /**

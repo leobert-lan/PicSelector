@@ -87,7 +87,7 @@ public class PictureExternalPreviewActivity extends FragmentActivity {
 
         @Override
         public Fragment getItem(int position) {
-            return PictureImagePreviewFragment.getInstance(images.get(position).getPath(),
+            return PicturePreviewFragment.getInstance(images.get(position).getPath(),
                     images);
         }
 

@@ -13,7 +13,10 @@ public class CompressImageOptions implements CompressInterface {
     private List<LocalMedia> images;
     private CompressInterface.CompressListener listener;
 
-    public static CompressInterface compress(Context context, CompressConfig config, List<LocalMedia> images, CompressInterface.CompressListener listener) {
+    public static CompressInterface fetchCompressInterface(Context context,
+                                                           CompressConfig config,
+                                                           List<LocalMedia> images,
+                                                           CompressInterface.CompressListener listener) {
         if (config.getLuBanOptions() != null) {
             return new LuBanCompress(context, config, images, listener);
         } else {
@@ -31,12 +34,16 @@ public class CompressImageOptions implements CompressInterface {
     public void compress() {
         if (images == null || images.isEmpty())
             listener.onCompressError(images, " images is null");
-        for (LocalMedia image : images) {
+        if (images.contains(null)) {
+            listener.onCompressError(images, " contain null in image-list");
+            return;
+        }
+        /*for (LocalMedia image : images) {
             if (image == null) {
-                listener.onCompressError(images, " There are pictures of compress  is null.");
+                listener.onCompressError(images, " contain null in image-list");
                 return;
             }
-        }
+        }*/
         compress(images.get(0));
     }
 
@@ -53,7 +60,7 @@ public class CompressImageOptions implements CompressInterface {
         }
 
         File file = new File(path);
-        if (file == null || !file.exists() || !file.isFile()) {
+        if (/*file == null || */!file.exists() || !file.isFile()) {
             continueCompress(image, false);
             return;
         }
@@ -72,7 +79,9 @@ public class CompressImageOptions implements CompressInterface {
         });
     }
 
-    private void continueCompress(LocalMedia image, boolean preSuccess, String... message) {
+    private void continueCompress(LocalMedia image,
+                                  boolean preSuccess,
+                                  String... message) {
         image.setCompressed(preSuccess);
         int index = images.indexOf(image);
         boolean isLast = index == images.size() - 1;
@@ -91,7 +100,8 @@ public class CompressImageOptions implements CompressInterface {
 
         for (LocalMedia image : images) {
             if (!image.isCompressed()) {
-                listener.onCompressError(images, image.getCompressPath() + " is compress failures");
+                listener.onCompressError(images,"[failure]" +
+                        image.getCompressPath());
                 return;
             }
         }

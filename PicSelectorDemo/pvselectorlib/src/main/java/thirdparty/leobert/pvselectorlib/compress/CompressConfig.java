@@ -1,9 +1,31 @@
 package thirdparty.leobert.pvselectorlib.compress;
 
+import android.support.annotation.IntDef;
+
 import java.io.Serializable;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
 
 public class CompressConfig implements Serializable {
+
+    /**
+     * tag for system fetchCompressInterface scheme
+     */
+    public static final int SCHEME_SYSTEM = 1;
+
+    /**
+     * tag for LuBan fetchCompressInterface scheme
+     */
+    public static final int SCHEME_LUBAN = 2;
+
+    /**
+     * scope of the fetchCompressInterface scheme
+     */
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef({SCHEME_SYSTEM,SCHEME_LUBAN})
+    public @interface CompressScheme {
+    }
 
     /**
      * 长或宽不超过的最大像素,单位px
@@ -37,7 +59,7 @@ public class CompressConfig implements Serializable {
         return new CompressConfig();
     }
 
-    public static CompressConfig ofLuban(LuBanOptions options) {
+    public static CompressConfig ofLuBan(LuBanOptions options) {
         return new CompressConfig(options);
     }
 

@@ -15,7 +15,6 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.yalantis.ucrop.UcropConsts;
 import com.yalantis.ucrop.entity.LocalMedia;
 
 import java.util.ArrayList;
@@ -25,6 +24,7 @@ import thirdparty.leobert.pvselectorlib.Consts;
 import thirdparty.leobert.pvselectorlib.R;
 import thirdparty.leobert.pvselectorlib.broadcast.ActionConsumer;
 import thirdparty.leobert.pvselectorlib.broadcast.ActionListenedBroadCastReceiver;
+import thirdparty.leobert.pvselectorlib.compress.CompressConfig;
 import thirdparty.leobert.pvselectorlib.model.FunctionConfig;
 
 public abstract class PVBaseActivity extends FragmentActivity {
@@ -61,7 +61,9 @@ public abstract class PVBaseActivity extends FragmentActivity {
     protected int compressQuality = 0;// 压缩图片质量
     protected List<LocalMedia> selectMedias = new ArrayList<>();
     protected FunctionConfig config = new FunctionConfig();
-    protected int compressFlag = 1;
+
+    @CompressConfig.CompressScheme
+    protected int compressScheme = CompressConfig.SCHEME_SYSTEM;
     protected int mScreenWidth = 720;
     protected int mScreenHeight = 1280;
     protected int compressW;
@@ -105,7 +107,7 @@ public abstract class PVBaseActivity extends FragmentActivity {
         previewBottomBgColor = config.getPreviewBottomBgColor();
         compressQuality = config.getCompressQuality();
         selectMedias = config.getSelectMedia();
-        compressFlag = config.getCompressFlag();
+        compressScheme = config.getCompressScheme();
         compressW = config.getCompressW();
         compressH = config.getCompressH();
         // 如果是显示数据风格，则默认为qq选择风格
@@ -266,7 +268,9 @@ public abstract class PVBaseActivity extends FragmentActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (broadCastReceiver != null)
+        if (broadCastReceiver != null) {
             broadCastReceiver.unregister(this);
+            broadCastReceiver = null;
+        }
     }
 }

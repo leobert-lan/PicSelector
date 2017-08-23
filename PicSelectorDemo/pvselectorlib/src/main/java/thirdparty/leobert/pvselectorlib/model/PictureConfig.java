@@ -88,7 +88,8 @@ public class PictureConfig {
             intent.putExtra(Consts.Extra.EXTRA_POSITION, position);
             intent.setClass(mContext, PictureExternalPreviewActivity.class);
             mContext.startActivity(intent);
-            ((Activity) mContext).overridePendingTransition(R.anim.toast_enter, 0);
+            if (mContext instanceof Activity)
+                ((Activity) mContext).overridePendingTransition(R.anim.toast_enter, 0);
         }
     }
 

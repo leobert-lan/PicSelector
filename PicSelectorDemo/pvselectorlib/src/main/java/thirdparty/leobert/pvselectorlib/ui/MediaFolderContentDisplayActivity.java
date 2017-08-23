@@ -72,7 +72,7 @@ public class MediaFolderContentDisplayActivity extends PVBaseActivity
 
     /**
      * located at the right in the bottom bar, click to complete select
-     * start crop or compress or finish if none next flow exist
+     * start crop or fetchCompressInterface or finish if none next flow exist
      */
     private TextView tvOpComplete;
 
@@ -743,13 +743,13 @@ public class MediaFolderContentDisplayActivity extends PVBaseActivity
 
     private void handleCropResult(List<LocalMedia> result) {
         if (result != null) {
-            if (enableCompress && type == LocalMedia.TYPE_PICTURE) {
-                // 压缩图片
+            if (enableCompress) // && type == LocalMedia.TYPE_PICTURE) { always be picture
                 compressImage(result);
-            } else {
+            else
                 onSelectDone(result);
-            }
+            return;
         }
+        Logger.d(TAG, "[empty data],on handle picture cropped result");
     }
 
     public void onSelectDone(List<LocalMedia> result) {
@@ -770,7 +770,7 @@ public class MediaFolderContentDisplayActivity extends PVBaseActivity
         }
         finish();
         overridePendingTransition(0, R.anim.slide_bottom_out);
-        sendBroadcast("app.activity.finish");
+        sendBroadcast(Consts.BcActions.ACTION_FINISH_ACTIVITY);
     }
 
 
@@ -819,7 +819,7 @@ public class MediaFolderContentDisplayActivity extends PVBaseActivity
                 break;
             case 2:
                 // 取消
-                sendBroadcast("app.activity.finish");
+                sendBroadcast(Consts.BcActions.ACTION_FINISH_ACTIVITY);
                 finish();
                 overridePendingTransition(0, R.anim.slide_bottom_out);
                 break;
@@ -832,25 +832,26 @@ public class MediaFolderContentDisplayActivity extends PVBaseActivity
      */
     private void compressImage(List<LocalMedia> result) {
         showDialog("处理中...");
-        CompressConfig compress_config = CompressConfig.ofDefaultConfig();
-        switch (compressFlag) {
-            case 1:
-                // 系统自带压缩
-                compress_config.enablePixelCompress(config.isEnablePixelCompress());
-                compress_config.enableQualityCompress(config.isEnableQualityCompress());
-                break;
-            case 2:
+        CompressConfig compressConfig = CompressConfig.ofDefaultConfig();
+        switch (compressScheme) {
+            case CompressConfig.SCHEME_LUBAN:
                 // luban压缩
-                LuBanOptions option = new LuBanOptions.Builder()
-                        .setMaxHeight(compressH)
-                        .setMaxWidth(compressW)
-                        .setMaxSize(FunctionConfig.MAX_COMPRESS_SIZE)
-                        .create();
-                compress_config = CompressConfig.ofLuban(option);
+                LuBanOptions option = new LuBanOptions();
+                option.setMaxHeight(compressH);
+                option.setMaxWidth(compressW);
+                option.setMaxSize(FunctionConfig.MAX_COMPRESS_SIZE);
+                Logger.d(TAG, "check point");
+                compressConfig = CompressConfig.ofLuBan(option);
+                break;
+            case CompressConfig.SCHEME_SYSTEM:
+            default:
+                // 系统自带压缩
+                compressConfig.enablePixelCompress(config.isEnablePixelCompress());
+                compressConfig.enableQualityCompress(config.isEnableQualityCompress());
                 break;
         }
 
-        CompressImageOptions.compress(this, compress_config, result, new CompressInterface.CompressListener() {
+        CompressImageOptions.fetchCompressInterface(this, compressConfig, result, new CompressInterface.CompressListener() {
             @Override
             public void onCompressSuccess(List<LocalMedia> images) {
                 // 压缩成功回调
