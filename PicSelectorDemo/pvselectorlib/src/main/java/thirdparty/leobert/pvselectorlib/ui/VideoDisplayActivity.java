@@ -11,16 +11,15 @@ import android.widget.MediaController;
 import android.widget.VideoView;
 
 import thirdparty.leobert.pvselectorlib.Consts;
+import thirdparty.leobert.pvselectorlib.Logger;
 import thirdparty.leobert.pvselectorlib.R;
 
 public class VideoDisplayActivity extends PVBaseActivity
         implements MediaPlayer.OnErrorListener,
         MediaPlayer.OnCompletionListener {
     private String videoPath = "";
-    private ImageView left_back;
-    private MediaController mMediaController;
     private VideoView mVideoView;
-    private ImageView iv_play;
+    private ImageView ivStartPlay;
     private int mPositionWhenPaused = -1;
 
     @Override
@@ -31,26 +30,27 @@ public class VideoDisplayActivity extends PVBaseActivity
 
         videoPath = getIntent().getStringExtra(Consts.Extra.EXTRA_PREVIEW_VIDEO_PATH);
 
-        left_back = (ImageView) findViewById(R.id.left_back);
+        ImageView navBack = (ImageView) findViewById(R.id.left_back);
         mVideoView = (VideoView) findViewById(R.id.video_view);
-        iv_play = (ImageView) findViewById(R.id.iv_play);
-        mMediaController = new MediaController(this);
+        ivStartPlay = (ImageView) findViewById(R.id.iv_play);
+        MediaController mMediaController = new MediaController(this);
         mVideoView.setOnCompletionListener(this);
         mVideoView.setMediaController(mMediaController);
-        left_back.setOnClickListener(new View.OnClickListener() {
+        navBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
             }
         });
-        iv_play.setOnClickListener(new View.OnClickListener() {
+        ivStartPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mVideoView.start();
-                iv_play.setVisibility(View.INVISIBLE);
+                ivStartPlay.setVisibility(View.INVISIBLE);
             }
         });
     }
+
 
     private void translucentStatusBar() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
@@ -102,11 +102,52 @@ public class VideoDisplayActivity extends PVBaseActivity
         super.onResume();
     }
 
-    public boolean onError(MediaPlayer player, int arg1, int arg2) {
+    @Override
+    public boolean onError(MediaPlayer mp, int what, int extra) {
+        Logger.i(getClass().getSimpleName(), "[video play on error]\r"
+                + "what:" + getErrorType(what)
+                + "\rextra:" + getErrorExtra(extra));
+
+        //not handled, onCompletion will be called
         return false;
     }
 
+    private String getErrorType(int what) {
+        String ret;
+        switch (what) {
+            case MediaPlayer.MEDIA_ERROR_SERVER_DIED:
+                ret = "MEDIA_ERROR_SERVER_DIED";
+                break;
+            case MediaPlayer.MEDIA_ERROR_UNKNOWN:
+            default:
+                ret = "MEDIA_ERROR_UNKNOWN";
+                break;
+        }
+        return ret;
+    }
+
+    private String getErrorExtra(int extra) {
+        String ret;
+        switch (extra) {
+            case MediaPlayer.MEDIA_ERROR_IO:
+                ret = "MEDIA_ERROR_IO";
+                break;
+            case MediaPlayer.MEDIA_ERROR_UNSUPPORTED:
+                ret = "MEDIA_ERROR_UNSUPPORTED";
+                break;
+            case MediaPlayer.MEDIA_ERROR_TIMED_OUT:
+                ret = "MEDIA_ERROR_TIMED_OUT";
+                break;
+            case MediaPlayer.MEDIA_ERROR_MALFORMED:
+            default:
+                ret = "MEDIA_ERROR_MALFORMED";
+                break;
+        }
+        return ret;
+    }
+
+    @Override
     public void onCompletion(MediaPlayer mp) {
-        iv_play.setVisibility(View.VISIBLE);
+        ivStartPlay.setVisibility(View.VISIBLE);
     }
 }
