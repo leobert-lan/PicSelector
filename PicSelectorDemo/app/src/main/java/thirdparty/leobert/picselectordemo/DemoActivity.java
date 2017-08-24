@@ -20,6 +20,7 @@ import java.util.List;
 
 import thirdparty.leobert.picselectordemo.adapter.GridImageAdapter;
 import thirdparty.leobert.picselectordemo.util.FullyGridLayoutManager;
+import thirdparty.leobert.pvselectorlib.PVSelector;
 import thirdparty.leobert.pvselectorlib.compress.CompressConfig;
 import thirdparty.leobert.pvselectorlib.model.FunctionConfig;
 import thirdparty.leobert.pvselectorlib.model.PictureConfig;
@@ -131,6 +132,13 @@ public class DemoActivity extends Activity implements RadioGroup.OnCheckedChange
 //        PVSelector.getVideoSelector(this).multiSelect(4).enableCamera().enablePreview()
 //                .setCompleteTxtColor(ContextCompat.getColor(this, R.color.colorPrimary)).launch(resultCallback);
 
+        PVSelector.getPhotoSelector(this)
+                .singleSelect()
+                .enableCamera()
+                .enableCrop(FunctionConfig.CROP_MODE_16_9)
+                .useSystemCompress(true,true)
+                .setSelectedMedia(selectMedia) //已经选择的内容
+                .launch(resultCallback);
     }
 
     /**
