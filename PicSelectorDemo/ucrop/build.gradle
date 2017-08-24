@@ -102,7 +102,8 @@ task sourcesJar(type: Jar) {
 
 task javadoc(type: Javadoc) {
     source = android.sourceSets.main.java.srcDirs
-    exclude "com/yalantis/ucrop"
+//    exclude "com/yalantis/ucrop"
+    exclude " android/support/annotation"
     classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
 }
 
@@ -140,8 +141,10 @@ install {
                 url siteUrl
                 licenses {
                     license {
-                        name 'The Apache Software License, Version 2.0'
-                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+//                        name 'The Apache Software License, Version 2.0'
+//                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        name 'MIT'
+                        url 'https://opensource.org/licenses/MIT'
                     }
                 }
                 developers {
@@ -182,7 +185,8 @@ bintray {
         name = "ucrop"     // #CONFIG# project name in jcenter
         websiteUrl = siteUrl
         vcsUrl = gitUrl
-        licenses = ["Apache-2.0"]
+        licenses = ["MIT"]
+//        licenses = ["Apache-2.0"]
         publish = true
     }
 }

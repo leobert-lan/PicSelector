@@ -28,7 +28,7 @@ package com.yalantis.ucrop;
  * <p><b>Package:</b> com.yalantis.ucrop </p>
  * <p><b>Project:</b> PicSelectorDemo </p>
  * <p><b>Classname:</b> Consts </p>
- * <p><b>Description:</b> TODO </p>
+ * <p><b>Description:</b> define constant </p>
  * Created by leobert on 2017/8/22.
  */
 
@@ -52,7 +52,7 @@ public interface UcropConsts {
 
         String EXTRA_COLOR_BACKGROUND = "DATA_COLOR_BACKGROUND";
 
-        String EXTRA_PREFIX = BuildConfig.APPLICATION_ID;
+        String EXTRA_PREFIX = "com.yalantis.ucrop";//BuildConfig.APPLICATION_ID;
         String EXTRA_COMPRESSION_FORMAT_NAME = EXTRA_PREFIX + ".CompressionFormatName";
         String EXTRA_COMPRESSION_QUALITY = EXTRA_PREFIX + ".CompressionQuality";
 

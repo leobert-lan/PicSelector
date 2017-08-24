@@ -47,10 +47,6 @@ import com.yalantis.ucrop.util.RectUtils;
 import java.lang.ref.WeakReference;
 import java.util.Arrays;
 
-/**
- * This class adds crop feature, methods to draw crop guidelines, and keep image in correct state.
- * Also it extends parent class methods to add checks for scale; animating zoom in/out.
- */
 public class CropImageView extends TransformImageView {
 
     public static final int DEFAULT_MAX_BITMAP_SIZE = 0;
@@ -87,7 +83,8 @@ public class CropImageView extends TransformImageView {
     }
 
     /**
-     * Cancels all current animations and sets image to fill crop area (without animation).
+     * Cancels all current animations and sets image to fill crop area
+     * (without animation).
      * Then creates and executes {@link BitmapCropTask} with proper parameters.
      */
     public void cropAndSaveImage(@NonNull Bitmap.CompressFormat compressFormat, int compressQuality,
@@ -287,7 +284,7 @@ public class CropImageView extends TransformImageView {
 
     /**
      * If image doesn't fill the crop bounds it must be translated and scaled properly to fill those.
-     * <p/>
+     * <p>
      * Therefore this method calculates delta X, Y and scale values and passes them to the
      * {@link WrapCropBoundsRunnable} which animates image.
      * Scale value must be calculated only if image won't fill the crop bounds after it's translated to the

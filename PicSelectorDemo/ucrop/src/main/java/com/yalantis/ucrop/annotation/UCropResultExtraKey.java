@@ -35,7 +35,7 @@ import java.lang.annotation.RetentionPolicy;
  * <p><b>Package:</b> com.yalantis.ucrop.annotation </p>
  * <p><b>Project:</b> PicSelectorDemo </p>
  * <p><b>Classname:</b> UCropResult </p>
- * <p><b>Description:</b> TODO </p>
+ * <p><b>Description:</b> UCropResultExtraKey </p>
  * Created by leobert on 2017/8/22.
  */
 

@@ -31,7 +31,7 @@ import android.content.Intent;
  * <p><b>Package:</b> thirdparty.leobert.pvselectorlib.broadcast </p>
  * <p><b>Project:</b> PicSelectorDemo </p>
  * <p><b>Classname:</b> ActionConsumer </p>
- * <p><b>Description:</b> a consumer to listen&consume the action of broadcast </p>
+ * <p><b>Description:</b> a consumer to listen and consume the action of broadcast </p>
  * Created by leobert on 2017/8/21.
  */
 

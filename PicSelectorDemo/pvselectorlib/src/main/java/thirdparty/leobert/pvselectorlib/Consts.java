@@ -39,7 +39,7 @@ import thirdparty.leobert.pvselectorlib.ui.PicturePreviewActivity;
  * <p><b>Package:</b> thirdparty.leobert.pvselectorlib </p>
  * <p><b>Project:</b> PicSelectorDemo </p>
  * <p><b>Classname:</b> Consts </p>
- * <p><b>Description:</b> define & classify constants </p>
+ * <p><b>Description:</b> define and classify constants </p>
  * Created by leobert on 2017/8/18.
  */
 

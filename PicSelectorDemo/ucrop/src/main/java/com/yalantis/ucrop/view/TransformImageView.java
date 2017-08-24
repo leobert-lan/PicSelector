@@ -46,7 +46,8 @@ import com.yalantis.ucrop.util.RectUtils;
  * This class provides base logic to setup the image, transform it with matrix (move, scale, rotate),
  * and methods to get current matrix state.
  */
-public class TransformImageView extends android.support.v7.widget.AppCompatImageView {
+public class TransformImageView extends
+        android.support.v7.widget.AppCompatImageView {
 
     private static final String TAG = "TransformImageView";
 
@@ -118,7 +119,7 @@ public class TransformImageView extends android.support.v7.widget.AppCompatImage
 
     /**
      * Setter for {@link #mMaxBitmapSize} value.
-     * Be sure to call it before {@link #setImageURI(Uri)} or other image setters.
+     * Be sure to call it before setImageURI(Uri) or other image setters.
      *
      * @param maxBitmapSize - max size for both width and height of bitmap that will be used in the view.
      */

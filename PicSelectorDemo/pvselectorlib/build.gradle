@@ -11,7 +11,7 @@ apply plugin: 'com.jfrog.bintray'
 group = "individual.leobert.libs"
 
 // 根节点添加
-version = "1.0.6"
+version = "1.1.0"
 
 // 根节点添加
 def siteUrl = 'https://github.com/leobert-lan/PicSelector'    // project homepage
@@ -24,8 +24,8 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 25
-        versionCode 106
-        versionName "1.0.6"
+        versionCode 110
+        versionName "1.1.0"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -64,8 +64,8 @@ dependencies {
     })
     //    compile 'com.android.support:appcompat-v7:25.1.0'
     testCompile 'junit:junit:4.12'
-//    compile 'individual.leobert.libs:ucrop:2.3.0'
-    compile project(':ucrop')
+    compile 'individual.leobert.libs:ucrop:2.4.0'
+//    compile project(':ucrop')
 
     compile 'io.reactivex:rxjava:1.1.6'
     compile 'io.reactivex:rxandroid:1.1.0'
@@ -78,8 +78,8 @@ task sourcesJar(type: Jar) {
 
 task javadoc(type: Javadoc) {
     source = android.sourceSets.main.java.srcDirs
+    //ignore doc
     exclude "thirdparty/leobert/pvselectorlib", "com/yalantis/ucrop"
-//,"com/google/zxing"//如果你要排除一些目录下的，要这样写,不能是com.zbar.lib
     classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
 }
 
@@ -116,8 +116,10 @@ install {
                 url siteUrl
                 licenses {
                     license {
-                        name 'The Apache Software License, Version 2.0'
-                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+//                        name 'The Apache Software License, Version 2.0'
+//                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        name 'MIT'
+                        url 'https://opensource.org/licenses/MIT'
                     }
                 }
                 developers {
@@ -158,7 +160,8 @@ bintray {
         name = "pvselectorlib"     // #CONFIG# project name in jcenter
         websiteUrl = siteUrl
         vcsUrl = gitUrl
-        licenses = ["Apache-2.0"]
+        licenses = ["MIT"]
+//        licenses = ["Apache-2.0"]
         publish = true
     }
 }
