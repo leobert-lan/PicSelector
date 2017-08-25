@@ -44,7 +44,7 @@ import java.util.List;
 public class PictureConfig {
 
     public static FunctionConfig config;
-    public static PictureConfig pictureConfig;
+    private static PictureConfig pictureConfig;
 
 
     public static PictureConfig getPictureConfig() {

@@ -48,7 +48,7 @@ public class SweetAlertDialog extends Dialog {
     public Context context;
 
     public SweetAlertDialog(Context context) {
-        super(context, R.style.alert_dialog);
+        super(context, R.style.ucrop_alert_dialog);
         this.context = context;
         setCancelable(true);
         setCanceledOnTouchOutside(false);

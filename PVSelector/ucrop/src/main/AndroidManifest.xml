@@ -29,6 +29,20 @@
     <application
         android:allowBackup="true"
         android:supportsRtl="true">
+
+        <activity android:name=".ui.PictureMultiUCropActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/UcropTheme.Slider" />
+
+        <activity
+            android:name=".ui.PictureSingleUCropActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/UcropTheme.Slider" />
+
     </application>
+
+
 
 </manifest>
