@@ -10,7 +10,7 @@ see Support Blog at [CSDN](http://blog.csdn.net/a774057695/article/details/77533
 
 ## Feature OverView
 
-###Picture
+### Picture
 
 * single or multi picture select modes
 * capture image for select
@@ -20,13 +20,13 @@ see Support Blog at [CSDN](http://blog.csdn.net/a774057695/article/details/77533
 	* open source library:[LuBan](https://github.com/Curzibn/Luban)
 * picture preview，rely on [PhotoView],but it's a very old version one
 
-###Video
+### Video
 
 * single or multi video select modes
 * video preview, with system API
 * record video for select
 
-###UI style configuration
+### UI style configuration
 
 * Style as QQ or WeChat
 * config some important texts and color
