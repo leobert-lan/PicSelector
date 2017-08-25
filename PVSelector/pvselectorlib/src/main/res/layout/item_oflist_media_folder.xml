@@ -31,7 +31,7 @@
     android:padding="8dp">
 
     <ImageView
-        android:id="@+id/first_image"
+        android:id="@+id/item_image_cover"
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:layout_centerVertical="true"
@@ -39,30 +39,30 @@
         android:src="@drawable/ic_placeholder" />
 
     <TextView
-        android:id="@+id/tv_folder_name"
+        android:id="@+id/item_tv_folder_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="5dp"
-        android:layout_toRightOf="@id/first_image"
-        android:text="相机胶卷"
+        android:layout_toRightOf="@id/item_image_cover"
+        android:text="@string/txt_folder_camera"
         android:textColor="@color/ucrop_black"
         android:textSize="16sp" />
 
     <TextView
-        android:id="@+id/image_num"
+        android:id="@+id/item_tv_media_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="5dp"
-        android:layout_toRightOf="@id/tv_folder_name"
+        android:layout_toRightOf="@id/item_tv_folder_name"
         android:text="(0)"
         android:textColor="@color/ucrop_grey"
         android:textSize="16sp" />
 
 
     <ImageView
-        android:id="@+id/iv_more"
+        android:id="@+id/item_img_access_detail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
@@ -71,14 +71,14 @@
         android:src="@drawable/more_1x" />
 
     <TextView
-        android:id="@+id/bottombar_tv_select_count"
+        android:id="@+id/item_tv_selected_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_toLeftOf="@id/iv_more"
+        android:layout_toLeftOf="@id/item_img_access_detail"
         android:background="@drawable/message_oval"
         android:gravity="center"
-        android:text="0"
+        android:text="@string/num_zero"
         android:textColor="@color/ucrop_color_toolbar_widget"
         android:textSize="12sp"
         android:visibility="invisible" />

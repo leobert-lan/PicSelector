@@ -47,7 +47,7 @@ import java.util.List;
 
 import thirdparty.leobert.pvselectorlib.Consts;
 import thirdparty.leobert.pvselectorlib.R;
-import thirdparty.leobert.pvselectorlib.adapter.PictureAlbumDirectoryAdapter;
+import thirdparty.leobert.pvselectorlib.adapter.MediaFolderListAdapter;
 import thirdparty.leobert.pvselectorlib.broadcast.consumers.FinishActionConsumer;
 import thirdparty.leobert.pvselectorlib.decoration.RecycleViewDivider;
 import thirdparty.leobert.pvselectorlib.model.LaunchConfig;
@@ -60,11 +60,11 @@ import thirdparty.leobert.pvselectorlib.observable.ObserverListener;
 public class AlbumDirectoryListActivity
         extends PVBaseActivity
         implements View.OnClickListener,
-        PictureAlbumDirectoryAdapter.OnItemClickListener,
+        MediaFolderListAdapter.OnItemClickListener,
         ObserverListener {
 
     private List<LocalMediaFolder> folders = new ArrayList<>();
-    private PictureAlbumDirectoryAdapter adapter;
+    private MediaFolderListAdapter adapter;
     private RecyclerView recyclerView;
 
     private TextView tvHintEmptyFolder;
@@ -118,7 +118,7 @@ public class AlbumDirectoryListActivity
         rlToolBar.setBackgroundColor(backgroundColor);
         tvOpCancel.setText(getString(R.string.txt_cancel));
 
-        adapter = new PictureAlbumDirectoryAdapter(this);
+        adapter = new MediaFolderListAdapter();
         LinearLayoutManager manager = new LinearLayoutManager(this);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new RecycleViewDivider(
@@ -292,7 +292,7 @@ public class AlbumDirectoryListActivity
     protected void clearReference() {
         // 释放静态变量
         LaunchConfig.getLaunchConfig().resultCallback = null;
-        LaunchConfig.pictureConfig = null;
+        LaunchConfig.launchConfig = null;
         ImagesObservable.getInstance().remove(this);
         ImagesObservable.getInstance().clearLocalFolders();
         ImagesObservable.getInstance().clearLocalMedia();
@@ -331,6 +331,4 @@ public class AlbumDirectoryListActivity
             }
         }
     }
-
-
 }

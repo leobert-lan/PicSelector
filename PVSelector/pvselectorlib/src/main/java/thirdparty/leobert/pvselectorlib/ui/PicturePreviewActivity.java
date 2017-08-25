@@ -133,7 +133,7 @@ public class PicturePreviewActivity extends PVBaseActivity
                 (RelativeLayout) findViewById(R.id.preview_bottom_bar);
         check = (TextView) findViewById(R.id.check);
         tvOpComplete = (TextView) findViewById(R.id.bottombar_tv_select_complete);
-        tvSelectedCount = (TextView) findViewById(R.id.bottombar_tv_select_count);
+        tvSelectedCount = (TextView) findViewById(R.id.item_tv_selected_count);
         tvTitle = (TextView) findViewById(R.id.tv_title);
 
         rlToolBar.setBackgroundColor(backgroundColor);

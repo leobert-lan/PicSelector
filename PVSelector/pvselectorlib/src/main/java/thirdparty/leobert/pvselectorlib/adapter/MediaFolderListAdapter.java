@@ -42,15 +42,16 @@ import java.util.List;
 
 import thirdparty.leobert.pvselectorlib.R;
 
-public class PictureAlbumDirectoryAdapter
-        extends RecyclerView.Adapter<PictureAlbumDirectoryAdapter.ViewHolder> {
-    private Context mContext;
+/**
+ * adapt {@link LocalMediaFolder} data for RecyclerView,
+ */
+public class MediaFolderListAdapter
+        extends RecyclerView.Adapter<MediaFolderListAdapter.ViewHolder> {
     private List<LocalMediaFolder> folders = new ArrayList<>();
 
-    public PictureAlbumDirectoryAdapter(Context mContext) {
-        super();
-        this.mContext = mContext;
-    }
+//    public MediaFolderListAdapter() {
+//        super();
+//    }
 
     public void bindFolderData(List<LocalMediaFolder> folders) {
         this.folders = folders;
@@ -63,38 +64,19 @@ public class PictureAlbumDirectoryAdapter
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(mContext).inflate(R.layout.picture_album_folder_item, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_oflist_media_folder,
+                        parent, false);
         return new ViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         final LocalMediaFolder folder = folders.get(position);
-        String name = folder.getName();
-        int imageNum = folder.getImageNum();
-        String imagePath = folder.getFirstImagePath();
-        if (folder.isChecked()) {
-            holder.tv_img_num.setVisibility(View.VISIBLE);
-            holder.tv_img_num.setText(String.valueOf(folder.getCheckedNum()));
-        } else {
-            holder.tv_img_num.setVisibility(View.INVISIBLE);
-        }
-        int type = folder.getType();
-        if (type == LocalMedia.TYPE_VIDEO) {
-            Glide.with(mContext).load(imagePath).thumbnail(0.5f).into(holder.first_image);
-        } else {
-            Glide.with(mContext)
-                    .load(imagePath)
-                    .placeholder(R.drawable.ic_placeholder)
-                    .error(R.drawable.ic_placeholder)
-                    .centerCrop()
-                    .crossFade()
-                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                    .into(holder.first_image);
 
-        }
-        holder.image_num.setText("(" + imageNum + ")");
-        holder.tv_folder_name.setText(name);
+        holder.onBindData(folder);
+
+        //reset onclick listener
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -110,16 +92,56 @@ public class PictureAlbumDirectoryAdapter
         return folders.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView first_image;
-        TextView tv_folder_name, image_num, tv_img_num;
+    static class ViewHolder extends RecyclerView.ViewHolder {
+        ImageView imgCover;
+        TextView tvFolderName;
+        TextView mediaCount;
+        TextView selectedCount;
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
-            first_image = (ImageView) itemView.findViewById(R.id.first_image);
-            tv_folder_name = (TextView) itemView.findViewById(R.id.tv_folder_name);
-            image_num = (TextView) itemView.findViewById(R.id.image_num);
-            tv_img_num = (TextView) itemView.findViewById(R.id.bottombar_tv_select_count);
+            imgCover = (ImageView) itemView.findViewById(R.id.item_image_cover);
+            tvFolderName = (TextView) itemView.findViewById(R.id.item_tv_folder_name);
+            mediaCount = (TextView) itemView.findViewById(R.id.item_tv_media_count);
+            selectedCount = (TextView) itemView.findViewById(R.id.item_tv_selected_count);
+        }
+
+        public void onBindData(LocalMediaFolder mediaFolder) {
+            String name = mediaFolder.getName();
+            int imageNum = mediaFolder.getImageNum();
+            String imagePath = mediaFolder.getFirstImagePath();
+
+            if (mediaFolder.isChecked()) {
+                selectedCount.setVisibility(View.VISIBLE);
+                selectedCount.setText(String.valueOf(mediaFolder.getCheckedNum()));
+            } else
+                selectedCount.setVisibility(View.INVISIBLE);
+
+            loadCover(imagePath,mediaFolder.getType());
+            mediaCount.setText("(" + imageNum + ")");
+            tvFolderName.setText(name);
+        }
+
+        private void loadCover(String path,@LocalMedia.MediaType int type) {
+            if (type == LocalMedia.TYPE_VIDEO) {
+                Glide.with(getContext())
+                        .load(path)
+                        .thumbnail(0.5f)
+                        .into(imgCover);
+            } else {
+                Glide.with(getContext())
+                        .load(path)
+                        .placeholder(R.drawable.ic_placeholder)
+                        .error(R.drawable.ic_placeholder)
+                        .centerCrop()
+                        .crossFade()
+                        .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                        .into(imgCover);
+            }
+        }
+
+        private Context getContext() {
+            return itemView.getContext();
         }
     }
 

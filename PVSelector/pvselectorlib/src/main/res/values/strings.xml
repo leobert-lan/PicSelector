@@ -50,4 +50,5 @@
     <string name="txt_complete_unexpected">请选择</string>
     <string name="txt_preview">预览</string>
     <string name="txt_cancel">取消</string>
+    <string name="txt_folder_camera">相机胶卷</string>
 </resources>

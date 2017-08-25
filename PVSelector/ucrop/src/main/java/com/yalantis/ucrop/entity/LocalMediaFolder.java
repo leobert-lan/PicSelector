@@ -42,6 +42,7 @@ public class LocalMediaFolder implements Serializable {
 
     private List<LocalMedia> images = new ArrayList<>();
 
+    @LocalMedia.MediaType
     public int getType() {
         return type;
     }

@@ -128,6 +128,6 @@ public class PictureExternalPreviewActivity extends FragmentActivity {
     protected void onDestroy() {
         super.onDestroy();
         LaunchConfig.getLaunchConfig().resultCallback = null;
-        LaunchConfig.pictureConfig = null;
+        LaunchConfig.launchConfig = null;
     }
 }

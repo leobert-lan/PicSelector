@@ -267,7 +267,7 @@ public class MediaFolderContentDisplayActivity extends PVBaseActivity
         tvOpCancel = (TextView) findViewById(R.id.album_toolbar_rightop);
         tvOpComplete = (TextView) findViewById(R.id.bottombar_tv_select_complete);
         btnPreview = (Button) findViewById(R.id.bottombar_btn_preview);
-        tvSelectedCount = (TextView) findViewById(R.id.bottombar_tv_select_count);
+        tvSelectedCount = (TextView) findViewById(R.id.item_tv_selected_count);
 
         //UI style
         rlToolBar.setBackgroundColor(backgroundColor);
@@ -907,11 +907,4 @@ public class MediaFolderContentDisplayActivity extends PVBaseActivity
         }
     }
 
-//    @Override
-//    protected void onDestroy() {
-//        super.onDestroy();
-//        if (receiver != null) {
-//            unregisterReceiver(receiver);
-//        }
-//    }
 }

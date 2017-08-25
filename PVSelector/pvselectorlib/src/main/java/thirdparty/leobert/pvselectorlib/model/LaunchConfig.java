@@ -44,7 +44,7 @@ import java.util.List;
 public class LaunchConfig {
 
     public static FunctionConfig config;
-    private static LaunchConfig launchConfig;
+    public static LaunchConfig launchConfig;
 
 
     public static LaunchConfig getLaunchConfig() {
