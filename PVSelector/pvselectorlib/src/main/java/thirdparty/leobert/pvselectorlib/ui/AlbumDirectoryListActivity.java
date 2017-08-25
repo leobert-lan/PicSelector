@@ -50,7 +50,7 @@ import thirdparty.leobert.pvselectorlib.R;
 import thirdparty.leobert.pvselectorlib.adapter.PictureAlbumDirectoryAdapter;
 import thirdparty.leobert.pvselectorlib.broadcast.consumers.FinishActionConsumer;
 import thirdparty.leobert.pvselectorlib.decoration.RecycleViewDivider;
-import thirdparty.leobert.pvselectorlib.model.PictureConfig;
+import thirdparty.leobert.pvselectorlib.model.LaunchConfig;
 import thirdparty.leobert.pvselectorlib.observable.ImagesObservable;
 import thirdparty.leobert.pvselectorlib.observable.ObserverListener;
 
@@ -291,8 +291,8 @@ public class AlbumDirectoryListActivity
 
     protected void clearReference() {
         // 释放静态变量
-        PictureConfig.getPictureConfig().resultCallback = null;
-        PictureConfig.pictureConfig = null;
+        LaunchConfig.getLaunchConfig().resultCallback = null;
+        LaunchConfig.pictureConfig = null;
         ImagesObservable.getInstance().remove(this);
         ImagesObservable.getInstance().clearLocalFolders();
         ImagesObservable.getInstance().clearLocalMedia();

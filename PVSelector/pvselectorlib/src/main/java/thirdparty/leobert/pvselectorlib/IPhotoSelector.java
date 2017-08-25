@@ -29,7 +29,7 @@ import com.yalantis.ucrop.entity.LocalMedia;
 import java.util.List;
 
 import thirdparty.leobert.pvselectorlib.model.FunctionConfig;
-import thirdparty.leobert.pvselectorlib.model.PictureConfig;
+import thirdparty.leobert.pvselectorlib.model.LaunchConfig;
 
 /**
  * <p><b>Package</b> thirdparty.leobert.pvselectorlib
@@ -103,6 +103,6 @@ public interface IPhotoSelector extends ICustomStyle<IPhotoSelector>{
      */
     IPhotoSelector setSelectedMedia(List<LocalMedia> selectMedia);
 
-    void launch(PictureConfig.OnSelectResultCallback resultCallback);
+    void launch(LaunchConfig.OnSelectResultCallback resultCallback);
 
 }

@@ -41,21 +41,21 @@ import java.io.Serializable;
 import java.util.List;
 
 
-public class PictureConfig {
+public class LaunchConfig {
 
     public static FunctionConfig config;
-    private static PictureConfig pictureConfig;
+    private static LaunchConfig launchConfig;
 
 
-    public static PictureConfig getPictureConfig() {
-        if (pictureConfig == null) {
-            pictureConfig = new PictureConfig();
+    public static LaunchConfig getLaunchConfig() {
+        if (launchConfig == null) {
+            launchConfig = new LaunchConfig();
         }
 
-        return pictureConfig;
+        return launchConfig;
     }
 
-    public PictureConfig() {
+    public LaunchConfig() {
         super();
     }
 

@@ -36,7 +36,7 @@ import android.widget.TextView;
 
 import thirdparty.leobert.pvselectorlib.Consts;
 import thirdparty.leobert.pvselectorlib.R;
-import thirdparty.leobert.pvselectorlib.model.PictureConfig;
+import thirdparty.leobert.pvselectorlib.model.LaunchConfig;
 import thirdparty.leobert.pvselectorlib.widget.PreviewViewPager;
 import com.yalantis.ucrop.entity.LocalMedia;
 
@@ -127,7 +127,7 @@ public class PictureExternalPreviewActivity extends FragmentActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        PictureConfig.getPictureConfig().resultCallback = null;
-        PictureConfig.pictureConfig = null;
+        LaunchConfig.getLaunchConfig().resultCallback = null;
+        LaunchConfig.pictureConfig = null;
     }
 }

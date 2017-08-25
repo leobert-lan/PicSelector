@@ -77,7 +77,7 @@ import thirdparty.leobert.pvselectorlib.compress.LuBanOptions;
 import thirdparty.leobert.pvselectorlib.decoration.GridSpacingItemDecoration;
 import thirdparty.leobert.pvselectorlib.model.FunctionConfig;
 import thirdparty.leobert.pvselectorlib.model.LocalMediaLoader;
-import thirdparty.leobert.pvselectorlib.model.PictureConfig;
+import thirdparty.leobert.pvselectorlib.model.LaunchConfig;
 import thirdparty.leobert.pvselectorlib.observable.ImagesObservable;
 
 /**
@@ -787,8 +787,8 @@ public class MediaFolderContentDisplayActivity extends PVBaseActivity
         for (LocalMedia media : images) {
             result.add(media);
         }
-        PictureConfig.OnSelectResultCallback resultCallback =
-                PictureConfig.getPictureConfig().getResultCallback();
+        LaunchConfig.OnSelectResultCallback resultCallback =
+                LaunchConfig.getLaunchConfig().getResultCallback();
         if (resultCallback != null) {
             resultCallback.onSelectSuccess(result);
         }

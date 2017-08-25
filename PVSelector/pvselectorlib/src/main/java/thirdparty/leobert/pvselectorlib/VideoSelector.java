@@ -32,7 +32,7 @@ import java.lang.ref.WeakReference;
 import java.util.List;
 
 import thirdparty.leobert.pvselectorlib.model.FunctionConfig;
-import thirdparty.leobert.pvselectorlib.model.PictureConfig;
+import thirdparty.leobert.pvselectorlib.model.LaunchConfig;
 
 /**
  * 视频选择器
@@ -118,15 +118,15 @@ class VideoSelector extends AbsSelector<IVideoSelector>
     }
 
     @Override
-    public void launch(PictureConfig.OnSelectResultCallback resultCallback) {
+    public void launch(LaunchConfig.OnSelectResultCallback resultCallback) {
         Context context = contextRef.get();
         if (context == null) {
             Logger.e(VideoSelector.class.getSimpleName(),
                     "context is null,maybe activity finished");
             return;
         }
-        PictureConfig.init(config);
-        PictureConfig.getPictureConfig().openPhoto(context, resultCallback);
+        LaunchConfig.init(config);
+        LaunchConfig.getLaunchConfig().openPhoto(context, resultCallback);
     }
 
     @Override

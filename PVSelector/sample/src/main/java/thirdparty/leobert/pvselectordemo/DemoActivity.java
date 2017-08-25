@@ -47,7 +47,7 @@ import thirdparty.leobert.pvselectordemo.util.FullyGridLayoutManager;
 import thirdparty.leobert.pvselectorlib.PVSelector;
 import thirdparty.leobert.pvselectorlib.compress.CompressConfig;
 import thirdparty.leobert.pvselectorlib.model.FunctionConfig;
-import thirdparty.leobert.pvselectorlib.model.PictureConfig;
+import thirdparty.leobert.pvselectorlib.model.LaunchConfig;
 
 public class DemoActivity extends Activity implements RadioGroup.OnCheckedChangeListener {
 
@@ -148,7 +148,7 @@ public class DemoActivity extends Activity implements RadioGroup.OnCheckedChange
             @Override
             public void onItemClick(int position, View v) {
                 // 这里可预览图片
-                PictureConfig.getPictureConfig()
+                LaunchConfig.getLaunchConfig()
                         .externalPicturePreview(mContext, position, selectMedia);
             }
         });
@@ -257,8 +257,9 @@ public class DemoActivity extends Activity implements RadioGroup.OnCheckedChange
                     }
 
                     // 先初始化参数配置，在启动相册
-                    PictureConfig.init(config);
-                    PictureConfig.getPictureConfig().openPhoto(mContext, resultCallback);
+                    LaunchConfig.init(config);
+                    LaunchConfig.getLaunchConfig()
+                            .openPhoto(mContext, resultCallback);
 
                     break;
                 case 1:
@@ -273,7 +274,7 @@ public class DemoActivity extends Activity implements RadioGroup.OnCheckedChange
     /**
      * 图片回调方法
      */
-    private PictureConfig.OnSelectResultCallback resultCallback = new PictureConfig.OnSelectResultCallback() {
+    private LaunchConfig.OnSelectResultCallback resultCallback = new LaunchConfig.OnSelectResultCallback() {
         @Override
         public void onSelectSuccess(List<LocalMedia> resultList) {
             selectMedia = resultList;

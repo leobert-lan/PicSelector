@@ -33,7 +33,7 @@ import java.util.List;
 
 import thirdparty.leobert.pvselectorlib.compress.CompressConfig;
 import thirdparty.leobert.pvselectorlib.model.FunctionConfig;
-import thirdparty.leobert.pvselectorlib.model.PictureConfig;
+import thirdparty.leobert.pvselectorlib.model.LaunchConfig;
 
 /**
  * 相片选择实现
@@ -129,14 +129,14 @@ import thirdparty.leobert.pvselectorlib.model.PictureConfig;
     }
 
     @Override
-    public void launch(PictureConfig.OnSelectResultCallback resultCallback) {
+    public void launch(LaunchConfig.OnSelectResultCallback resultCallback) {
         Context context = contextRef.get();
         if (context == null) {
             Logger.e(PhotoSelector.class.getSimpleName(), "context is null,maybe activity finished");
             return;
         }
-        PictureConfig.init(config);
-        PictureConfig.getPictureConfig().openPhoto(context, resultCallback);
+        LaunchConfig.init(config);
+        LaunchConfig.getLaunchConfig().openPhoto(context, resultCallback);
     }
 
 
