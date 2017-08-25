@@ -34,19 +34,19 @@ import java.io.IOException;
  * <p><b>Package:</b> thirdparty.leobert.pvselectorlib.rotate </p>
  * <p><b>Project:</b> PicSelectorDemo </p>
  * <p><b>Classname:</b> RotateUtil </p>
- * <p><b>Description:</b> TODO </p>
+ * <p><b>Description:</b> Util for image to read Rotate-Degree info in Exif,and generate
+ * rotated image</p>
  * Created by leobert on 2017/5/5.
  */
 
 public class RotateUtil {
 
-
     public static int getBitmapDegree(String path) {
         int degree = 0;
         try {
-            // 从指定路径下读取图片，并获取其EXIF信息
+            // load exif info by the given file path
             ExifInterface exifInterface = new ExifInterface(path);
-            // 获取图片的旋转信息
+
             int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION,
                     ExifInterface.ORIENTATION_NORMAL);
             switch (orientation) {
@@ -69,13 +69,16 @@ public class RotateUtil {
     public static Bitmap rotateBitmapByDegree(Bitmap bm, int degree) {
         Bitmap returnBm = null;
 
-        // 根据旋转角度，生成旋转矩阵
+        // generate the rotate matrix by degree
+
         Matrix matrix = new Matrix();
         matrix.postRotate(degree);
         try {
-            // 将原始图片按照旋转矩阵进行旋转，并得到新的图片
-            returnBm = Bitmap.createBitmap(bm, 0, 0, bm.getWidth(), bm.getHeight(), matrix, true);
+            // generate the degree rotated image
+            returnBm = Bitmap.createBitmap(bm, 0, 0,
+                    bm.getWidth(), bm.getHeight(), matrix, true);
         } catch (OutOfMemoryError e) {
+            e.printStackTrace();
         }
         if (returnBm == null) {
             returnBm = bm;
