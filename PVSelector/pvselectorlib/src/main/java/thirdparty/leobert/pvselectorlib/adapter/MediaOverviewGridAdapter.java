@@ -51,7 +51,11 @@ import java.util.List;
 import thirdparty.leobert.pvselectorlib.R;
 import thirdparty.leobert.pvselectorlib.model.FunctionConfig;
 
-public class PictureImageGridAdapter
+/**
+ * adapt {@link LocalMedia} data for RecyclerView, that display all medias
+ * of one media folder as grid style
+ */
+public class MediaOverviewGridAdapter
         extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 
@@ -78,14 +82,14 @@ public class PictureImageGridAdapter
      */
     private boolean displayCandidateNo;
 
-    public PictureImageGridAdapter(Context context,
-                                   boolean showCamera,
-                                   int maxSelectNum,
-                                   int mode,
-                                   boolean enablePreviewPicture,
-                                   boolean enablePreviewVideo,
-                                   int cbDrawable,
-                                   boolean displayCandidateNo) {
+    public MediaOverviewGridAdapter(Context context,
+                                    boolean showCamera,
+                                    int maxSelectNum,
+                                    int mode,
+                                    boolean enablePreviewPicture,
+                                    boolean enablePreviewVideo,
+                                    int cbDrawable,
+                                    boolean displayCandidateNo) {
         this.context = context;
         this.selectMode = mode;
         this.showCamera = showCamera;
@@ -129,13 +133,13 @@ public class PictureImageGridAdapter
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent,
+                                                      int viewType) {
         if (viewType == VIEW_TYPE_CAMERA) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.picture_item_camera,
-                    parent, false);
-            return new HeaderViewHolder(view);
+            return  HeaderViewHolder.create(parent);
         } else {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.picture_image_grid_item,
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.item_ofgrid_media_overview,
                     parent, false);
             return new ViewHolder(view);
         }
@@ -188,19 +192,28 @@ public class PictureImageGridAdapter
         return showCamera ? datas.size() + 1 : datas.size();
     }
 
-    public class HeaderViewHolder extends RecyclerView.ViewHolder {
+    private static class HeaderViewHolder extends RecyclerView.ViewHolder {
+        static HeaderViewHolder create(ViewGroup parent) {
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.item_ofgrid_camera,
+                            parent, false);
+            return new HeaderViewHolder(view);
+        }
+
         View headerView;
 
-        public HeaderViewHolder(View itemView) {
+        HeaderViewHolder(View itemView) {
             super(itemView);
             headerView = itemView;
         }
     }
 
     private class ViewHolder extends RecyclerView.ViewHolder {
+
+
         ImageView picture;
         TextView check;
-        TextView tv_duration;
+        TextView tvDuration;
         View contentView;
         LinearLayout ll_check;
         RelativeLayout rl_duration;
@@ -211,7 +224,7 @@ public class PictureImageGridAdapter
             picture = (ImageView) itemView.findViewById(R.id.picture);
             check = (TextView) itemView.findViewById(R.id.check);
             ll_check = (LinearLayout) itemView.findViewById(R.id.toolbar_area_selector);
-            tv_duration = (TextView) itemView.findViewById(R.id.tv_duration);
+            tvDuration = (TextView) itemView.findViewById(R.id.tv_duration);
             rl_duration = (RelativeLayout) itemView.findViewById(R.id.rl_duration);
         }
 
@@ -294,7 +307,7 @@ public class PictureImageGridAdapter
             Glide.with(context).load(path).into(picture);
             rl_duration.setVisibility(View.VISIBLE);
             String _s = "时长:" + timeParse(duration);
-            tv_duration.setText(_s);
+            tvDuration.setText(_s);
         }
 
         private void asPicture(String path) {
@@ -322,7 +335,8 @@ public class PictureImageGridAdapter
     /**
      * 选择按钮更新
      */
-    private void refreshCandidateNo(ViewHolder viewHolder, LocalMedia imageBean) {
+    private void refreshCandidateNo(ViewHolder viewHolder,
+                                    LocalMedia imageBean) {
         viewHolder.check.setText("");
         for (LocalMedia media : selectedMedia) {
             if (media.getPath().equals(imageBean.getPath())) {
@@ -423,7 +437,7 @@ public class PictureImageGridAdapter
      * @param duration
      * @return
      */
-    public String timeParse(long duration) {
+    private String timeParse(long duration) {
         String time = "";
         long minute = duration / 60000;
         long seconds = duration % 60000;

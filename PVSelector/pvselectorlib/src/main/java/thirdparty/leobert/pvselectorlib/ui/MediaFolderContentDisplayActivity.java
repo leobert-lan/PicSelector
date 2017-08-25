@@ -66,7 +66,7 @@ import java.util.List;
 import thirdparty.leobert.pvselectorlib.Consts;
 import thirdparty.leobert.pvselectorlib.Logger;
 import thirdparty.leobert.pvselectorlib.R;
-import thirdparty.leobert.pvselectorlib.adapter.PictureImageGridAdapter;
+import thirdparty.leobert.pvselectorlib.adapter.MediaOverviewGridAdapter;
 import thirdparty.leobert.pvselectorlib.broadcast.consumers.FinishActionConsumer;
 import thirdparty.leobert.pvselectorlib.broadcast.consumers.ImageCroppedActionConsumer;
 import thirdparty.leobert.pvselectorlib.broadcast.consumers.RefreshDataActionConsumer;
@@ -85,7 +85,7 @@ import thirdparty.leobert.pvselectorlib.observable.ImagesObservable;
  */
 public class MediaFolderContentDisplayActivity extends PVBaseActivity
         implements View.OnClickListener,
-        PictureImageGridAdapter.OnPhotoSelectChangedListener {
+        MediaOverviewGridAdapter.OnPhotoSelectChangedListener {
     public final String TAG = "FolderContentDisplay";
 //            MediaFolderContentDisplayActivity.class.getSimpleName(); too long
 
@@ -117,7 +117,7 @@ public class MediaFolderContentDisplayActivity extends PVBaseActivity
      */
     private Button btnPreview;
 
-    private PictureImageGridAdapter adapter;
+    private MediaOverviewGridAdapter adapter;
     private String cameraPath;
     private SweetAlertDialog dialog;
     private List<LocalMediaFolder> folders = new ArrayList<>();
@@ -246,7 +246,7 @@ public class MediaFolderContentDisplayActivity extends PVBaseActivity
                 showCamera = false;
             }
         }
-        adapter = new PictureImageGridAdapter(this, showCamera, maxSelectNum, selectMode, enablePreview, enablePreviewVideo, cb_drawable, displayCandidateNo);
+        adapter = new MediaOverviewGridAdapter(this, showCamera, maxSelectNum, selectMode, enablePreview, enablePreviewVideo, cb_drawable, displayCandidateNo);
         recyclerView.setAdapter(adapter);
         if (selectMedias.size() > 0) {
             ChangeImageNumber(selectMedias);
