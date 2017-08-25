@@ -1,1 +1,1 @@
-include ':app', ':pvselectorlib', 'ucrop'
+include ':sample', ':pvselectorlib', 'ucrop'
