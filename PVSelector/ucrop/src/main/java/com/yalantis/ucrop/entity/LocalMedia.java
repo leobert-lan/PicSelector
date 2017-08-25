@@ -53,7 +53,7 @@ public class LocalMedia implements Serializable {
     private long lastUpdateAt;
     private boolean isCropped;
 //    /**
-//    private boolean isChecked;
+//    private boolean isSelectedMediaContains;
 //     *
 //     */
 //    private int position;
@@ -80,7 +80,7 @@ public class LocalMedia implements Serializable {
         this.path = path;
         this.duration = duration;
         this.lastUpdateAt = lastUpdateAt;
-//        this.isChecked = isChecked;
+//        this.isSelectedMediaContains = isSelectedMediaContains;
 //        this.position = position;
 //        this.num = num;
         this.type = type;
@@ -168,11 +168,11 @@ public class LocalMedia implements Serializable {
     }
 
 //    public boolean getIsChecked() {
-//        return this.isChecked;
+//        return this.isSelectedMediaContains;
 //    }
 //
-//    public void setIsChecked(boolean isChecked) {
-//        this.isChecked = isChecked;
+//    public void setIsChecked(boolean isSelectedMediaContains) {
+//        this.isSelectedMediaContains = isSelectedMediaContains;
 //    }
 
 //    public int getPosition() {

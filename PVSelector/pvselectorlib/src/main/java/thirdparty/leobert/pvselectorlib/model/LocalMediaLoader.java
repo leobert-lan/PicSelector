@@ -126,12 +126,12 @@ public class LocalMediaLoader {
                                         folder.getImages().add(image);
                                         folder.setType(type);
                                         index++;
-                                        folder.setImageNum(folder.getImageNum() + 1);
+                                        folder.setMediaCount(folder.getMediaCount() + 1);
                                         // 最近相册中  只添加最新的100条
                                         if (index <= 100) {
                                             allImages.add(image);
                                             allImageFolder.setType(type);
-                                            allImageFolder.setImageNum(allImageFolder.getImageNum() + 1);
+                                            allImageFolder.setMediaCount(allImageFolder.getMediaCount() + 1);
                                         }
 
                                     } while (data.moveToNext());
@@ -180,8 +180,8 @@ public class LocalMediaLoader {
                 if (lhs.getImages() == null || rhs.getImages() == null) {
                     return 0;
                 }
-                int lSize = lhs.getImageNum();
-                int rSize = rhs.getImageNum();
+                int lSize = lhs.getMediaCount();
+                int rSize = rhs.getMediaCount();
                 return lSize == rSize ? 0 : (lSize < rSize ? 1 : -1);
             }
         });

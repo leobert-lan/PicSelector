@@ -29,13 +29,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+/**
+ * refers to the folder contains media file
+ */
 public class LocalMediaFolder implements Serializable {
     private String name;
     private String path;
     private String firstImagePath;
-    private int imageNum;
-    private boolean isChecked;
-    private int checkedNum;
+    private int mediaCount;
+    private boolean selectedMediaContains;
+    private int selectedMediaCount;
 
     @LocalMedia.MediaType
     private int type;
@@ -51,20 +54,21 @@ public class LocalMediaFolder implements Serializable {
         this.type = type;
     }
 
-    public int getCheckedNum() {
-        return checkedNum;
+    public int getSelectedMediaCount() {
+        return selectedMediaCount;
     }
 
-    public void setCheckedNum(int checkedNum) {
-        this.checkedNum = checkedNum;
+    public void setSelectedMediaCount(int selectedMediaCount) {
+        this.selectedMediaCount = selectedMediaCount;
     }
 
-    public boolean isChecked() {
-        return isChecked;
+    public boolean isSelectedMediaContains() {
+
+        return selectedMediaContains;
     }
 
-    public void setChecked(boolean checked) {
-        isChecked = checked;
+    public void setSelectedMediaContains(boolean contains) {
+        this.selectedMediaContains = contains;
     }
 
     public String getName() {
@@ -91,12 +95,12 @@ public class LocalMediaFolder implements Serializable {
         this.firstImagePath = firstImagePath;
     }
 
-    public int getImageNum() {
-        return imageNum;
+    public int getMediaCount() {
+        return mediaCount;
     }
 
-    public void setImageNum(int imageNum) {
-        this.imageNum = imageNum;
+    public void setMediaCount(int mediaCount) {
+        this.mediaCount = mediaCount;
     }
 
     public List<LocalMedia> getImages() {

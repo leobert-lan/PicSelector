@@ -185,9 +185,9 @@ public class AlbumDirectoryListActivity
             List<LocalMediaFolder> folders = adapter.getFolderData();
             for (LocalMediaFolder folder : folders) {
                 // 只重置之前有选中过的文件夹，因为有可能也取消选中的
-                if (folder.isChecked()) {
-                    folder.setCheckedNum(0);
-                    folder.setChecked(false);
+                if (folder.isSelectedMediaContains()) {
+                    folder.setSelectedMediaCount(0);
+                    folder.setSelectedMediaContains(false);
                 }
             }
 
@@ -200,8 +200,8 @@ public class AlbumDirectoryListActivity
                         for (LocalMedia m : medias) {
                             if (path.equals(m.getPath())) {
                                 num++;
-                                folder.setChecked(true);
-                                folder.setCheckedNum(num);
+                                folder.setSelectedMediaContains(true);
+                                folder.setSelectedMediaCount(num);
                             }
                         }
                     }

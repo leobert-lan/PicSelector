@@ -708,7 +708,7 @@ public class MediaFolderContentDisplayActivity extends PVBaseActivity
                     LocalMediaFolder folder = getImageFolder(media.getPath(), folders);
                     // 更新当前图片所属文件夹
                     folder.getImages().add(0, media);// 插入到第一个位置
-                    folder.setImageNum(folder.getImageNum() + 1);
+                    folder.setMediaCount(folder.getMediaCount() + 1);
                     folder.setFirstImagePath(media.getPath());
                     folder.setType(type);
 
@@ -723,7 +723,7 @@ public class MediaFolderContentDisplayActivity extends PVBaseActivity
                     List<LocalMedia> images = adapter.getDatas();
                     images.add(0, media);
                     mediaFolder.setImages(images);
-                    mediaFolder.setImageNum(mediaFolder.getImages().size());
+                    mediaFolder.setMediaCount(mediaFolder.getImages().size());
                     // 没有到最大选择量 才做默认选中刚拍好的
                     if (adapter.getSelectedImages().size() < maxSelectNum) {
                         List<LocalMedia> selectedImages = adapter.getSelectedImages();

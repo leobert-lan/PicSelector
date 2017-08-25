@@ -108,12 +108,12 @@ public class MediaFolderListAdapter
 
         public void onBindData(LocalMediaFolder mediaFolder) {
             String name = mediaFolder.getName();
-            int imageNum = mediaFolder.getImageNum();
+            int imageNum = mediaFolder.getMediaCount();
             String imagePath = mediaFolder.getFirstImagePath();
 
-            if (mediaFolder.isChecked()) {
+            if (mediaFolder.isSelectedMediaContains()) {
                 selectedCount.setVisibility(View.VISIBLE);
-                selectedCount.setText(String.valueOf(mediaFolder.getCheckedNum()));
+                selectedCount.setText(String.valueOf(mediaFolder.getSelectedMediaCount()));
             } else
                 selectedCount.setVisibility(View.INVISIBLE);
 
