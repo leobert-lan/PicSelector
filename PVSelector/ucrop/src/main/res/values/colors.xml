@@ -58,4 +58,6 @@
     <color name="ucrop_bar_grey_90">#dd393a3e</color>
     <color name="ucrop_blue">#00AFFF</color>
 
+    <color name="ucrop_success_tick">#A5DC86</color>
+
 </resources>

@@ -52,7 +52,7 @@
             android:layout_marginTop="10dp"
             android:singleLine="true"
             android:text="处理中..."
-            android:textColor="#FFFFFF"
+            android:textColor="@android:color/white"
             android:textSize="14sp"
             android:textStyle="normal" />
 

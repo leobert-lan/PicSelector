@@ -52,8 +52,10 @@ public class SweetAlertDialog extends Dialog {
         this.context = context;
         setCancelable(true);
         setCanceledOnTouchOutside(false);
-        mModalInAnim = (AnimationSet) OptAnimationLoader.loadAnimation(getContext(), R.anim.modal_in);
-        mModalOutAnim = (AnimationSet) OptAnimationLoader.loadAnimation(getContext(), R.anim.modal_out);
+        mModalInAnim = (AnimationSet) OptAnimationLoader
+                .loadAnimation(getContext(), R.anim.modal_in);
+        mModalOutAnim = (AnimationSet) OptAnimationLoader
+                .loadAnimation(getContext(), R.anim.modal_out);
         mModalOutAnim.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
@@ -97,7 +99,8 @@ public class SweetAlertDialog extends Dialog {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.picture_alert_dialog);
 
-        mDialogView = getWindow().getDecorView().findViewById(android.R.id.content);
+        mDialogView = getWindow().getDecorView()
+                .findViewById(android.R.id.content);
         mTitleTextView = (TextView) findViewById(R.id.title_text);
         setTitleText(mTitleText);
     }

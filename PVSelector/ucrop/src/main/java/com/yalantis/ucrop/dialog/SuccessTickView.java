@@ -26,7 +26,6 @@ package com.yalantis.ucrop.dialog;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.support.v4.content.ContextCompat;
@@ -66,7 +65,8 @@ public class SuccessTickView extends View {
 
     private void init() {
         mPaint = new Paint();
-        mPaint.setColor(ContextCompat.getColor(context, Color.parseColor("#A5DC86")));
+        mPaint.setColor(ContextCompat.getColor(context, R.color.ucrop_success_tick));
+
         mLeftRectWidth = CONST_LEFT_RECT_W;
         mRightRectWidth = CONST_RIGHT_RECT_W;
         mLeftRectGrowMode = false;
