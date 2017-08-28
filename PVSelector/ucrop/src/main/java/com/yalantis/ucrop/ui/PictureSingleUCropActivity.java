@@ -34,9 +34,10 @@ import com.yalantis.ucrop.UCrop;
 import com.yalantis.ucrop.UcropConsts;
 import com.yalantis.ucrop.entity.LocalMedia;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.yalantis.ucrop.entity.LocalMedia.asArrayList;
 
 
 public class PictureSingleUCropActivity extends UCropActivity {
@@ -74,8 +75,8 @@ public class PictureSingleUCropActivity extends UCropActivity {
         result.add(media);
         sendBroadcast(new Intent()
                 .setAction(UcropConsts.BcActions.ACTION_IMAGE_CROPPED)
-                .putExtra(UcropConsts.Extra.EXTRA_SERIALIZABLE_RESULT,
-                        (Serializable) result));
+                .putParcelableArrayListExtra(UcropConsts.Extra.EXTRA_ARRAYLIST_LOCALMEDIA,
+                        asArrayList(result)));
         finish();
         overridePendingTransition(0, R.anim.hold);
     }

@@ -49,7 +49,6 @@ import com.yalantis.ucrop.entity.LocalMedia;
 import com.yalantis.ucrop.util.ToolbarUtil;
 
 import java.io.File;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,6 +59,8 @@ import thirdparty.leobert.pvselectorlib.broadcast.consumers.MultiCropCompleteAct
 import thirdparty.leobert.pvselectorlib.model.FunctionConfig;
 import thirdparty.leobert.pvselectorlib.observable.ImagesObservable;
 import thirdparty.leobert.pvselectorlib.widget.PreviewViewPager;
+
+import static com.yalantis.ucrop.entity.LocalMedia.asArrayList;
 
 public class PicturePreviewActivity extends PVBaseActivity
         implements View.OnClickListener {
@@ -111,12 +112,13 @@ public class PicturePreviewActivity extends PVBaseActivity
 
         if (from_bottom_preview)
             // 底部预览按钮过来
-            datas = (List<LocalMedia>) getIntent().getSerializableExtra(Consts.Extra.EXTRA_PREVIEW_LIST);
+            datas = getIntent()
+                    .getParcelableArrayListExtra(Consts.Extra.EXTRA_PREVIEW_LIST);
         else
             datas = ImagesObservable.getInstance().readLocalMedias();
 
-        selectImages = (List<LocalMedia>) getIntent()
-                .getSerializableExtra(Consts.Extra.EXTRA_PREVIEW_SELECT_LIST);
+        selectImages = getIntent()
+                .getParcelableArrayListExtra(Consts.Extra.EXTRA_PREVIEW_SELECT_LIST);
 
         initUiInstance();
         initViewPageAdapterData();
@@ -320,9 +322,9 @@ public class PicturePreviewActivity extends PVBaseActivity
                 @Override
                 public void run() {
                     sendBroadcast(new Intent()
-                            .setAction("app.action.refresh.data")
-                            .putExtra(Consts.Extra.EXTRA_PREVIEW_SELECT_LIST,
-                                    (Serializable) selectImages));
+                            .setAction(Consts.BcActions.ACTION_REFRESH_DATA)
+                            .putParcelableArrayListExtra(Consts.Extra.EXTRA_PREVIEW_SELECT_LIST,
+                                    asArrayList(selectImages)));
                 }
             }, 100);
         }
@@ -371,7 +373,8 @@ public class PicturePreviewActivity extends PVBaseActivity
         }
         sendBroadcast(new Intent()
                 .setAction(Consts.BcActions.ACTION_IMAGE_CROPPED)
-                .putExtra(Consts.Extra.EXTRA_SERIALIZABLE_RESULT, (Serializable) result));
+                .putParcelableArrayListExtra(Consts.Extra.EXTRA_ARRAYLIST_LOCALMEDIA,
+                        asArrayList(result)));
         finish();
         overridePendingTransition(0, R.anim.slide_bottom_out);
     }

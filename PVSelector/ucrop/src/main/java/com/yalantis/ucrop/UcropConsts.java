@@ -35,7 +35,7 @@ package com.yalantis.ucrop;
 public interface UcropConsts {
     interface Extra {
 
-        String EXTRA_SERIALIZABLE_RESULT = "DATA_RESULT_SERIALIZABLE";
+        String EXTRA_ARRAYLIST_LOCALMEDIA = "DATA_ARRAYLIST_LOCALMEDIA";
 
         /**
          * used to tag the position of the current media(only Picture)

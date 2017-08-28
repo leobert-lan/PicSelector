@@ -41,13 +41,14 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.yalantis.ucrop.entity.LocalMedia;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import thirdparty.leobert.pvselectorlib.Consts;
 import thirdparty.leobert.pvselectorlib.R;
 import uk.co.senab.photoview.PhotoViewAttacher;
+
+import static com.yalantis.ucrop.entity.LocalMedia.asArrayList;
 
 public class PicturePreviewFragment extends Fragment {
     public static final String PATH = "path";
@@ -57,8 +58,8 @@ public class PicturePreviewFragment extends Fragment {
         PicturePreviewFragment fragment = new PicturePreviewFragment();
         Bundle bundle = new Bundle();
         bundle.putString(PATH, path);
-        bundle.putSerializable(Consts.Extra.EXTRA_PREVIEW_SELECT_LIST,
-                (Serializable) medias);
+        bundle.putParcelableArrayList(Consts.Extra.EXTRA_PREVIEW_SELECT_LIST,
+                asArrayList(medias));
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -70,8 +71,8 @@ public class PicturePreviewFragment extends Fragment {
         final ImageView imageView =
                 (ImageView) contentView.findViewById(R.id.preview_image);
         final PhotoViewAttacher mAttacher = new PhotoViewAttacher(imageView);
-        selectImages = (List<LocalMedia>) getArguments()
-                .getSerializable(Consts.Extra.EXTRA_PREVIEW_SELECT_LIST);
+        selectImages = getArguments()
+                .getParcelableArrayList(Consts.Extra.EXTRA_PREVIEW_SELECT_LIST);
         String path = getArguments().getString(PATH);
         Glide.with(container.getContext())
                 .load(path)
@@ -102,8 +103,8 @@ public class PicturePreviewFragment extends Fragment {
         //data not used
         getActivity().setResult(Activity.RESULT_OK,
                 new Intent().putExtra(Consts.Extra.PV_TYPE, LocalMedia.TYPE_PICTURE)
-                        .putExtra(Consts.Extra.EXTRA_PREVIEW_SELECT_LIST,
-                                (Serializable) selectImages));
+                        .putParcelableArrayListExtra(Consts.Extra.EXTRA_PREVIEW_SELECT_LIST,
+                                asArrayList(selectImages)));
         getActivity().finish();
     }
 }

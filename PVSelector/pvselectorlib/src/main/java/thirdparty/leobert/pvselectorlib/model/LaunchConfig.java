@@ -28,17 +28,18 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 
+import com.yalantis.ucrop.entity.LocalMedia;
+import com.yalantis.ucrop.util.Utils;
+
+import java.util.List;
+
 import thirdparty.leobert.pvselectorlib.Consts;
 import thirdparty.leobert.pvselectorlib.R;
 import thirdparty.leobert.pvselectorlib.ui.AlbumDirectoryListActivity;
 import thirdparty.leobert.pvselectorlib.ui.MediaFolderContentDisplayActivity;
 import thirdparty.leobert.pvselectorlib.ui.PictureExternalPreviewActivity;
 
-import com.yalantis.ucrop.entity.LocalMedia;
-import com.yalantis.ucrop.util.Utils;
-
-import java.io.Serializable;
-import java.util.List;
+import static com.yalantis.ucrop.entity.LocalMedia.asArrayList;
 
 
 public class LaunchConfig {
@@ -107,8 +108,11 @@ public class LaunchConfig {
                                        List<LocalMedia> medias) {
         if (medias != null && medias.size() > 0) {
             Intent intent = new Intent();
-            intent.putExtra(Consts.Extra.EXTRA_PREVIEW_SELECT_LIST,
-                    (Serializable) medias);
+            //change to ParcelableArrayListExtra
+//            intent.putExtra(Consts.Extra.EXTRA_PREVIEW_SELECT_LIST,
+//                    (Serializable) medias);
+            intent.putParcelableArrayListExtra(Consts.Extra.EXTRA_PREVIEW_SELECT_LIST,
+                   asArrayList(medias));
             intent.putExtra(Consts.Extra.EXTRA_POSITION, position);
             intent.setClass(mContext, PictureExternalPreviewActivity.class);
             mContext.startActivity(intent);

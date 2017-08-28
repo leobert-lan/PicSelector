@@ -25,21 +25,24 @@
 package com.yalantis.ucrop.entity;
 
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.IntDef;
 
 import java.io.Serializable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
  * local "Media" file，picture or video
  */
-public class LocalMedia implements Serializable {
+public class LocalMedia implements Serializable ,Parcelable{
 
     public static final int TYPE_PICTURE = 0;
     public static final int TYPE_VIDEO = 1;
-
 
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({TYPE_PICTURE, TYPE_VIDEO})
@@ -52,12 +55,8 @@ public class LocalMedia implements Serializable {
     private long duration;
     private long lastUpdateAt;
     private boolean isCropped;
-//    /**
-//    private boolean isSelectedMediaContains;
-//     *
-//     */
-//    private int position;
-//    private int num;
+
+
 
     private
     @MediaType
@@ -68,23 +67,24 @@ public class LocalMedia implements Serializable {
     private final GridItemInfoHolder gridItemInfoHolder
             = new GridItemInfoHolder();
 
-    public LocalMedia(String path, long lastUpdateAt, long duration, @MediaType int type) {
+    public LocalMedia(String path, long lastUpdateAt, long duration,
+                      @MediaType int type) {
         this.path = path;
         this.duration = duration;
         this.lastUpdateAt = lastUpdateAt;
         this.type = type;
     }
 
-    public LocalMedia(String path, long duration, long lastUpdateAt,
-                      boolean isChecked, int position, int num, @MediaType int type) {
-        this.path = path;
-        this.duration = duration;
-        this.lastUpdateAt = lastUpdateAt;
-//        this.isSelectedMediaContains = isSelectedMediaContains;
-//        this.position = position;
-//        this.num = num;
-        this.type = type;
-    }
+//    public LocalMedia(String path, long duration, long lastUpdateAt,
+//                       @MediaType int type) {
+//        this.path = path;
+//        this.duration = duration;
+//        this.lastUpdateAt = lastUpdateAt;
+////        this.isSelectedMediaContains = isSelectedMediaContains;
+////        this.position = position;
+////        this.num = num;
+//        this.type = type;
+//    }
 
     public LocalMedia() {
     }
@@ -167,24 +167,68 @@ public class LocalMedia implements Serializable {
         this.lastUpdateAt = lastUpdateAt;
     }
 
-//    public boolean getIsChecked() {
-//        return this.isSelectedMediaContains;
-//    }
-//
-//    public void setIsChecked(boolean isSelectedMediaContains) {
-//        this.isSelectedMediaContains = isSelectedMediaContains;
-//    }
-
-//    public int getPosition() {
-//        return this.position;
-//    }
-//
-//    public void setPosition(int position) {
-//        this.position = position;
-//    }
 
     @Override
     public String toString() {
         return "original path:" + this.path;
     }
+
+    ///////////////////////////////////////////////////////////////////////////
+    // Parcelable
+    ///////////////////////////////////////////////////////////////////////////
+
+    @SuppressWarnings("ResourceType")
+    protected LocalMedia(Parcel in) {
+        path = in.readString();
+        compressPath = in.readString();
+        croppedPath = in.readString();
+        duration = in.readLong();
+        lastUpdateAt = in.readLong();
+        isCropped = in.readByte() != 0;
+
+        //ResourceType
+        type = in.readInt();
+        compressed = in.readByte() != 0;
+    }
+
+    public static final Creator<LocalMedia> CREATOR = new Creator<LocalMedia>() {
+        @Override
+        public LocalMedia createFromParcel(Parcel in) {
+            return new LocalMedia(in);
+        }
+
+        @Override
+        public LocalMedia[] newArray(int size) {
+            return new LocalMedia[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(path);
+        dest.writeString(compressPath);
+        dest.writeString(croppedPath);
+        dest.writeLong(duration);
+        dest.writeLong(lastUpdateAt);
+        dest.writeByte((byte) (isCropped ? 1 : 0));
+        dest.writeInt(type);
+        dest.writeByte((byte) (compressed ? 1 : 0));
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    // asArrayList
+    ///////////////////////////////////////////////////////////////////////////
+    public static ArrayList<LocalMedia> asArrayList(List<LocalMedia> medias) {
+        if (medias == null)
+            return new ArrayList<>();
+        if (medias instanceof ArrayList)
+            return (ArrayList<LocalMedia>) medias;
+        return new ArrayList<>(medias);
+    }
+
 }

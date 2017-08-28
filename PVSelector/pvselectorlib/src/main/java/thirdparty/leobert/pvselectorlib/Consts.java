@@ -98,10 +98,13 @@ public interface Consts {
         String EXTRA_POSITION = "POSITION";
 
         String EXTRA_PREVIEW_LIST = "DATA_LIST_PREVIEW";
+
+        @ExtraKey
         String EXTRA_PREVIEW_SELECT_LIST = "DATA_LIST_PREVIEW_SELECTED";
 
         @ResultExtraKey
-        String EXTRA_SERIALIZABLE_RESULT = UcropConsts.Extra.EXTRA_SERIALIZABLE_RESULT;
+        @ExtraKey
+        String EXTRA_ARRAYLIST_LOCALMEDIA = UcropConsts.Extra.EXTRA_ARRAYLIST_LOCALMEDIA;
 
         /**
          * used to put/get the name of the folder that contains media,
@@ -146,9 +149,20 @@ public interface Consts {
                 UcropConsts.BcActions.ACTION_MULTI_IMAGE_CROPPED_COMPLETE;
     }
 
+    /**
+     * used to tag the key in result-intent-data
+     */
     @Retention(RetentionPolicy.SOURCE)
-    @StringDef({Extra.EXTRA_SERIALIZABLE_RESULT})
+    @StringDef({Extra.EXTRA_ARRAYLIST_LOCALMEDIA})
     @UCropResultExtraKey
     @interface ResultExtraKey {
+    }
+
+    /**
+     * used to tag the key in intent-data,prepared for intent-parser
+     */
+    @Retention(RetentionPolicy.SOURCE)
+    @StringDef({Extra.EXTRA_ARRAYLIST_LOCALMEDIA})
+    @interface ExtraKey {
     }
 }

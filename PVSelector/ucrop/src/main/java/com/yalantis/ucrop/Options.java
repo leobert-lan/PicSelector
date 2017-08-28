@@ -45,6 +45,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
+import static com.yalantis.ucrop.entity.LocalMedia.asArrayList;
+
 /**
  * <p><b>Package:</b> com.yalantis.ucrop </p>
  * <p><b>Project:</b> PicSelectorDemo </p>
@@ -303,8 +305,8 @@ public interface Options extends UcropConsts.Extra {
          */
         @Override
         public void setLocalMedia(List<LocalMedia> medias) {
-            mOptionBundle.putSerializable(UcropConsts.Extra.EXTRA_MEDIA_LIST,
-                    (Serializable) medias);
+            mOptionBundle.putParcelableArrayList(UcropConsts.Extra.EXTRA_MEDIA_LIST,
+                    asArrayList(medias));
         }
 
         /**

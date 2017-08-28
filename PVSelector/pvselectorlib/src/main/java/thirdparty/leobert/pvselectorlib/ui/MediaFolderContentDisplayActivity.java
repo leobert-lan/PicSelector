@@ -59,7 +59,6 @@ import com.yalantis.ucrop.util.ToolbarUtil;
 import com.yalantis.ucrop.util.Utils;
 
 import java.io.File;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,9 +75,11 @@ import thirdparty.leobert.pvselectorlib.compress.CompressInterface;
 import thirdparty.leobert.pvselectorlib.compress.LuBanOptions;
 import thirdparty.leobert.pvselectorlib.decoration.GridSpacingItemDecoration;
 import thirdparty.leobert.pvselectorlib.model.FunctionConfig;
-import thirdparty.leobert.pvselectorlib.model.LocalMediaLoader;
 import thirdparty.leobert.pvselectorlib.model.LaunchConfig;
+import thirdparty.leobert.pvselectorlib.model.LocalMediaLoader;
 import thirdparty.leobert.pvselectorlib.observable.ImagesObservable;
+
+import static com.yalantis.ucrop.entity.LocalMedia.asArrayList;
 
 /**
  * display the snapshot of each media in the folder, in grid.
@@ -137,8 +138,8 @@ public class MediaFolderContentDisplayActivity extends PVBaseActivity
             = new RefreshDataActionConsumer() {
         @Override
         public void consume(Context context, Intent intent) {
-            List<LocalMedia> selectImages = (List<LocalMedia>) intent
-                    .getSerializableExtra(Consts.Extra.EXTRA_PREVIEW_SELECT_LIST);
+            List<LocalMedia> selectImages = intent
+                    .getParcelableArrayListExtra(Consts.Extra.EXTRA_PREVIEW_SELECT_LIST);
             if (selectImages != null && adapter != null)
                 adapter.bindSelectedMedias(selectImages);
         }
@@ -148,8 +149,8 @@ public class MediaFolderContentDisplayActivity extends PVBaseActivity
             = new ImageCroppedActionConsumer() {
         @Override
         public void consume(Context context, Intent intent) {
-            List<LocalMedia> result = (List<LocalMedia>) intent
-                    .getSerializableExtra(Consts.Extra.EXTRA_SERIALIZABLE_RESULT);
+            List<LocalMedia> result = intent.getParcelableArrayListExtra(Consts
+                    .Extra.EXTRA_ARRAYLIST_LOCALMEDIA);
             if (result == null)
                 result = new ArrayList<>();
             handleCropResult(result);
@@ -183,8 +184,9 @@ public class MediaFolderContentDisplayActivity extends PVBaseActivity
                         Manifest.permission.READ_EXTERNAL_STORAGE);
             }
         } else {
-            selectMedias = (List<LocalMedia>) getIntent()
-                    .getSerializableExtra(Consts.Extra.EXTRA_PREVIEW_SELECT_LIST);
+            selectMedias = getIntent()
+                    .getParcelableArrayListExtra(Consts
+                            .Extra.EXTRA_PREVIEW_SELECT_LIST);
         }
 
         String folderName = getIntent()
@@ -360,10 +362,10 @@ public class MediaFolderContentDisplayActivity extends PVBaseActivity
         for (LocalMedia media : selectedImages)
             medias.add(media);
 
-        intent.putExtra(Consts.Extra.EXTRA_PREVIEW_LIST,
-                (Serializable) medias);
-        intent.putExtra(Consts.Extra.EXTRA_PREVIEW_SELECT_LIST,
-                (Serializable) selectedImages);
+        intent.putParcelableArrayListExtra(Consts.Extra.EXTRA_PREVIEW_LIST,
+                asArrayList(medias));
+        intent.putParcelableArrayListExtra(Consts.Extra.EXTRA_PREVIEW_SELECT_LIST,
+                asArrayList(selectedImages));
 
         intent.putExtra(Consts.Extra.EXTRA_POSITION, 0);
         intent.putExtra(Consts.Extra.EXTRA_FROM_BOTTOMBAR_PREVIEW, true);
@@ -516,8 +518,8 @@ public class MediaFolderContentDisplayActivity extends PVBaseActivity
         Intent intent = new Intent();
         ImagesObservable.getInstance().saveLocalMedia(previewMedias);
         List<LocalMedia> selectedImages = adapter.getSelectedImages();
-        intent.putExtra(Consts.Extra.EXTRA_PREVIEW_SELECT_LIST,
-                (Serializable) selectedImages);
+        intent.putParcelableArrayListExtra(Consts.Extra.EXTRA_PREVIEW_SELECT_LIST,
+                asArrayList(selectedImages));
         intent.putExtra(Consts.Extra.EXTRA_POSITION, position);
         intent.putExtra(Consts.Extra.EXTRA_FUNCTION_CONFIG, config);
         intent.setClass(mContext, PicturePreviewActivity.class);

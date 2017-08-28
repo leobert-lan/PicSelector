@@ -40,6 +40,6 @@ import java.lang.annotation.RetentionPolicy;
  */
 
 @Retention(RetentionPolicy.SOURCE)
-@StringDef({UcropConsts.Extra.EXTRA_SERIALIZABLE_RESULT})
+@StringDef({UcropConsts.Extra.EXTRA_ARRAYLIST_LOCALMEDIA})
 public @interface UCropResultExtraKey {
 }

@@ -41,7 +41,6 @@ import com.yalantis.ucrop.entity.LocalMediaFolder;
 import com.yalantis.ucrop.util.ToolbarUtil;
 import com.yalantis.ucrop.util.Utils;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,6 +52,8 @@ import thirdparty.leobert.pvselectorlib.decoration.RecycleViewDivider;
 import thirdparty.leobert.pvselectorlib.model.LaunchConfig;
 import thirdparty.leobert.pvselectorlib.observable.ImagesObservable;
 import thirdparty.leobert.pvselectorlib.observable.ObserverListener;
+
+import static com.yalantis.ucrop.entity.LocalMedia.asArrayList;
 
 /**
  * display the list of media folder.
@@ -262,8 +263,8 @@ public class AlbumDirectoryListActivity
         ImagesObservable.getInstance().saveLocalMedia(medias);
         ImagesObservable.getInstance().saveLocalFolders(folders);
 
-        intent.putExtra(Consts.Extra.EXTRA_PREVIEW_SELECT_LIST,
-                (Serializable) selectMedias);
+        intent.putParcelableArrayListExtra(Consts.Extra.EXTRA_PREVIEW_SELECT_LIST,
+                asArrayList(selectMedias));
         intent.putExtra(Consts.Extra.EXTRA_FUNCTION_CONFIG, config);
         intent.putExtra(Consts.Extra.EXTRA_FOLDER_NAME, folderName);
         intent.putExtra(Consts.Extra.EXTRA_IS_FIRST_STARTED, true);
@@ -325,8 +326,10 @@ public class AlbumDirectoryListActivity
         if (requestCode == Consts.AcResultReqCode.REQUEST_SELECT_MEDIA) {
             if (resultCode == RESULT_OK) {
                 List<LocalMedia> result =
-                        (List<LocalMedia>) data.getSerializableExtra(Consts.Extra.EXTRA_SERIALIZABLE_RESULT);
-                setResult(RESULT_OK, new Intent().putExtra(Consts.Extra.EXTRA_SERIALIZABLE_RESULT, (Serializable) result));
+                        data.getParcelableArrayListExtra(Consts.Extra.EXTRA_ARRAYLIST_LOCALMEDIA);
+                setResult(RESULT_OK, new Intent()
+                        .putParcelableArrayListExtra(Consts.Extra.EXTRA_ARRAYLIST_LOCALMEDIA,
+                                asArrayList(result)));
                 finish();
             }
         }

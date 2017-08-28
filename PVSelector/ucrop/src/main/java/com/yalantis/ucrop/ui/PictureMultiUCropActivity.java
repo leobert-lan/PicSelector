@@ -38,8 +38,9 @@ import com.yalantis.ucrop.UcropConsts;
 import com.yalantis.ucrop.entity.LocalMedia;
 
 import java.io.File;
-import java.io.Serializable;
 import java.util.List;
+
+import static com.yalantis.ucrop.entity.LocalMedia.asArrayList;
 
 public class PictureMultiUCropActivity extends UCropActivity {
 
@@ -50,8 +51,8 @@ public class PictureMultiUCropActivity extends UCropActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.picture_activity_multi_cutting);
         mContext = this;
-        images = (List<LocalMedia>) getIntent()
-                .getSerializableExtra(UcropConsts.Extra.EXTRA_MEDIA_LIST);
+        images = getIntent()
+                .getParcelableArrayListExtra(UcropConsts.Extra.EXTRA_MEDIA_LIST);
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         Intent intent = getIntent();
@@ -124,15 +125,15 @@ public class PictureMultiUCropActivity extends UCropActivity {
         cropIndex++;
         if (cropIndex >= images.size()) {
             // send the multi-crop-complete signal
-            Log.d(getClass().getSimpleName(),"sent ACTION_MULTI_IMAGE_CROPPED_COMPLETE");
+            Log.d(getClass().getSimpleName(), "sent ACTION_MULTI_IMAGE_CROPPED_COMPLETE");
             sendBroadcast(new Intent()
                     .setAction(UcropConsts.BcActions
                             .ACTION_MULTI_IMAGE_CROPPED_COMPLETE));
 
             sendBroadcast(new Intent()
                     .setAction(UcropConsts.BcActions.ACTION_IMAGE_CROPPED)
-                    .putExtra(UcropConsts.Extra.EXTRA_SERIALIZABLE_RESULT,
-                            (Serializable) images));
+                    .putParcelableArrayListExtra(UcropConsts.Extra.EXTRA_ARRAYLIST_LOCALMEDIA,
+                            asArrayList(images)));
             // 裁剪完成，看是否压缩
             for (LocalMedia media : images) {
                 media.setCropped(true);

@@ -34,14 +34,15 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import thirdparty.leobert.pvselectorlib.Consts;
-import thirdparty.leobert.pvselectorlib.R;
-import thirdparty.leobert.pvselectorlib.model.LaunchConfig;
-import thirdparty.leobert.pvselectorlib.widget.PreviewViewPager;
 import com.yalantis.ucrop.entity.LocalMedia;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import thirdparty.leobert.pvselectorlib.Consts;
+import thirdparty.leobert.pvselectorlib.R;
+import thirdparty.leobert.pvselectorlib.model.LaunchConfig;
+import thirdparty.leobert.pvselectorlib.widget.PreviewViewPager;
 
 /** if preview needed after selected done, use this activity can fast
  * implement requirement*/
@@ -62,8 +63,11 @@ public class PictureExternalPreviewActivity extends FragmentActivity {
         initUiEventListener();
 
         position = getIntent().getIntExtra(Consts.Extra.EXTRA_POSITION, 0);
-        images = (List<LocalMedia>) getIntent()
-                .getSerializableExtra(Consts.Extra.EXTRA_PREVIEW_SELECT_LIST);
+//        images = (List<LocalMedia>) getIntent()
+//                .getSerializableExtra(Consts.Extra.EXTRA_PREVIEW_SELECT_LIST);
+
+        images = getIntent().getParcelableArrayListExtra(Consts.Extra
+                .EXTRA_PREVIEW_SELECT_LIST);
 
         initViewPageAdapterData();
     }
